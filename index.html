@@ -171,7 +171,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>运算符之间的优先级关系,如果不是很清楚,都加上括号</p>
+
       
 
       
@@ -233,7 +234,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="第一章"><a href="#第一章" class="headerlink" title="   第一章"></a>   第一章</h2><h2 id="第二章"><a href="#第二章" class="headerlink" title="  第二章"></a>  第二章</h2><h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2>
+        <p>   第一章<br>C语言输出图形时,两部分for循环中第一个表达式条件不同更好写<br>#include &lt;stdio.h&gt;</p>
+<p>int main()<br>{<br>   int n;<br>   int i,j;</p>
+<p>   printf(“please input n: “);<br>   scanf(“%d”,&amp;n);</p>
+<p>   printf(“\n\n”);<br>   printf(“output:\n”);</p>
+<p>   for(i = 0 ; i &lt; n ;i++ )  //这里 i = 0<br>   {<br>       for(j = 0 ; j &lt; n-i ; j++ )<br>       {</p>
+<pre><code>if(j == 0 || j == n-i-1)
+printf(&quot;$&quot;);
+
+else
+printf(&quot; &quot;);
+ }
+ putchar(&apos;\n&apos;);</code></pre><p>   }</p>
+<p>   for(i = n-1 ; i &gt; 0 ; i– )   //这里 i = n-1<br>   {<br>      for(j = 0 ; j &lt; n-i+1 ; j++)<br>      {<br>          if(j == 0 || j == n-i)<br>          printf(“$”);</p>
+<pre><code>    else
+    printf(&quot; &quot;);
+} 
+putchar(&apos;\n&apos;);</code></pre><p>   }<br>   return 0;</p>
+<p>}</p>
+<hr>
+<h2 id="第二章"><a href="#第二章" class="headerlink" title="  第二章"></a>  第二章</h2><h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2>
       
 
       
