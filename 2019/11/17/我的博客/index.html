@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="第一章C语言输出图形时,两部分for循环中第一个表达式条件不同更好写#include &amp;lt;stdio.h&amp;gt; int main(){   int n;   int i,j;    printf(“please input n: “);   scanf(“%d”,&amp;amp;n);    printf(“\n\n”);   printf(“output:\n”);    for(i =">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-19T03:28:14.179Z">
+<meta property="og:updated_time" content="2019-11-24T03:13:35.156Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -191,7 +191,20 @@ printf(&quot; &quot;);
 putchar(&apos;\n&apos;);</code></pre><p>   }<br>   return 0;</p>
 <p>}</p>
 <hr>
-<h2 id="第二章"><a href="#第二章" class="headerlink" title="  第二章"></a>  第二章</h2><h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2>
+<h2 id="第二章"><a href="#第二章" class="headerlink" title="  第二章"></a>  第二章</h2><p><code>hexo</code>默认无法自动处理文章插入本地图片，需要通过扩展插件支持。</p>
+<h2 id="图片路径问题"><a href="#图片路径问题" class="headerlink" title="图片路径问题"></a>图片路径问题</h2><p>配置<code>_config.yml</code>里面的<code>post_asset_folder:false</code>这个选项设置为<code>true</code>。</p>
+<p>安装<a href="https://github.com/7ym0n/hexo-asset-image.git" target="_blank" rel="noopener">hexo-asset-image</a>，运行<code>hexo n &quot;xxxx&quot;</code>来生成md博文时，<code>/source/_posts</code>文件夹内除了xxxx.md文件还有一个同名的文件夹，把图片放入该文件夹。</p>
+<p>使用<code>![xxx](xxx/xxx.png)</code>直接插入图片即可。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由于hexo3版本后对很多插件支持有问题，<a href="https://github.com/CodeFalling/hexo-asset-image.git" target="_blank" rel="noopener">hexo-asset-image</a>插件在处理<code>data.permalink</code>链接时出现路径错误，把年月去掉了，导致最后生成的路径为<code>%d/xxx/xxx</code>需要对其做兼容处理。通过判断当前版本是否等于<code>3</code>的版本做不同的路径分割。</p>
+<p>在代码中加入：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> version = <span class="built_in">String</span>(hexo.version).split(<span class="string">'.'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>date.permalink</code>处理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> link = data.permalink;  </span><br><span class="line"><span class="keyword">if</span>(version.length &gt; <span class="number">0</span> &amp;&amp; <span class="built_in">Number</span>(version[<span class="number">0</span>]) == <span class="number">3</span>) </span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">1</span>) + <span class="number">1</span>; </span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">3</span>) + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>重新生成静态文件即可正确显示。</p>
+<p>可直接安装已经修改过得插件<code>npm install https://github.com/7ym0n/hexo-asset-image --sa</code></p>
+<h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2>
       
 
       
