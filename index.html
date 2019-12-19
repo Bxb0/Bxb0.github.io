@@ -151,6 +151,118 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-求1-m之间的素数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">求1-m之间的素数.</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2019-12-19T08:20:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#include &lt;stdio.h&gt;</p>
+<p>int main()<br>{<br>    int m;<br>    int i,j;<br>    int s = 0,n = 0,cnt = 0,q = 0;<br>    int a[100];</p>
+<pre><code>printf(&quot;Input:\n&quot;);
+printf(&quot;Please input a number:\n&quot;);
+scanf(&quot;%d&quot;,&amp;m);
+
+printf(&quot;Output:\n&quot;);
+
+if(m &lt;= 0)
+
+printf(&quot;error!&quot;);
+
+else
+{
+    for(i = 2 ; i &lt; m ; i++)
+    {
+        for(j = 2 ; j &lt; i ; j++)
+        {
+            if(i%j == 0)
+                q = 1; 
+        }
+        if(q == 0)
+        {
+          s++;
+
+          if(s &gt; 100)
+          break;
+
+           a[n++] = i;
+
+        }
+        q = 0;
+    }
+
+    if(s &gt; 100)
+        printf(&quot;overflow!&quot;);
+    else
+    {
+        printf(&quot;n=%d\n&quot;,s);
+        for(i = 0 ; i &lt; s ; i++)
+        {
+            cnt++;
+            printf(&quot;%5d&quot;,a[i]);
+
+            if(cnt%15 == 0)
+            putchar(&apos;\n&apos;);
+        }
+    }
+}
+return 0;</code></pre><p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-罗马数字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
