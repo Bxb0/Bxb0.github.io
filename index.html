@@ -151,6 +151,69 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-形参数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/">形参数组</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/" class="archive-article-date">
+  	<time datetime="2019-12-20T07:59:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 当二维数组作为参数传递给函数时，函数的形参不能简单地写双重指针，因为编译器实际寻址如下：对于数组 int p[m][n];如果要取p[i][j]的值，编译器是这样寻址的：p + i*n + j; 如果我们省略了第二维或者更高维的大小，编译器将不知道如何正确的寻址。因此如果我们在编写程序的时候需要用到各个维数都不固定的二维数组作为参数，虽然这个时候编译器还是不能识别，但我们可以把二维数组当做普通的指针，将它的大小用两个参数指明，然后我们为二维数组手工寻址，这样就可以将二维数组作为函数的参数传递了，我们可以把维数固定的参数变为维数随即的参数，如： void Func(int array[3][10]); void Func(int array[][10]); </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-求1-m之间的素数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
