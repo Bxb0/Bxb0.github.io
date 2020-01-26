@@ -151,6 +151,78 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-需要用getchar-吃掉回车的情况" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/">需要用getchar()吃掉回车的情况</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/" class="archive-article-date">
+  	<time datetime="2020-01-26T10:12:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>写程序的时候有时会使用getchar（）来接收一个字符。但程序很长的时候，有时会发生需要getchar（）来接收字符的时候，运行直接跳过了。这可能就是，需要接收字符的getchar（）接收了上次输入时最后的回车键，而没有正确的接收我要输入的字符。例如下面这个程序：</p>
+<p>运行的时候我输入wuhan 回车，程序就直接结束了，不符合我的本意。这时就需要用getchar（）来回收这个回车，再输入字符。</p>
+<p>这时就运行正确了。那么到底什么时候需要用getchar（）来吃掉回车呢？下面来说下我实验总结的几种情况。</p>
+<p>1。程序开始时要接收字符ch，不需要用空的getchar（）；</p>
+<p>2.当接受字符ch前面有scanf语句时，不管多远，需要用空的getchar（）来吃回车，因为这时scanf的回车还在缓冲区里，上面的例子就是这种情况。</p>
+<p>3，gets（a）后面要接收ch是不需要用空的getchar（）吃回车的（下面有图）。</p>
+<p>4；连续用2个getchar（）接收字符时，中间要用一个空的getchar（）来吃回车。</p>
+<p>图上传卡住了，不传了。总之，最后再总结一次需要用空的getchar()吃掉回车的情况有2个（在目前主要接收输入函数只有scanf，gets，getchar（）的情况下）；</p>
+<p>1），前面有scanf，后面要用ch=getchar()接收字符时，中间要用一个空的getchar（）吃回车；</p>
+<p>2），2个接收字符的ch=getchar()中间需要一个空的getchar（）吃回车。<br>————————————————<br>版权声明：本文为CSDN博主「坚持做笔记」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/u011562187/article/details/9955785" target="_blank" rel="noopener">https://blog.csdn.net/u011562187/article/details/9955785</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-小甲鱼指针作业心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -835,100 +907,6 @@ for(i = 0 ; i &lt; lenth/2 ; i++)
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-我的博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/17/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/">我的博客</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/17/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
-  	<time datetime="2019-11-17T09:50:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>   第一章<br>C语言输出图形时,两部分for循环中第一个表达式条件不同更好写<br>#include &lt;stdio.h&gt;</p>
-<p>int main()<br>{<br>   int n;<br>   int i,j;</p>
-<p>   printf(“please input n: “);<br>   scanf(“%d”,&amp;n);</p>
-<p>   printf(“\n\n”);<br>   printf(“output:\n”);</p>
-<p>   for(i = 0 ; i &lt; n ;i++ )  //这里 i = 0<br>   {<br>       for(j = 0 ; j &lt; n-i ; j++ )<br>       {</p>
-<pre><code>if(j == 0 || j == n-i-1)
-printf(&quot;$&quot;);
-
-else
-printf(&quot; &quot;);
- }
- putchar(&apos;\n&apos;);</code></pre><p>   }</p>
-<p>   for(i = n-1 ; i &gt; 0 ; i– )   //这里 i = n-1<br>   {<br>      for(j = 0 ; j &lt; n-i+1 ; j++)<br>      {<br>          if(j == 0 || j == n-i)<br>          printf(“$”);</p>
-<pre><code>    else
-    printf(&quot; &quot;);
-} 
-putchar(&apos;\n&apos;);</code></pre><p>   }<br>   return 0;</p>
-<p>}</p>
-<hr>
-<h2 id="第二章"><a href="#第二章" class="headerlink" title="  第二章"></a>  第二章</h2><p><code>hexo</code>默认无法自动处理文章插入本地图片，需要通过扩展插件支持。</p>
-<h2 id="图片路径问题"><a href="#图片路径问题" class="headerlink" title="图片路径问题"></a>图片路径问题</h2><p>配置<code>_config.yml</code>里面的<code>post_asset_folder:false</code>这个选项设置为<code>true</code>。</p>
-<p>安装<a href="https://github.com/7ym0n/hexo-asset-image.git" target="_blank" rel="noopener">hexo-asset-image</a>，运行<code>hexo n &quot;xxxx&quot;</code>来生成md博文时，<code>/source/_posts</code>文件夹内除了xxxx.md文件还有一个同名的文件夹，把图片放入该文件夹。</p>
-<p>使用<code>![xxx](xxx/xxx.png)</code>直接插入图片即可。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>由于hexo3版本后对很多插件支持有问题，<a href="https://github.com/CodeFalling/hexo-asset-image.git" target="_blank" rel="noopener">hexo-asset-image</a>插件在处理<code>data.permalink</code>链接时出现路径错误，把年月去掉了，导致最后生成的路径为<code>%d/xxx/xxx</code>需要对其做兼容处理。通过判断当前版本是否等于<code>3</code>的版本做不同的路径分割。</p>
-<p>在代码中加入：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> version = <span class="built_in">String</span>(hexo.version).split(<span class="string">'.'</span>);</span><br></pre></td></tr></table></figure>
-
-<p>修改<code>date.permalink</code>处理：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> link = data.permalink;  </span><br><span class="line"><span class="keyword">if</span>(version.length &gt; <span class="number">0</span> &amp;&amp; <span class="built_in">Number</span>(version[<span class="number">0</span>]) == <span class="number">3</span>) </span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">1</span>) + <span class="number">1</span>; </span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">var</span> beginPos = getPosition(link, <span class="string">'/'</span>, <span class="number">3</span>) + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>重新生成静态文件即可正确显示。</p>
-<p>可直接安装已经修改过得插件<code>npm install https://github.com/7ym0n/hexo-asset-image --sa</code></p>
-<h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/17/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2/">展开全文 >></a>
         </p>
       
 
