@@ -151,6 +151,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-缓冲区" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/">缓冲区</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/" class="archive-article-date">
+  	<time datetime="2020-02-05T03:28:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、什么是缓冲区</p>
+<p> 　缓冲区又称为缓存，它是内存空间的一部分。也就是说，在内存空间中预留了一定的<a href="http://storage.chinabyte.com/" target="_blank" rel="noopener">存储</a>空间，这些存储空间用来缓冲输入或输出的数据，这部分预留的空间就叫做缓冲区。</p>
+<p> 　缓冲区根据其对应的是输入设备还是输出设备，分为输入缓冲区和输出缓冲区。</p>
+<p> 　二、为什么要引入缓冲区</p>
+<p> 　我们为什么要引入缓冲区呢？</p>
+<p> 　比如我们从<a href="http://www.chinabyte.com/keyword/磁盘/" target="_blank" rel="noopener">磁盘</a>里取信息，我们先把读出的数据放在缓冲区，计算机再直接从缓冲区中取数据，等缓冲区的数据取完后再去磁盘中读取，这样就可以减少磁盘的读写次数，再加上计算机对缓冲区的操作大大快于对磁盘的操作，故应用缓冲区可大大提高计算机的运行速度。</p>
+<p> 　又比如，我们使用打印机打印文档，由于打印机的打印速度相对较慢，我们先把文档输出到打印机相应的缓冲区，打印机再自行逐步打印，这时我们的CPU可以处理别的事情。</p>
+<p> 　现在您基本明白了吧，缓冲区就是一块内存区，它用在输入输出设备和CPU之间，用来缓存数据。它使得低速的输入输出设备和高速的CPU能够协调工作，避免低速的输入输出设备占用CPU，解放出CPU，使其能够高效率工作。</p>
+<p> 　三、缓冲区的类型</p>
+<p> 　缓冲区 分为三种类型：全缓冲、行缓冲和不带缓冲。</p>
+<p> 　1、全缓冲</p>
+<p> 　在这种情况下，当填满标准I/O缓存后<a href="http://www.chinabyte.com/keyword/才进/" target="_blank" rel="noopener">才进</a>行实际I/O操作。全缓冲的典型代表是对磁盘文件的读写。</p>
+<p> 　2、行缓冲</p>
+<p> 　在这种情况下，当在输入和输出中遇到换行符时，执行真正的I/O操作。这时，我们输入的字符先存放在缓冲区，等按下回车键换行时才进行实际的I/O操作。典型代表是键盘输入数据。</p>
+<p> 　3、不带缓冲</p>
+<p> 　也就是不进行缓冲，标准出错情况stderr是典型代表，这使得出错信息可以直接尽快地显示出来。</p>
+<p> 　四、缓冲区的刷新</p>
+<p> 　下列情况会引发缓冲区的刷新:</p>
+<p> 　缓冲区满时;</p>
+<p> 　执行flush语句;</p>
+<p> 　执行endl语句;</p>
+<p> 　关闭文件。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-需要用getchar-吃掉回车的情况" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -844,69 +928,6 @@ for(i = 0 ; i &lt; lenth/2 ; i++)
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/11/24/%E6%B5%8B%E8%AF%95%E5%9B%BE%E7%89%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-测试一下有没有问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/">测试一下有没有问题</a>
-    </h1>
-  
-
-        
-        <a href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2019-11-17T12:28:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>运算符之间的优先级关系,如果不是很清楚,都加上括号</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/">展开全文 >></a>
         </p>
       
 
