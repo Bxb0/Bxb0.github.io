@@ -151,6 +151,125 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-初次体验摩尔投票-动态规划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">初次体验摩尔投票, 动态规划</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="archive-article-date">
+  	<time datetime="2020-03-14T05:58:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>摩尔投票个人总结:</p>
+<p>在一群以小队为组的战争中, 2个遇到若不是同队的就双方阵亡, 若2个人是同队的就结合起来.</p>
+<p>这样一直下去, 最后留下来的人, 将是这场战争中最多的人的小队的.该算法可以解决 计算一个</p>
+<p>数组中出现次数最多的元素. ( 从第一个数开始count=1，遇到相同的就加1，遇到不同的就减1，减到0就重新换个数开始计数，总能找到最多的那个 )</p>
+<p>eg: <img src="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20200314141207184.png" alt="image-20200314141207184"></p>
+<p>`int majorityElement(int* nums, int numsSize)</p>
+<p>{</p>
+<p>  int count = 0, ans = 0;</p>
+<p>  for(int i = 0; i &lt; numsSize; i++)</p>
+<p>  {</p>
+<p>​    if(nums[ans] == nums[i])</p>
+<p>​      count++;</p>
+<p>​    else</p>
+<p>​      count–;</p>
+<p>​    </p>
+<p>​    if(count == 0)</p>
+<p>​      ans = i+1;</p>
+<p>​    </p>
+<p>​    if(count &gt; numsSize/2)</p>
+<p>​      break; </p>
+<p>  }</p>
+<p>  return nums[ans];</p>
+<p>}`</p>
+<p>动态规划:</p>
+<p>将一个问题, 分成若干个的子问题解决 </p>
+<pre><code>dp[i]表示nums[0]到nums[i]，含nums[i]的最长上升子序列；
+如果nums[j] &lt; nums[i],就dp[i]=max(dp[i],dp[j]+1)
+每次保存最大长度res=max(res,dp[i]) ////因为最后一个元素nums[n],不一定在最长子序列中
+
+如[10,9,2,5,3,7,101,6]
+[10,9,2,5,3,7,101,6],dp[0]=1
+[10,9,2,5,3,7,101,6],dp[1]=1
+[10,9,2,5,3,7,101,6],dp[2]=1
+[10,9,2,5,3,7,101,6],dp[3]=dp[2]+1 //res=2
+[10,9,2,5,3,7,101,6],dp[4]=dp[2]+1 //res=2
+[10,9,2,5,3,7,101,6],dp[5]=dp[3]+1 //res=3
+[10,9,2,5,3,7,101,6],dp[6]=dp[5]+1 //res=4
+[10,9,2,5,3,7,101,6],dp[7]=dp[4]+1 //res=4</code></pre><p>eg:</p>
+<p><img src="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20200314142330565.png" alt="image-20200314142330565"></p>
+<p>`int lengthOfLIS(int* nums, int numsSize)</p>
+<p>{</p>
+<p>  if(numsSize == 0)</p>
+<p>  return 0;</p>
+<p>  int max = 1; </p>
+<p>  int dp[numsSize];</p>
+<p>  for(int i = 0; i &lt; numsSize; i++)</p>
+<p>  {</p>
+<p>​    dp[i] = 1;</p>
+<p>​    for(int j = 0; j &lt; i; j++) </p>
+<p>​    if(nums[i] &gt; nums[j])</p>
+<p>​    dp[i] = dp[i] &gt; dp[j]+1 ? dp[i]:dp[j]+1;</p>
+<p>​    </p>
+<p>​    if(dp[i] &gt; max)</p>
+<p>​    max = dp[i];</p>
+<p>  } </p>
+<p>  return max;</p>
+<p>}`</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-三月二日心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -821,69 +940,6 @@ for(m = 100 , i = 2 ; i &gt;= 0 ; m /= 10 , i--)
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/12/18/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-C语言关键字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/">C语言关键字</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/" class="archive-article-date">
-  	<time datetime="2019-12-13T05:20:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> C语言中的关键字<br>auto ：声明自动变量 一般不使用<br>double ：声明双精度变量或函数<br>int： 声明整型变量或函数<br>struct：声明结构体变量或函数<br>break：跳出当前循环<br>else ：条件语句否定分支（与 if 连用）<br>long ：声明长整型变量或函数<br>switch :用于开关语句<br>case：开关语句分支<br>enum ：声明枚举类型<br>register：声明积存器变量<br>typedef：用以给数据类型取别名（当然还有其他作用）<br>char ：声明字符型变量或函数<br>extern：声明变量是在其他文件正声明（也可以看做是<a href="https://www.baidu.com/s?wd=引用变量&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">引用变量</a>）<br>return ：子程序返回语句（可以带参数，也看不带参数）<br>union：声明联合数据类型<br>const ：声明只读变量<br>float：声明浮点型变量或函数<br>short ：声明短整型变量或函数<br>unsigned：声明无符号类型变量或函数<br>continue：结束当前循环，开始下一轮循环<br>for：一种循环语句(可意会不可言传）<br>signed：生命有符号类型变量或函数<br>void ：声明函数无返回值或无参数，声明无类型指针（基本上就这三个作用）<br>default：开关语句中的“其他”分支<br>goto：无条件跳转语句<br>sizeof：计算数据类型长度<br>volatile：说明变量在程序执行中可被隐含地改变<br>do ：循环语句的循环体<br>while ：循环语句的循环条件<br>static ：声明静态变量<br>if:条件语句 </p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/">展开全文 >></a>
         </p>
       
 
