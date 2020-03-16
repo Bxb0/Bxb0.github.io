@@ -6,20 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>初次体验摩尔投票, 动态规划 | Hexo</title>
+  <title>1, 逆向心得. | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="摩尔投票个人总结: 在一群以小队为组的战争中, 2个遇到若不是同队的就双方阵亡, 若2个人是同队的就结合起来. 这样一直下去, 最后留下来的人, 将是这场战争中最多的人的小队的.该算法可以解决 计算一个 数组中出现次数最多的元素. ( 从第一个数开始count=1，遇到相同的就加1，遇到不同的就减1，减到0就重新换个数开始计数，总能找到最多的那个 ) eg:  int majorityElemen">
+  <meta name="description" content="在程序密码算法时, 可能会将计算后的数据存放在4个内存单元, 然后将其传给一个通用寄存器(EAX), 但是一般英特尔的cpu, 数据存放形式都是小端, 所以会将该4个内存单元的数据, 以它小端存储方式读取, 比如, 4个连续内存单元的数据依次为 0x12  0x34  0x56  0x78, 传给寄存器后, 由于小端,所以为, 0x78563412. 那么我们再写注册机的时候就可以, 先定">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初次体验摩尔投票, 动态规划">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;14&#x2F;%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&#x2F;index.html">
+<meta property="og:title" content="1, 逆向心得.">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;16&#x2F;1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="摩尔投票个人总结: 在一群以小队为组的战争中, 2个遇到若不是同队的就双方阵亡, 若2个人是同队的就结合起来. 这样一直下去, 最后留下来的人, 将是这场战争中最多的人的小队的.该算法可以解决 计算一个 数组中出现次数最多的元素. ( 从第一个数开始count=1，遇到相同的就加1，遇到不同的就减1，减到0就重新换个数开始计数，总能找到最多的那个 ) eg:  int majorityElemen">
+<meta property="og:description" content="在程序密码算法时, 可能会将计算后的数据存放在4个内存单元, 然后将其传给一个通用寄存器(EAX), 但是一般英特尔的cpu, 数据存放形式都是小端, 所以会将该4个内存单元的数据, 以它小端存储方式读取, 比如, 4个连续内存单元的数据依次为 0x12  0x34  0x56  0x78, 传给寄存器后, 由于小端,所以为, 0x78563412. 那么我们再写注册机的时候就可以, 先定">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;14&#x2F;%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&#x2F;image-20200314141207184.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;14&#x2F;%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&#x2F;image-20200314142330565.png">
-<meta property="og:updated_time" content="2020-03-14T06:36:10.631Z">
+<meta property="og:updated_time" content="2020-03-16T05:19:43.791Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;14&#x2F;%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92&#x2F;image-20200314141207184.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -155,83 +152,44 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-初次体验摩尔投票-动态规划" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-1-逆向心得" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      初次体验摩尔投票, 动态规划
+      1, 逆向心得.
     </h1>
   
 
         
-        <a href="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="archive-article-date">
-  	<time datetime="2020-03-14T05:58:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-14</time>
+        <a href="/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/" class="archive-article-date">
+  	<time datetime="2020-03-16T04:20:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>摩尔投票个人总结:</p>
-<p>在一群以小队为组的战争中, 2个遇到若不是同队的就双方阵亡, 若2个人是同队的就结合起来.</p>
-<p>这样一直下去, 最后留下来的人, 将是这场战争中最多的人的小队的.该算法可以解决 计算一个</p>
-<p>数组中出现次数最多的元素. ( 从第一个数开始count=1，遇到相同的就加1，遇到不同的就减1，减到0就重新换个数开始计数，总能找到最多的那个 )</p>
-<p>eg: <img src="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20200314141207184.png" alt="image-20200314141207184"></p>
-<p>int majorityElement(int* nums, int numsSize)</p>
-<p>{</p>
-<p>  int count = 0, ans = 0;</p>
-<p>  for(int i = 0; i &lt; numsSize; i++)</p>
-<p>  {</p>
-<p>​    if(nums[ans] == nums[i])</p>
-<p>​      count++;</p>
-<p>​    else</p>
-<p>​      count–;</p>
-<p>​    </p>
-<p>​    if(count == 0)</p>
-<p>​      ans = i+1;</p>
-<p>​    </p>
-<p>​    if(count &gt; numsSize/2)</p>
-<p>​      break; </p>
-<p>  }</p>
-<p>  return nums[ans];</p>
-<p>}</p>
-<p>动态规划:</p>
-<p>将一个问题, 分成若干个的子问题解决 </p>
-<pre><code>dp[i]表示nums[0]到nums[i]，含nums[i]的最长上升子序列；
-如果nums[j] &lt; nums[i],就dp[i]=max(dp[i],dp[j]+1)
-每次保存最大长度res=max(res,dp[i]) ////因为最后一个元素nums[n],不一定在最长子序列中
+        <ol>
+<li><hr>
+<p>  在程序密码算法时, 可能会将计算后的数据存放在4个内存单元, 然后将其传给一个通用寄存器(EAX), 但是一般英特尔的cpu, 数据存放形式都是小端, 所以会将该4个内存单元的数据, 以它小端存储方式读取, 比如, 4个连续内存单元的数据依次为 0x12  0x34  0x56  0x78, 传给寄存器后, 由于小端,所以为, 0x78563412. 那么我们再写注册机的时候就可以, 先定义一个联合:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> EAX</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> eax;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span>[<span class="number">4</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-如[10,9,2,5,3,7,101,6]
-[10,9,2,5,3,7,101,6],dp[0]=1
-[10,9,2,5,3,7,101,6],dp[1]=1
-[10,9,2,5,3,7,101,6],dp[2]=1
-[10,9,2,5,3,7,101,6],dp[3]=dp[2]+1 //res=2
-[10,9,2,5,3,7,101,6],dp[4]=dp[2]+1 //res=2
-[10,9,2,5,3,7,101,6],dp[5]=dp[3]+1 //res=3
-[10,9,2,5,3,7,101,6],dp[6]=dp[5]+1 //res=4
-[10,9,2,5,3,7,101,6],dp[7]=dp[4]+1 //res=4</code></pre><p>eg:</p>
-<p><img src="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20200314142330565.png" alt="image-20200314142330565"></p>
-<p>int lengthOfLIS(int* nums, int numsSize)</p>
-<p>{</p>
-<p>  if(numsSize == 0)</p>
-<p>  return 0;</p>
-<p>  int max = 1; </p>
-<p>  int dp[numsSize];</p>
-<p>  for(int i = 0; i &lt; numsSize; i++)</p>
-<p>  {</p>
-<p>​    dp[i] = 1;</p>
-<p>​    for(int j = 0; j &lt; i; j++) </p>
-<p>​    if(nums[i] &gt; nums[j])</p>
-<p>​    dp[i] = dp[i] &gt; dp[j]+1 ? dp[i]:dp[j]+1;</p>
-<p>​    </p>
-<p>​    if(dp[i] &gt; max)</p>
-<p>​    max = dp[i];</p>
-<p>  } </p>
-<p>  return max;</p>
-<p>}</p>
+<p>依次, 将4个数据存放在char[0 - 3] , 而eax就是我们要得值了. (不过这里要注意使用<code>unsigned char</code> , 因为一个字节的最大数据为 2 ^8 - 1 (FF),  有符号<code>char</code> 是 -2^7 ~ 2^7-1 , 用有符号<code>char</code> 很容易溢出.)\</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>有 A xor B = C , C xor B = A, A xor C  = B的关系, 很可能用来加密代码. 让代码变形.</p>
+</li>
+<li><p>and 指令, 也可以用来表示 inc 操作, 比如  <code>0 and 3 = 0, 1 and 3 = 1, 2 and 3 = 2, 3 and 3 = 3, 4 and 3 = 0, 5 and 3 = 1</code>, 以此做 0-3 的循环.</p>
+</li>
+<li><p>sar指令, 将数据向右移位, 移了的位用0填充,  移 1 相当于除 2 , 不用考虑余数, 比如 eax = 3 (11) , sar eax, 1 后 eax = (01) = 1, 相当于 3/2 = 1;</p>
+</li>
+<li><p>一些和对话框有关的重要函数, DialogBoxParama, GetDlgItem, GetDlgItemInt, ,<strong>GetDlgItemTextA</strong>, GetWindowTextA, Getwindowlong.</p>
+</li>
+</ol>
 
       
 
@@ -311,7 +269,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -325,18 +283,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          1, 逆向心得.
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">三月二日心得</div>
+    <a href="/2020/03/14/%E5%88%9D%E6%AC%A1%E4%BD%93%E9%AA%8C%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">初次体验摩尔投票, 动态规划</div>
       <i class="icon-circle-right"></i>
     </a>
   

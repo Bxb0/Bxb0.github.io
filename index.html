@@ -151,6 +151,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-1-逆向心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/">1, 逆向心得.</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/" class="archive-article-date">
+  	<time datetime="2020-03-16T04:20:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><hr>
+<p>  在程序密码算法时, 可能会将计算后的数据存放在4个内存单元, 然后将其传给一个通用寄存器(EAX), 但是一般英特尔的cpu, 数据存放形式都是小端, 所以会将该4个内存单元的数据, 以它小端存储方式读取, 比如, 4个连续内存单元的数据依次为 0x12  0x34  0x56  0x78, 传给寄存器后, 由于小端,所以为, 0x78563412. 那么我们再写注册机的时候就可以, 先定义一个联合:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> EAX</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> eax;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span>[<span class="number">4</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>依次, 将4个数据存放在char[0 - 3] , 而eax就是我们要得值了. (不过这里要注意使用<code>unsigned char</code> , 因为一个字节的最大数据为 2 ^8 - 1 (FF),  有符号<code>char</code> 是 -2^7 ~ 2^7-1 , 用有符号<code>char</code> 很容易溢出.)\</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>有 A xor B = C , C xor B = A, A xor C  = B的关系, 很可能用来加密代码. 让代码变形.</p>
+</li>
+<li><p>and 指令, 也可以用来表示 inc 操作, 比如  <code>0 and 3 = 0, 1 and 3 = 1, 2 and 3 = 2, 3 and 3 = 3, 4 and 3 = 0, 5 and 3 = 1</code>, 以此做 0-3 的循环.</p>
+</li>
+<li><p>sar指令, 将数据向右移位, 移了的位用0填充,  移 1 相当于除 2 , 不用考虑余数, 比如 eax = 3 (11) , sar eax, 1 后 eax = (01) = 1, 相当于 3/2 = 1;</p>
+</li>
+<li><p>一些和对话框有关的重要函数, DialogBoxParama, GetDlgItem, GetDlgItemInt, ,<strong>GetDlgItemTextA</strong>, GetWindowTextA, Getwindowlong.</p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/16/1-%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-初次体验摩尔投票-动态规划" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -858,88 +938,6 @@ return 0;</code></pre><p>}</p>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-罗马数字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/18/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97/">罗马数字</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/18/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97/" class="archive-article-date">
-  	<time datetime="2019-12-18T10:04:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>#include &lt;stdio.h&gt;</p>
-<p>int main()<br>{<br>    int n,i,j;<br>    int m;<br>    char *a[][10] = {“”,”I”,”II”,”III”,”IV”,”V”,”VI”,”VII”,”VIII”,”IX”,<br>                    “”,”X”,”XX”,”XXX”,”XL”,”L”,”LX”,”LXX”,”LXXX”,”XCC”,<br>                    “”,”C”,”CC”,”CCC”,”CD”,”D”,”DC”,”DCC”,”DCCC”,”CM”};</p>
-<pre><code>printf(&quot;Please input number: &quot;);
-scanf(&quot;%d&quot;,&amp;n);
-
-printf(&quot;Output:\n&quot;);
-
-if(n &lt;= 0 || n &gt;= 1000)
-printf(&quot;Input error!&quot;);
-
-else
-{
-    printf(&quot;%d=&quot;,n);
-
-for(m = 100 , i = 2 ; i &gt;= 0 ; m /= 10 , i--)
-{
-    j = n/m%10;
-    printf(&quot;%s&quot;,a[i][j]);
-} </code></pre><p>}</p>
-<pre><code>return 0;</code></pre><p>}</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/18/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97/">展开全文 >></a>
         </p>
       
 
