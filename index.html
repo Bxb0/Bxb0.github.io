@@ -151,6 +151,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-攻防世界" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/">攻防世界</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/" class="archive-article-date">
+  	<time datetime="2020-04-09T01:53:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>misc:</strong></p>
+<p>菜狗截获了一份报文如下c8e9aca0c6f2e5f3e8c4efe7a1a0d4e8e5a0e6ece1e7a0e9f3baa0e8eafae3f9e4eafae2eae4e3eaebfaebe3f5e7e9f3e4e3e8eaf9eaf3e2e4e6f2.</p>
+<p>从报文中可以联想到是md5加密, 但试了一下, 发现不对. 再看报文中字母只是 a-f , 所以可能是十六进制数, 又一般都是一个字节一个字符, 而一个字节存放二个十六进制数. 我们就2个一组转换成十进制, 但是大于了127, 可打印字符ASCII范围在<strong>0-127</strong>,  那我们知道 <code>}</code>字符的ASCII十六进制为 <strong>0X7D</strong>,  再看报文最后2个字符组成的十六进制数 <strong>0xf2</strong>, 一般我们可以有这个思路,求差值 但也有最后没有用 <strong>}</strong>结尾的, 这里就不是.😂. 但其实想到要把字符打印出来, 而字符ASCII<strong>0-127</strong>, 那就直接试一试减128, 一下子就对了, 哈哈😁.</p>
+<p>下面是C语言写的, 2个一组转换成十进制数, 最后变成可打印字符:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> a[] = <span class="string">"c8e9aca0c6f2e5f3e8c4efe7a1a0d4e8e5a0e6ece1e7a0e9f3baa0e8eafae3f9e4eafae2eae4e3eaebfaebe3f5e7e9f3e4e3e8eaf9eaf3e2e4e6f2"</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, lenth  = <span class="built_in">strlen</span>(a), sum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> b[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;, j = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; lenth; i += <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i] &gt;= <span class="number">97</span> &amp;&amp; a[i] &lt;= <span class="number">122</span>)</span><br><span class="line">		a[i] -= <span class="number">87</span>;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		a[i] -= <span class="number">48</span>; </span><br><span class="line">		</span><br><span class="line">		sum = sum*<span class="number">16</span> + a[i];</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(a[i+<span class="number">1</span>])</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i+<span class="number">1</span>] &gt;= <span class="number">97</span> &amp;&amp; a[i+<span class="number">1</span>] &lt;= <span class="number">122</span>)</span><br><span class="line">			a[i+<span class="number">1</span>] -= <span class="number">87</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			a[i+<span class="number">1</span>] -= <span class="number">48</span>;</span><br><span class="line">			</span><br><span class="line">			sum = sum*<span class="number">16</span> + a[i+<span class="number">1</span>]; </span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(sum &gt; <span class="number">127</span>)</span><br><span class="line">		sum -= <span class="number">128</span>;</span><br><span class="line">		</span><br><span class="line">		b[j++] = sum, sum = <span class="number">0</span>; </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">puts</span>(b);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>reverse:</strong></p>
+<p>首先拿到题, 还是拖进<strong>Exeinfope</strong>查看一下是否有壳:</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409121215784.png" alt="image-20200409121215784"></p>
+<p>嗯没有😁.</p>
+<p>拖进ida, 找到主函数, 浏览一下程序功能, 一个游戏, 好像是通过点亮所有灯获得flag. 那么必定有一个判断条件, 往下看主函数, 显而易见:</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409121557118.png" alt="image-20200409121557118"></p>
+<p>那么下面一个函数就是关键函数了, 进去发现就是将flag计算出来, 56位长度, 还是懒得自己写程序来算.</p>
+<p>我们可以在ida中找到 <strong>判断条件</strong>那里的的地址,: 0045F5D1</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409122019635.png" alt="image-20200409122019635"></p>
+<p>再通过OD,看加载的 VA(虚拟内存地址) :</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409203440087.png" alt="image-20200409203440087"></p>
+<p>那么由于 动态和静态的VA可能不同，但是它们的RVA还是一样的。我们使用在ida中的找到VA - imagebase = RVA. 再加上OD中的VA, 即得到在OD中的地址: 0091F5D1. 这样我们直接在OD中找到这个地址: 如下图, 看到很多 jnz. 所以我们的目的是让它都不跳转, 可以每个地方都 nop了, 但我们可以往下看, 直接找到它最后应该去到的函数地址(记为A), 通过打补丁把jnz xxxx, (图中0091F5D8) 改为 jmp A.</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409204018803.png" alt="image-20200409204018803"></p>
+<p>最后一按 F9  运行, 出现  flag  .</p>
+<p><img src="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/image-20200409204652301.png" alt="image-20200409204652301"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-1-逆向心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -826,118 +911,6 @@ int main()
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-求1-m之间的素数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">求1-m之间的素数.</a>
-    </h1>
-  
-
-        
-        <a href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2019-12-19T08:20:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>#include &lt;stdio.h&gt;</p>
-<p>int main()<br>{<br>    int m;<br>    int i,j;<br>    int s = 0,n = 0,cnt = 0,q = 0;<br>    int a[100];</p>
-<pre><code>printf(&quot;Input:\n&quot;);
-printf(&quot;Please input a number:\n&quot;);
-scanf(&quot;%d&quot;,&amp;m);
-
-printf(&quot;Output:\n&quot;);
-
-if(m &lt;= 0)
-
-printf(&quot;error!&quot;);
-
-else
-{
-    for(i = 2 ; i &lt; m ; i++)
-    {
-        for(j = 2 ; j &lt; i ; j++)
-        {
-            if(i%j == 0)
-                q = 1; 
-        }
-        if(q == 0)
-        {
-          s++;
-
-          if(s &gt; 100)
-          break;
-
-           a[n++] = i;
-
-        }
-        q = 0;
-    }
-
-    if(s &gt; 100)
-        printf(&quot;overflow!&quot;);
-    else
-    {
-        printf(&quot;n=%d\n&quot;,s);
-        for(i = 0 ; i &lt; s ; i++)
-        {
-            cnt++;
-            printf(&quot;%5d&quot;,a[i]);
-
-            if(cnt%15 == 0)
-            putchar(&apos;\n&apos;);
-        }
-    }
-}
-return 0;</code></pre><p>}</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">展开全文 >></a>
         </p>
       
 

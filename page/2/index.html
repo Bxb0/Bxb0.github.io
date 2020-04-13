@@ -151,6 +151,118 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-求1-m之间的素数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">求1-m之间的素数.</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2019-12-19T08:20:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#include &lt;stdio.h&gt;</p>
+<p>int main()<br>{<br>    int m;<br>    int i,j;<br>    int s = 0,n = 0,cnt = 0,q = 0;<br>    int a[100];</p>
+<pre><code>printf(&quot;Input:\n&quot;);
+printf(&quot;Please input a number:\n&quot;);
+scanf(&quot;%d&quot;,&amp;m);
+
+printf(&quot;Output:\n&quot;);
+
+if(m &lt;= 0)
+
+printf(&quot;error!&quot;);
+
+else
+{
+    for(i = 2 ; i &lt; m ; i++)
+    {
+        for(j = 2 ; j &lt; i ; j++)
+        {
+            if(i%j == 0)
+                q = 1; 
+        }
+        if(q == 0)
+        {
+          s++;
+
+          if(s &gt; 100)
+          break;
+
+           a[n++] = i;
+
+        }
+        q = 0;
+    }
+
+    if(s &gt; 100)
+        printf(&quot;overflow!&quot;);
+    else
+    {
+        printf(&quot;n=%d\n&quot;,s);
+        for(i = 0 ; i &lt; s ; i++)
+        {
+            cnt++;
+            printf(&quot;%5d&quot;,a[i]);
+
+            if(cnt%15 == 0)
+            putchar(&apos;\n&apos;);
+        }
+    }
+}
+return 0;</code></pre><p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-罗马数字" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -567,7 +679,7 @@ for(i = 0 ; i &lt; lenth/2 ; i++)
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/">测试一下有没有问题</a>
+      <a class="article-title" href="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/">PTA-</a>
     </h1>
   
 
@@ -581,6 +693,16 @@ for(i = 0 ; i &lt; lenth/2 ; i++)
     <div class="article-entry" itemprop="articleBody">
       
         <p>运算符之间的优先级关系,如果不是很清楚,都加上括号</p>
+<p>1.PTA上开始没思路的题.</p>
+<p><img src="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/image-20200407130405852.png" alt="image-20200407130405852"></p>
+<p>下面附上代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> m = <span class="number">0</span>, n = <span class="number">0</span>, hours = <span class="number">0</span>, minute = <span class="number">0</span>, end_time = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d %d"</span>, &amp;m, &amp;n);</span><br><span class="line">	</span><br><span class="line">	hours = m/<span class="number">100</span>, minute = m%<span class="number">100</span>;  <span class="comment">//需要学习的地方.</span></span><br><span class="line">	</span><br><span class="line">	hours += n/<span class="number">60</span>, minute += n-(n/<span class="number">60</span>)*<span class="number">60</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(minute &gt;= <span class="number">60</span>) </span><br><span class="line">		hours += <span class="number">1</span>, minute -= <span class="number">60</span>; <span class="comment">//需要注意的地方.</span></span><br><span class="line">	<span class="keyword">if</span>(minute &lt; <span class="number">0</span>)</span><br><span class="line">		hours -=<span class="number">1</span>, minute += <span class="number">60</span>; <span class="comment">//需要注意的地方.</span></span><br><span class="line">	</span><br><span class="line">	end_time = hours*<span class="number">100</span> + minute; </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d"</span>, end_time);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.PTA中做一道题, 注意细节心得.</p>
+<p><img src="/2019/11/17/%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%A1%E6%9C%89%E9%97%AE%E9%A2%98/image-20200413132934160.png" alt="image-20200413132934160"></p>
+<p>下面附上代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(b)</span><br><span class="line">	&#123;</span><br><span class="line">		c = a%b;  <span class="comment">//求最大公约数中, 这里是  %  不要误写 /  ;</span></span><br><span class="line">		a = b;</span><br><span class="line">		b = c;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> N = <span class="number">0</span>, temp = <span class="number">0</span>, g = <span class="number">0</span>, temp_N = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">0</span>, <span class="built_in">min</span> = <span class="number">0</span>, sum_a = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;N);</span><br><span class="line">	temp_N = N;  </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(; N; N--)     <span class="comment">//开始输入的是N个数, 但是这里循环后变成了0, 所以后面就不能直接用N了, </span></span><br><span class="line">	&#123;				<span class="comment">//但是写程序时总是忽略了这点, 后面直接用N, 导致了出错还找半天.</span></span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d/%d"</span>, &amp;a, &amp;b);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">min</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = <span class="built_in">min</span>; </span><br><span class="line">			<span class="built_in">min</span> = (<span class="built_in">min</span>*b)/gcd(<span class="built_in">min</span>, b);</span><br><span class="line">			sum_a *= (<span class="built_in">min</span>/temp), sum_a += (<span class="built_in">min</span>/b)*a; </span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">min</span> = b, sum_a += a;</span><br><span class="line">			</span><br><span class="line">		g = gcd(sum_a, <span class="built_in">min</span>);</span><br><span class="line">		sum_a /= g, <span class="built_in">min</span> /= g;	</span><br><span class="line">	&#125; </span><br><span class="line">	N = temp_N;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">min</span> *= N;</span><br><span class="line">	g = gcd(sum_a, <span class="built_in">min</span>);</span><br><span class="line">	sum_a /= g, <span class="built_in">min</span> /= g;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">min</span> &gt; <span class="number">1</span>)</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d/%d"</span>, sum_a, <span class="built_in">min</span>);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d"</span>, sum_a);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
