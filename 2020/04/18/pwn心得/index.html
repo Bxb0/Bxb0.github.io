@@ -6,16 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>形参数组 | Hexo</title>
+  <title>PWN | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="当二维数组作为参数传递给函数时，函数的形参不能简单地写双重指针，因为编译器实际寻址如下：对于数组 int p[m][n];如果要取p[i][j]的值，编译器是这样寻址的：p + i*n + j; 如果我们省略了第二维或者更高维的大小，编译器将不知道如何正确的寻址。因此如果我们在编写程序的时候需要用到各个维数都不固定的二维数组作为参数，虽然这个时候编译器还是不能识别，但我们可以把二维数组当做普通的">
+  <meta name="description" content="由于汇编语言是底层的编程语言，各种函数参数都要直接控制栈进行存取，在混合编程中，要用汇编来调用C函数，当然就要知道参数的压栈情况了。    当知道C函数的参数压栈顺序是从右到左时，我觉得很奇怪，因为大多数情况下，人们的习惯是从左到右的，难不成设计者学咱们中国古代写字从右到左的习惯不成？    当时只是记下了这个规则而已，并没有去探究这其中的缘由，后来在实验中自己用汇编实现了printf和scanf">
 <meta property="og:type" content="article">
-<meta property="og:title" content="形参数组">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;20&#x2F;%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84&#x2F;index.html">
+<meta property="og:title" content="PWN">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;18&#x2F;pwn%E5%BF%83%E5%BE%97&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="当二维数组作为参数传递给函数时，函数的形参不能简单地写双重指针，因为编译器实际寻址如下：对于数组 int p[m][n];如果要取p[i][j]的值，编译器是这样寻址的：p + i*n + j; 如果我们省略了第二维或者更高维的大小，编译器将不知道如何正确的寻址。因此如果我们在编写程序的时候需要用到各个维数都不固定的二维数组作为参数，虽然这个时候编译器还是不能识别，但我们可以把二维数组当做普通的">
+<meta property="og:description" content="由于汇编语言是底层的编程语言，各种函数参数都要直接控制栈进行存取，在混合编程中，要用汇编来调用C函数，当然就要知道参数的压栈情况了。    当知道C函数的参数压栈顺序是从右到左时，我觉得很奇怪，因为大多数情况下，人们的习惯是从左到右的，难不成设计者学咱们中国古代写字从右到左的习惯不成？    当时只是记下了这个规则而已，并没有去探究这其中的缘由，后来在实验中自己用汇编实现了printf和scanf">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-25T11:01:32.696Z">
+<meta property="og:updated_time" content="2020-04-25T11:04:36.363Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -152,27 +152,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-形参数组" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-pwn心得" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      形参数组
+      PWN
     </h1>
   
 
         
-        <a href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/" class="archive-article-date">
-  	<time datetime="2019-12-20T07:59:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-20</time>
+        <a href="/2020/04/18/pwn%E5%BF%83%E5%BE%97/" class="archive-article-date">
+  	<time datetime="2020-04-18T01:57:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> 当二维数组作为参数传递给函数时，函数的形参不能简单地写双重指针，因为编译器实际寻址如下：对于数组 int p[m][n];如果要取p[i][j]的值，编译器是这样寻址的：p + i*n + j; 如果我们省略了第二维或者更高维的大小，编译器将不知道如何正确的寻址。因此如果我们在编写程序的时候需要用到各个维数都不固定的二维数组作为参数，虽然这个时候编译器还是不能识别，但我们可以把二维数组当做普通的指针，将它的大小用两个参数指明，然后我们为二维数组手工寻址，这样就可以将二维数组作为函数的参数传递了，我们可以把维数固定的参数变为维数随即的参数，如： void Func(int array[3][10]); void Func(int array[][10]); </p>
+        <p>由于汇编语言是底层的编程语言，各种函数参数都要直接控制栈进行存取，在混合编程中，要用汇编来调用C函数，当然就要知道参数的压栈情况了。<br>    当知道C函数的参数压栈顺序是从右到左时，我觉得很奇怪，因为大多数情况下，人们的习惯是从左到右的，难不成设计者学咱们中国古代写字从右到左的习惯不成？<br>    当时只是记下了这个规则而已，并没有去探究这其中的缘由，后来在实验中自己用汇编实现了printf和scanf函数的基本功能，尝到了压栈从右到左的好处，但是仍然没有多想。<br>    直到前阵子看斯坦福大学公开课的时候，老师解释了一番才恍然大悟！<br>    那么，这是为什么呢？<br>    要回答这个问题，就不得不谈一谈printf()函数，printf函数的原型是：printf（const char* format,…）<br>    没错，它是一个不定参函数，那么我们在实际使用中是怎么样知道它的参数个数呢？这就要靠format了，编译器通过format中的%占位符的个数来确定参数的个数。<br>     现在我们假设参数的压栈顺序是从左到右的，这时，函数调用的时候，format最先进栈，之后是各个参数进栈，最后pc进栈，此时，由于format先进栈了，上面压着未知个数的参数，想要知道参数的个数，必须找到format，而要找到format，必须要知道参数的个数，这样就陷入了一个无法求解的死循环了！！<br>    而如果把参数从右到左压栈，情况又是怎么样的？函数调用时，先把若干个参数都压入栈中，再压format，最后压pc，这样一来，栈顶指针加2便找到了format，通过format中的%占位符，取得后面参数的个数，从而正确取得所有参数。<br>    所以，如果不存在…这种不定参的函数，则参数的压栈顺序无论是从左到右还是从右到左都是没关系的</p>
 
       
 
@@ -252,7 +252,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/04/18/pwn%E5%BF%83%E5%BE%97/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -266,18 +266,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/01/10/%E5%B0%8F%E7%94%B2%E9%B1%BC%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%BE%97/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/04/23/BUUCTF/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          小甲鱼指针作业心得
+          BUUCTF
         
       </div>
     </a>
   
   
-    <a href="/2019/12/19/%E6%B1%821-m%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%A0%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">求1-m之间的素数.</div>
+    <a href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">攻防世界</div>
       <i class="icon-circle-right"></i>
     </a>
   

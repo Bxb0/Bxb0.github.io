@@ -235,19 +235,19 @@
 
 
   
-    <article id="post-PWN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-pwn心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/18/PWN/">PWN</a>
+      <a class="article-title" href="/2020/04/18/pwn%E5%BF%83%E5%BE%97/">PWN</a>
     </h1>
   
 
         
-        <a href="/2020/04/18/PWN/" class="archive-article-date">
+        <a href="/2020/04/18/pwn%E5%BF%83%E5%BE%97/" class="archive-article-date">
   	<time datetime="2020-04-18T01:57:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-18</time>
 </a>
         
@@ -268,7 +268,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/18/PWN/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/04/18/pwn%E5%BF%83%E5%BE%97/">展开全文 >></a>
         </p>
       
 
@@ -637,19 +637,19 @@
 
 
   
-    <article id="post-三月二日心得" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-union 与 小端 " class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/">三月二日心得</a>
+      <a class="article-title" href="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/">三月二日心得</a>
     </h1>
   
 
         
-        <a href="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/" class="archive-article-date">
+        <a href="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/" class="archive-article-date">
   	<time datetime="2020-03-02T10:29:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
 </a>
         
@@ -658,8 +658,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在一般的我们平常使用的计算机, 数据存储方式都是小端, 但是C语言编译器都会经过处理, 所以总是按一个类型, 倒序显示. </p>
-<p><img src="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/image-20200302183836237.png" alt="image-20200302183836237"></p>
-<p><img src="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/image-20200302185122616.png" alt="image-20200302185122616"></p>
+<p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200302183836237.png" alt="image-20200302183836237"></p>
+<p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200302185122616.png" alt="image-20200302185122616"></p>
 <p>从以上两个图片可以看出, 当结构体中位域定义时. 是从左往右一个字节一个字节进行定义, 但是在一个字节中是从</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">低位bit0 开始算起的(注意不是从高位开始对应)</span><br></pre></td></tr></table></figure>
 
@@ -677,7 +677,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/%E4%B8%89%E6%9C%88%E4%BA%8C%E6%97%A5%E5%BF%83%E5%BE%97/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/">展开全文 >></a>
         </p>
       
 
@@ -729,7 +729,7 @@
       
         <p>由于现在的计算机是64位, 而debug是当年在16位的计算机上搞的, 在32位计算机中, 微软还在系统同增加了debug这个工具, 但是到了64位, 却没有加, 所以我们要自己去下载一个 dosbox 开源的dos模拟器, 然后将debug在dosbox中运行.当然这些都是没问题的.问题是:</p>
 <p>在下载masm后, 由于第一次接触, 编写好源程序后, 用指令 masm   xxx.asm .但是一直报 A2044的错误, 就百度, 知乎的到问题, 都说输入的格式错误, 或者有非法字符. 但是我一个一个照着打的 ,不可能啊.就这样痛苦了一晚上, 第二天起来, 还是不知道为什么, 就抱着试一试(奔溃了),换了个masm版本, 这次成功了. 但是在编写一个新的源程序, 又是这个错误, 再次崩,()/(ㄒoㄒ)/~~,.</p>
-<p>突然我想到, 会不会是编码格式的错误呢, (换了UTF-8)一换,果然是!!!!!舒服了.</p>
+<p>突然我想到, 会不会是编码格式的错误呢, (换了UTF-8)一换,果然是!!!!!.</p>
 <p>所以在以后再有类似的问题, 一定要想全面哪里有错误, 既然网上都说了格式或者非法字符, 那怎么没想到编码问题呢,.</p>
 
       
@@ -1015,7 +1015,7 @@ int main()
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
