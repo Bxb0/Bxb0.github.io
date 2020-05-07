@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="easy_Maze  这道题还是挺好玩的.   由题目我们能知道是关于迷宫的题. 下载下来是elf文件, 查壳后无壳, 在linux下运行看看大概流程.   载入IDA, 先分析了接受我们输入的字符的函数.  知道在外面一层的主函数是先生成一个每行7个元素的数组. 然后通过我们输入的字符按控制在矩阵迷宫中走向, 最后按照规定的到达一个目的地.  接下来返回外侧的主函数, 就是生成矩阵的了. 通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="攻防世界(3)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="easy_Maze  这道题还是挺好玩的.   由题目我们能知道是关于迷宫的题. 下载下来是elf文件, 查壳后无壳, 在linux下运行看看大概流程.   载入IDA, 先分析了接受我们输入的字符的函数.  知道在外面一层的主函数是先生成一个每行7个元素的数组. 然后通过我们输入的字符按控制在矩阵迷宫中走向, 最后按照规定的到达一个目的地.  接下来返回外侧的主函数, 就是生成矩阵的了. 通过">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200504133456542.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200504133948097.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506194728611.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506195403856.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506202545180.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200504135411101.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506201841271.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200504140433640.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506144401943.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506145151730.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200506145627945.png">
+<meta property="og:updated_time" content="2020-05-06T12:58:09.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;04&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)&#x2F;image-20200504133456542.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>攻防世界(3) | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          攻防世界(3)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-04 13:14:05" itemprop="dateCreated datePublished" datetime="2020-05-04T13:14:05+08:00">2020-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-06 20:58:09" itemprop="dateModified" datetime="2020-05-06T20:58:09+08:00">2020-05-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<h3 id="easy-Maze"><a href="#easy-Maze" class="headerlink" title="easy_Maze"></a>easy_Maze</h3></blockquote>
+<ul>
+<li><p>这道题还是挺好玩的. </p>
+</li>
+<li><p>由题目我们能知道是关于迷宫的题. 下载下来是elf文件, 查壳后无壳, 在linux下运行看看大概流程. </p>
+</li>
+<li><p>载入IDA, 先分析了接受我们输入的字符的函数.  知道在外面一层的主函数是先生成一个每行7个元素的数组. 然后通过我们输入的字符按控制在矩阵迷宫中走向, 最后按照规定的到达一个目的地.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133456542.png" alt="image-20200504133456542"></p>
+</li>
+<li><p>接下来返回外侧的主函数, 就是生成矩阵的了. 通过上面的49个元素知道且下面函数的参数7, 知道规模 7*7. <img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133948097.png" alt="image-20200504133948097"></p>
+</li>
+<li><p>进入<strong>Step_0</strong> 看看. 就是简单的把上面49个元素赋值给 v7 数组, 也印证了数组是7*7<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506194728611.png" alt="image-20200506194728611"></p>
+</li>
+<li><p>接下来 <strong>Step_1</strong>, 看起来是很简洁, 但里面的 <strong>getA</strong>与 <strong>getAstart</strong> 函数 算法太冗长了.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506195403856.png" alt="image-20200506195403856"></p>
+</li>
+<li><p>这个时候, 开始我就把生成矩阵的所有函数及数据都复制到<strong>VC</strong> 编译器中, 再根据栈的特点改下数据的顺序(<strong>数据存放是从下往上, 那么我们取数据时地址每次减1而不是加一</strong>), 然后运行打印出矩阵. 问题是运行后什么也没有打印, 调试发现一个函数中的内存空间和另外一个冲突, 相互覆盖值. 这个函数太多,关联性大, 改起来也麻烦.</p>
+</li>
+<li><p>然后转向GDB调试, 但是不熟练. 又转向ida动态调试. 首先<strong>在 IDA 的安装目录/dbgsrc/找到 linux_server 和 linux_server64 拷贝到 linux</strong> ,在linux中运行 <strong>linux_server64</strong>, 然后在Debugger的 process options 如下图格式配置. 然后F9开始.</p>
+<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506202545180.png" alt="image-20200506202545180"></p>
+</li>
+<li><p>先下断点, 找到储存矩阵的空间的地址, 把这个地址转到数据窗口跟随, 然后运行到生成矩阵的下面一个函数(也就是(<strong>Step_1</strong>下面). 在数据窗口出现我们的数据(int型), 由于是49个元素, 49<em>4/16 = 12 …4  ,那就是12行加4个数据, 用 *</em>shift+E** 提取出C语言格式的数据.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504135411101.png" alt="image-20200504135411101"></p>
+</li>
+<li><p>数据得到后, 用C语言打印出来好观察, 注意每个数据4个字节(小端). </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">union</span> 	<span class="comment">//每个数据4个字节, 且小端. 用联合</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">char</span> ida_chars[<span class="number">196</span>];</span><br><span class="line">		<span class="keyword">int</span> a[<span class="number">49</span>];</span><br><span class="line">	&#125;A = &#123;</span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span></span><br><span class="line">		&#125;;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> (*p)[<span class="number">7</span>] = (<span class="keyword">int</span> (*)[<span class="number">7</span>])A.a;  <span class="comment">// 强制转化为数组指针, 方便后面打印</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">7</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"%d "</span>, p[i][j]);</span><br><span class="line">		&#125; </span><br><span class="line">		<span class="built_in">putchar</span>(<span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506201841271.png" alt="image-20200506201841271"></p>
+</li>
+<li><p>根据我们打游戏的熟悉 aswd ,朝着1走到最后.  <strong>ssddwdwdddsssaasasaaassddddwdds</strong> 最后在linux下输入.</p>
+<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504140433640.png" alt="image-20200504140433640"></p>
+</li>
+<li><p><strong>总结: 更加熟悉了linux动态调试的运用,  加深了数组指针的理解.</strong></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<h3 id="simple-check-100"><a href="#simple-check-100" class="headerlink" title="simple-check-100"></a>simple-check-100</h3></blockquote>
+<ul>
+<li><p>题目本来很简单, 但是有坑啊…</p>
+</li>
+<li><p>首先, 题目下载下来, 有三个版本. 下意识的选择了熟悉的.exe来分析. </p>
+</li>
+<li><p>查壳无壳, 用ida打开. 第一直觉就是这个最后的flag与我们输入字符没关系, 直接OD动态调试跳过判断条件就好了.</p>
+</li>
+<li><p>还是先细看一下栈空间, 虽然还是和我们输入的字符没有关系. 但是有问题啊,要用的地址交叉了.  想着万一题就是这样呢, 先取OD试一下. 不出所料, 乱码😢 </p>
+</li>
+<li><p>开始仔细分析下这个题的栈空间, 在OD反复调试, 发现我们输入字符的空间只有19个字节啊, 为什么我们输入的字符栈空间在OD中调试有19+32 = 51字节空间.</p>
+<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506144401943.png" alt="image-20200506144401943"></p>
+</li>
+<li><p>看了半天不知道为什么, 后面才看见程序下面有  <strong>v3 = alloca(32);</strong> 百度了一下, 这个是再栈上申请空间的函数. 正好是多出来的32. </p>
+</li>
+<li><p>经过反复调试, 这个题怎么也和我们输入的字符没关系啊, 程序每次过了判断条件, 算的都一样. 真的奇怪了.</p>
+</li>
+<li><p>最后没办法了,想不通.  就最后再把文件中这个程序的linux版本载入ida看看,  嗯….这个版本的栈空间就没有交叉. v7一直到v34, 没有像PE文件那个版本在中间多一个指针.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145151730.png" alt="image-20200506145151730"></p>
+</li>
+<li><p>在linux下动态调试.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145627945.png" alt="image-20200506145627945"></p>
+</li>
+<li><p>😂什么鬼题. PE文件版本居然是有问题的!!!</p>
+</li>
+<li><p><strong>总结: 文件有多个版本的时候, 注意!!! 张见识了. 虽然多花了时间在PE上耗, 但是对栈更清楚了.</strong></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(2)/" rel="prev" title="攻防世界 (2)">
+      <i class="fa fa-chevron-left"></i> 攻防世界 (2)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#easy-Maze"><span class="nav-number">1.</span> <span class="nav-text">easy_Maze</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#simple-check-100"><span class="nav-number">2.</span> <span class="nav-text">simple-check-100</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
