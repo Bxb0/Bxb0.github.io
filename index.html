@@ -144,7 +144,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/ASLR/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -158,7 +158,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/" class="post-title-link" itemprop="url">攻防世界(3)</a>
+            <a href="/2020/05/12/ASLR/" class="post-title-link" itemprop="url">ASLR</a>
         </h2>
 
         <div class="post-meta">
@@ -167,16 +167,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-05-04 13:14:05" itemprop="dateCreated datePublished" datetime="2020-05-04T13:14:05+08:00">2020-05-04</time>
+              <time title="Created: 2020-05-12 12:15:30 / Modified: 12:17:24" itemprop="dateCreated datePublished" datetime="2020-05-12T12:15:30+08:00">2020-05-12</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-06 20:58:09" itemprop="dateModified" datetime="2020-05-06T20:58:09+08:00">2020-05-06</time>
-              </span>
 
           
 
@@ -190,34 +184,149 @@
 
       
           <blockquote>
+<p><strong>开始是一道CTF题加了UPX壳,  利用堆栈平衡脱壳,import rec进行IAT修复后,程序不能正常打开了.  后来才知道是开启了ASLR, 关闭后即可打开.  但有一个问题想了很久.  为什么开启了ASLR的程序在有壳时可以打开, 脱壳后就打不开了呢? 目前觉得是 加壳会对PE文件的重定位表进行压缩,在OD直接dump出的程序是丢失重定位表的, 而程序又是开启了ASLR,那程序自然会访问到无效的地址而打不开(如果不对, 希望大佬指正)</strong></p>
+</blockquote>
+<p>[TOC]</p>
+<h6 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h6><ul>
+<li><p>ASLR(地址空间布局随机化), 一种针对缓冲区溢出的安全保护技术. 从Windows Vsita(内核版本<strong>6.0</strong>)开始采用, 而Windows XP的内核版本是<strong>5.1</strong>, 所以我们在Windows XP下脱开启了ASLR 的壳是不会有这个问题的.</p>
+</li>
+<li><p>ASLR就是使我们的PE文件在每次载入内存时起始地址都会变得随机化, 增加恶意用户编写漏洞利用代码的难度(<strong>在之前我们知道只有dll文件在理想地址空间被占用了才会进行重定位</strong>)</p>
+</li>
+<li><p>对于ASLR功能我们系统(win10)是默认关闭的, 我们可以在设置的安全中心打开.<img src="/2020/05/12/ASLR/image-20200511184233641-1589256958059.png" alt="image-20200511184233641"></p>
+<p>另外就是可执行文件的ASLR, 我们在我们的编译器上也可以选择是否引用该功能.<img src="/2020/05/12/ASLR/image-20200511185012962-1589256958060.png" alt="image-20200511185012962"></p>
+</li>
+</ul>
+<h6 id="分析ASLR"><a href="#分析ASLR" class="headerlink" title="分析ASLR."></a>分析ASLR.</h6><ul>
+<li><p>以VS编译器写一个程序, 分别生成开启了随机基址与未开启的的版本来分析. (<strong>一共有三个地方不同</strong>)</p>
+<p><strong>(1)</strong>未开启ASLR的程序的<strong>文件头的Characteristics</strong>会多一个 <strong>IMAGE_FILE_RELOCS_STRIPPED   0X0001</strong> 的属性, 经过查看官方文档可以看得到属性解释, 所以我们开启ASLRd的程序不会有这个属性<img src="/2020/05/12/ASLR/image-20200511200244008-1589256958060.png" alt="image-20200511200244008"></p>
+<p>​    下面看程序对比:</p>
+<p><img src="/2020/05/12/ASLR/image-20200511201513817-1589256958060.png" alt="image-20200511201513817"></p>
+</li>
+</ul>
+<p>  <strong>(2)</strong>开启了ASLR的程序的<strong>可选头的DllCharacteristics</strong>多了<strong>IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE</strong></p>
+<p>  <strong>0X0040</strong>的属性. 同样查看官方文档. 即重定位时需要的属性.<img src="/2020/05/12/ASLR/image-20200511201801401-1589256958060.png" alt="image-20200511201801401"></p>
+<p>  程序对比:<img src="/2020/05/12/ASLR/image-20200511202308748-1589204427416-1589204437657-1589256958060.png" alt="image-20200511202308748"></p>
+<p>  <strong>(3)</strong>开启了ASLR的程序会多一个 <strong>.reloc</strong> 节(一般普通的exe文件是不需要该节的, 用于开启ASLR的程序进行重定位, 当然我们关闭了ASLR也可以把这个节删了)<img src="/2020/05/12/ASLR/image-20200511202858464-1589256958060.png" alt="image-20200511202858464"></p>
+<h6 id="关闭ASLR"><a href="#关闭ASLR" class="headerlink" title="关闭ASLR"></a>关闭ASLR</h6><ul>
+<li><p>由上面的分析知道有3处不同, 其中上面的<strong>(1)</strong>中是开启了ASLR的程序少了 <strong>IMAGE_FILE_RELOCS_STRIPPED   0X0001</strong>属性, 我们增加上这个属性即可关闭ASLR(即 <strong>0102 -&gt; 0103</strong> / <strong>对应属性打上勾即可</strong>).    另外<strong>(2)</strong>中是多了<strong>DLL can move</strong>的属性,删除这个属性,同样可以关闭ASLR(即 <strong>8140 -&gt; 8100</strong> / <strong>对应属性取消打勾即可</strong> )</p>
+<p>下面示例在010编译器中修改数值来关闭ASLR.<img src="/2020/05/12/ASLR/image-20200511204613644-1589256958060.png" alt="image-20200511204613644"></p>
+</li>
+</ul>
+<blockquote>
+<p><strong>以上是关于ASLR的分析即关闭, 如果开启了ASLR, 我们在脱壳之前还是先关闭它最好,也方便调试时IDA与OD中地址的对应(如果只是想地址对应, 也可以在IDA中启动时把Manual load勾上, 手动输入加载的基地址即可),  既然关闭了ASLR, 那多出的.reloc节也就没用了, 下面手动删除该节区(虽然有很多工具可以直接实现, 还是手动熟悉下PE结构)</strong></p>
+</blockquote>
+<h6 id="删除-reloc节区"><a href="#删除-reloc节区" class="headerlink" title="删除.reloc节区."></a>删除.reloc节区.</h6><ul>
+<li><p>首先每个节都对应一个节区头的, 那先从节区头开始. 使用010editor可以轻松在最后一节区头找到.  我们将其全部用0覆盖填充即可.(注: 不能直接删除了, 不然PE文件的很多属性会对应不上)<img src="/2020/05/12/ASLR/image-20200511205903649-1589256958060.png" alt="image-20200511205903649"></p>
+</li>
+<li><p>下面删除.reloc整个节区(一般这个节区都是新加的,所以在最后, 我们只要找到偏移地址直接删除到最后即可), 如图, 直接删除到最后即可. (这里的Size: 600h, 下面有用)<img src="/2020/05/12/ASLR/image-20200511210742225-1589256958060.png" alt="image-20200511210742225"></p>
+</li>
+<li><p>删除完后, 我们知道PE文件头的<strong>_IMAGE_FILE_HEADER</strong>的<strong>NumberOfSections</strong>的值一定要严格的与实际节区对应, 所以去修改 <strong>_IMAGE_FILE_HEADER</strong>的<strong>NumberOfSections</strong>使其减一.<img src="/2020/05/12/ASLR/image-20200511210943674-1589256958060.png" alt="image-20200511210943674">)<img src="/2020/05/12/ASLR/image-20200511211434269-1589256958060.png" alt="image-20200511211434269"></p>
+</li>
+<li><p>最后还有修改一个属性, 就是PE文件头 <strong>_IMAGE_OPTIONAL_HEADER</strong></p>
+<p>的<strong>SizeOfImage</strong>, 修改为减去 .reloc节区后的大小  从上面我们知道.reloc大小是600h, 而该PE文件<strong>SectionAlignment(节在内存中的最小单位 (对齐单位) 一般为: 1000h)为1000h</strong>, 1000h &gt; 600h. 以1000h对齐, 所以我们直接将<strong>SizeOfImage</strong>减去1000h即可.<img src="/2020/05/12/ASLR/image-20200511211537176-1589256958060.png" alt="image-20200511211537176">)<img src="/2020/05/12/ASLR/image-20200511212159056-1589256958060.png" alt="image-20200511212159056"></p>
+<blockquote>
+<p>如果想增加一个节区, 也可以使用同样的方法</p>
+</blockquote>
+</li>
+<li><p><strong>最后以上是对目前ALSR学习的总结(刚接触不久),  如果有错误的地方请大家指正.</strong> </p>
+</li>
+<li><p><strong>原CTF题也附上.</strong></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/" class="post-title-link" itemprop="url">攻防世界 (3)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-03 13:49:15" itemprop="dateCreated datePublished" datetime="2020-05-03T13:49:15+08:00">2020-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-12 13:51:38" itemprop="dateModified" datetime="2020-05-12T13:51:38+08:00">2020-05-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[TOC]</p>
+<blockquote>
 <h3 id="easy-Maze"><a href="#easy-Maze" class="headerlink" title="easy_Maze"></a>easy_Maze</h3></blockquote>
 <ul>
 <li><p>这道题还是挺好玩的. </p>
 </li>
 <li><p>由题目我们能知道是关于迷宫的题. 下载下来是elf文件, 查壳后无壳, 在linux下运行看看大概流程. </p>
 </li>
-<li><p>载入IDA, 先分析了接受我们输入的字符的函数.  知道在外面一层的主函数是先生成一个每行7个元素的数组. 然后通过我们输入的字符按控制在矩阵迷宫中走向, 最后按照规定的到达一个目的地.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133456542.png" alt="image-20200504133456542"></p>
+<li><p>载入IDA, 先分析了接受我们输入的字符的函数.  知道在外面一层的主函数是先生成一个每行7个元素的数组. 然后通过我们输入的字符按控制在矩阵迷宫中走向, 最后按照规定的到达一个目的地.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133456542.png" alt="image-20200504133456542"></p>
 </li>
-<li><p>接下来返回外侧的主函数, 就是生成矩阵的了. 通过上面的49个元素知道且下面函数的参数7, 知道规模 7*7. <img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133948097.png" alt="image-20200504133948097"></p>
+<li><p>接下来返回外侧的主函数, 就是生成矩阵的了. 通过上面的49个元素知道且下面函数的参数7, 知道规模 7*7. <img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504133948097.png" alt="image-20200504133948097"></p>
 </li>
-<li><p>进入<strong>Step_0</strong> 看看. 就是简单的把上面49个元素赋值给 v7 数组, 也印证了数组是7*7<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506194728611.png" alt="image-20200506194728611"></p>
+<li><p>进入<strong>Step_0</strong> 看看. 就是简单的把上面49个元素赋值给 v7 数组, 也印证了数组是7*7<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506194728611.png" alt="image-20200506194728611"></p>
 </li>
-<li><p>接下来 <strong>Step_1</strong>, 看起来是很简洁, 但里面的 <strong>getA</strong>与 <strong>getAstart</strong> 函数 算法太冗长了.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506195403856.png" alt="image-20200506195403856"></p>
+<li><p>接下来 <strong>Step_1</strong>, 看起来是很简洁, 但里面的 <strong>getA</strong>与 <strong>getAstart</strong> 函数 算法太冗长了.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506195403856.png" alt="image-20200506195403856"></p>
 </li>
 <li><p>这个时候, 开始我就把生成矩阵的所有函数及数据都复制到<strong>VC</strong> 编译器中, 再根据栈的特点改下数据的顺序(<strong>数据存放是从下往上, 那么我们取数据时地址每次减1而不是加一</strong>), 然后运行打印出矩阵. 问题是运行后什么也没有打印, 调试发现一个函数中的内存空间和另外一个冲突, 相互覆盖值. 这个函数太多,关联性大, 改起来也麻烦.</p>
 </li>
 <li><p>然后转向GDB调试, 但是不熟练. 又转向ida动态调试. 首先<strong>在 IDA 的安装目录/dbgsrc/找到 linux_server 和 linux_server64 拷贝到 linux</strong> ,在linux中运行 <strong>linux_server64</strong>, 然后在Debugger的 process options 如下图格式配置. 然后F9开始.</p>
-<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506202545180.png" alt="image-20200506202545180"></p>
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506202545180.png" alt="image-20200506202545180"></p>
 </li>
-<li><p>先下断点, 找到储存矩阵的空间的地址, 把这个地址转到数据窗口跟随, 然后运行到生成矩阵的下面一个函数(也就是(<strong>Step_1</strong>下面). 在数据窗口出现我们的数据(int型), 由于是49个元素, 49<em>4/16 = 12 …4  ,那就是12行加4个数据, 用 *</em>shift+E** 提取出C语言格式的数据.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504135411101.png" alt="image-20200504135411101"></p>
+<li><p>先下断点, 找到储存矩阵的空间的地址, 把这个地址转到数据窗口跟随, 然后运行到生成矩阵的下面一个函数(也就是(<strong>Step_1</strong>下面). 在数据窗口出现我们的数据(int型), 由于是49个元素, 49*4/16 = 12 …4  ,那就是12行加4个数据, <strong>shift+E</strong>提取出C语言格式的数据.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504135411101.png" alt="image-20200504135411101"></p>
 </li>
 <li><p>数据得到后, 用C语言打印出来好观察, 注意每个数据4个字节(小端). </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">union</span> 	<span class="comment">//每个数据4个字节, 且小端. 用联合</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">char</span> ida_chars[<span class="number">196</span>];</span><br><span class="line">		<span class="keyword">int</span> a[<span class="number">49</span>];</span><br><span class="line">	&#125;A = &#123;</span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span></span><br><span class="line">		&#125;;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> (*p)[<span class="number">7</span>] = (<span class="keyword">int</span> (*)[<span class="number">7</span>])A.a;  <span class="comment">// 强制转化为数组指针, 方便后面打印</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">7</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"%d "</span>, p[i][j]);</span><br><span class="line">		&#125; </span><br><span class="line">		<span class="built_in">putchar</span>(<span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506201841271.png" alt="image-20200506201841271"></p>
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506201841271.png" alt="image-20200506201841271"></p>
 </li>
 <li><p>根据我们打游戏的熟悉 aswd ,朝着1走到最后.  <strong>ssddwdwdddsssaasasaaassddddwdds</strong> 最后在linux下输入.</p>
-<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504140433640.png" alt="image-20200504140433640"></p>
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200504140433640.png" alt="image-20200504140433640"></p>
 </li>
 <li><p><strong>总结: 更加熟悉了linux动态调试的运用,  加深了数组指针的理解.</strong></p>
 </li>
@@ -235,19 +344,59 @@
 <li><p>还是先细看一下栈空间, 虽然还是和我们输入的字符没有关系. 但是有问题啊,要用的地址交叉了.  想着万一题就是这样呢, 先取OD试一下. 不出所料, 乱码😢 </p>
 </li>
 <li><p>开始仔细分析下这个题的栈空间, 在OD反复调试, 发现我们输入字符的空间只有19个字节啊, 为什么我们输入的字符栈空间在OD中调试有19+32 = 51字节空间.</p>
-<p><img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506144401943.png" alt="image-20200506144401943"></p>
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506144401943.png" alt="image-20200506144401943"></p>
 </li>
 <li><p>看了半天不知道为什么, 后面才看见程序下面有  <strong>v3 = alloca(32);</strong> 百度了一下, 这个是再栈上申请空间的函数. 正好是多出来的32. </p>
 </li>
 <li><p>经过反复调试, 这个题怎么也和我们输入的字符没关系啊, 程序每次过了判断条件, 算的都一样. 真的奇怪了.</p>
 </li>
-<li><p>最后没办法了,想不通.  就最后再把文件中这个程序的linux版本载入ida看看,  嗯….这个版本的栈空间就没有交叉. v7一直到v34, 没有像PE文件那个版本在中间多一个指针.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145151730.png" alt="image-20200506145151730"></p>
+<li><p>最后没办法了,想不通.  就最后再把文件中这个程序的linux版本载入ida看看,  嗯….这个版本的栈空间就没有交叉. v7一直到v34, 没有像PE文件那个版本在中间多一个指针.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145151730.png" alt="image-20200506145151730"></p>
 </li>
-<li><p>在linux下动态调试.<img src="/2020/05/04/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145627945.png" alt="image-20200506145627945"></p>
+<li><p>在linux下动态调试.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200506145627945.png" alt="image-20200506145627945"></p>
 </li>
 <li><p>😂什么鬼题. PE文件版本居然是有问题的!!!</p>
 </li>
 <li><p><strong>总结: 文件有多个版本的时候, 注意!!! 张见识了. 虽然多花了时间在PE上耗, 但是对栈更清楚了.</strong></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<h3 id="zorropub"><a href="#zorropub" class="headerlink" title="zorropub"></a>zorropub</h3></blockquote>
+<ul>
+<li><p>查壳查位数后载入ida, 整体思路如下.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200508104152981.png" alt="image-20200508104152981"></p>
+</li>
+<li><p>那其实我们是不用管这个 MD5 加密的 , 也不会这个解密.  直接爆破找到 <strong>i</strong> 值从而得到随机数种子.</p>
+</li>
+<li><p>那问题来了, 爆破找了一个 <strong>i</strong> 值是1023, 就在linux写了exp(<strong>不能在window下, 因为生成随机数不同</strong>). 但得到的数据都是乱码的, 我还是一直以为问题出现在 <strong>LOBYTE(取最低字节位)</strong> 因为第一次接触. </p>
+</li>
+<li><p>最后才想起那个 <strong>i</strong> 的值, 它可能不是唯一的. 开始写exp, 取大范围的数据爆破, 果然对了……</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> *c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> b = <span class="number">0</span>, f = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">	srand(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">29</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">                b = rand()%<span class="number">1000</span>;</span><br><span class="line">                flag[i] = b^c[<span class="number">4</span>*i];</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(flag[i] &gt; <span class="number">126</span> || flag[i] &lt; <span class="number">32</span>)</span><br><span class="line">		f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!f)</span><br><span class="line">	<span class="built_in">puts</span>(flag);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, b = <span class="number">0</span>, j = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">1000</span>] = &#123;</span><br><span class="line">  		<span class="number">200</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">50</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">206</span>,   <span class="number">2</span>,</span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">2</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">127</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,</span><br><span class="line">  		<span class="number">184</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">126</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">136</span>,   <span class="number">1</span>,</span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">73</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">127</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span>,</span><br><span class="line">   		<span class="number">94</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">52</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">84</span>,   <span class="number">3</span>,</span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>, <span class="number">163</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">150</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,</span><br><span class="line">   		<span class="number">64</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">40</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">252</span>,   <span class="number">2</span>,</span><br><span class="line">   		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">142</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span>,</span><br><span class="line">   		<span class="number">38</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">27</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">42</span>,   <span class="number">3</span>,</span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>, <span class="number">245</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">95</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,</span><br><span class="line">  		<span class="number">104</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">235</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>, <span class="number">121</span>,   <span class="number">0</span>,</span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">29</span>,   <span class="number">1</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">78</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span></span><br><span class="line">			&#125;;</span><br><span class="line">	<span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		j = i;</span><br><span class="line">		<span class="keyword">while</span>(j)</span><br><span class="line">		&#123;</span><br><span class="line">			cnt++;</span><br><span class="line">			j &amp;= j<span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(cnt &gt; <span class="number">10</span>)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(cnt == <span class="number">10</span>)</span><br><span class="line">		func(i,  a);</span><br><span class="line"></span><br><span class="line">		cnt = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200508105155224.png" alt="image-20200508105155224"></p>
+</li>
+<li><p>然后做完, 还是去看看大佬的writeup. 想看看那个md5怎解密, 但是没有.  却发现好多都是用的pwntools工具来爆破的, 自己也去试了下, 确实简单很多.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span>*</span><br><span class="line">a = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">16</span>, <span class="number">0xffff</span>):</span><br><span class="line">    cnt = <span class="number">0</span></span><br><span class="line">    j = i</span><br><span class="line">    <span class="keyword">while</span>(j):</span><br><span class="line">        cnt += <span class="number">1</span></span><br><span class="line">        j &amp;= j<span class="number">-1</span></span><br><span class="line">    <span class="keyword">if</span> cnt == <span class="number">10</span>:</span><br><span class="line">        a.append(i)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    p = process(<span class="string">"./11"</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.sendline(<span class="string">'1'</span>)</span><br><span class="line">    p.sendline(str(i))</span><br><span class="line">    ans = p.recv()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"NULL"</span> <span class="keyword">in</span> text:</span><br><span class="line">        <span class="keyword">print</span> (text)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    p.close()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>总结: (1)既然是爆破就要注意有多种情况 (2) LOBYTE 是ida的宏定义, 取最低字节位. (3)更加熟悉pwntools工具的使用.</strong></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<h3 id="BABYRE"><a href="#BABYRE" class="headerlink" title="BABYRE"></a>BABYRE</h3></blockquote>
+<ul>
+<li><p>题目不难, 但是第一次遇到这样的题.</p>
+</li>
+<li><p>64位elf文件, ida打开后, 和以往的文件不一样, 开始有一段循环计算赋值的操作,但是又是看不到到底是赋值给了谁.<img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200512134025680.png" alt="image-20200512134025680"></p>
+</li>
+<li><p>那就动态调试跟来看看, 到了判断条件的时候. 明白了就是类似加壳的程序打开会先进行解压生成代码. 这里开始那一段循环作用, 就改变我们代码的.</p>
+</li>
+<li><p>跟进判断函数, 算法很简单,直接读汇编,  就是一个异或操作然后对比. </p>
+<p><img src="/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/image-20200512133918795.png" alt="image-20200512133918795"></p>
+</li>
+<li><p>exp:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a[] = &#123;<span class="number">0x66</span>, <span class="number">0x6D</span>, <span class="number">0x63</span>, <span class="number">0x64</span>, <span class="number">0x7F</span>, <span class="number">0x6B</span>, <span class="number">0x37</span>, <span class="number">0x64</span>,  <span class="number">0x3B</span>, <span class="number">0x56</span>, <span class="number">0x60</span>, <span class="number">0x3B</span>, <span class="number">0x6E</span>, <span class="number">0x70</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;; </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= <span class="number">13</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		flag[i] = a[i] ^ i; </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">puts</span>(flag);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>总结: 算是长见识吧.</strong></p>
 </li>
 </ul>
 
@@ -603,7 +752,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-28 13:06:48" itemprop="dateModified" datetime="2020-04-28T13:06:48+08:00">2020-04-28</time>
+                <time title="Modified: 2020-05-10 18:56:19" itemprop="dateModified" datetime="2020-05-10T18:56:19+08:00">2020-05-10</time>
               </span>
 
           
@@ -618,9 +767,7 @@
 
       
           <blockquote>
-<p><strong>用C++来写的程序逆向, 之前也做过一些, 这次做一个总结</strong></p>
-</blockquote>
-<p><strong>百越杯2018: crazy</strong></p>
+<h3 id="百越杯2018-crazy"><a href="#百越杯2018-crazy" class="headerlink" title="百越杯2018: crazy"></a>百越杯2018: crazy</h3></blockquote>
 <ul>
 <li><p>首先, 这道题的算法很简单, 就是考引用C++的字符串类的函数. 但是自己也挖掘了一些感觉有用的东西, 主要是通过这道题总结 c++字符串类.</p>
 </li>
@@ -640,7 +787,8 @@
 <li><p>最后wp: 但是要引起注意的是这个flag真的奇怪, 开始以为算错了,检查几遍, 最后就是这个 <strong>tMx<del>qdstOs</del>crvtwb~aOba}qddtbrtcd</strong>  再加上flag{}.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> a[] = <span class="string">"327a6c4304ad5938eaf0efb6cc3e53dc"</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(a); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		a[i] = (a[i] - <span class="number">11</span>) ^ <span class="number">0x13</span>;</span><br><span class="line">		a[i] = (a[i] - <span class="number">23</span>) ^ <span class="number">0x50</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">puts</span>(a);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a><strong>总结:</strong></h2></li>
+<li><p><strong>总结:</strong></p>
+</li>
 <li><p>先说一下做这个题想过的一个问题.  我们知道 <strong>rodata</strong> 段是只读的, 存放常量等, 但是这里却有字符串地址的赋值, 他把 <strong>0x401EA0</strong> 地址的值改变了, 但为什么可以这样呢, 查了资料, 也想了很久, 最后认为应该是存放的指针,而且我们可以看到这一段都是8字节的增加, 都是一个指针 8字节的大小.</p>
 <p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427215217839.png" alt="image-20200427215217839"></p>
 <p>这里也通过查资料, 知道了以前学习指针的疑问.</p>
@@ -688,9 +836,36 @@
 <td align="left">即 <strong>gets(a)</strong></td>
 </tr>
 </tbody></table>
+<hr>
 </li>
 </ul>
-<p>​     </p>
+<blockquote>
+<h3 id="easyCpp"><a href="#easyCpp" class="headerlink" title="easyCpp"></a>easyCpp</h3></blockquote>
+<blockquote>
+<p>C++逆向的题, 刚开始接触很多代码看不懂,感觉可读性低.  但是看多了, 还是会好很多. 是一个慢慢熟悉stl的过程吧.</p>
+</blockquote>
+<ul>
+<li><p>经过了一些CPP逆向题的折磨, 这个题大多数函数连懵带猜的看起来还好, 但是遇到了一个不仔细的错误, 想了很久…..</p>
+</li>
+<li><p>64位elf文件, 载入ida, 函数的大部分还是看懂了. 2个关键函数.  <strong>transform  accumulate</strong></p>
+<p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510182506239.png" alt="image-20200510182506239"></p>
+</li>
+<li><p>先进入 transform. 算法也是很简单, 就是函数读起来更麻烦.</p>
+<p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510182650313.png" alt="image-20200510182650313"></p>
+</li>
+<li><p>下面 accumulate. 这个看起来就不是那么容易了, 有很多地址传过来传过去就很混淆. 那就ida动态调试看看这个函数是做什么.(也是这里自己想了很久的错误, 虽然很简单的, 可能是stl把自己搞昏了吧).</p>
+<p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510183307210.png" alt="image-20200510183307210"></p>
+</li>
+<li><p>发现错误, 重新调试后得到经过 accumulate 函数后的结果. 把结果都记录下来后. 发现只是把 transform函数后的结果进行了逆序.<img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510183543551.png" alt="image-20200510183543551"></p>
+</li>
+<li><p>开始写 exp:  得到 <strong>987 -377 -610 -754 -843 -898 -932 -953 -966 -974 -979 -982 -984 -985 -986 -986</strong>. 最后在linux下运行程序输入.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!a || a == <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> fib(a<span class="number">-1</span>) + fib(a<span class="number">-2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;, i = <span class="number">0</span>; </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= <span class="number">15</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		flag[i] = fib(i); </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">15</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%d "</span>, flag[i] = (i &lt; <span class="number">15</span> ? flag[i] - flag[<span class="number">15</span>]:flag[i]));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510184751024.png" alt="image-20200510184751024"></p>
+</li>
+<li><p><strong>总结: (1)注意传递的参数是指针还是值. (2)cpp逆向太多数都有一个模板一样, 动态调试注意地址的寻找.</strong></p>
+</li>
+</ul>
 
       
     </div>
@@ -1327,82 +1502,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/" class="post-title-link" itemprop="url">union 与小端</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-03-02 18:29:49" itemprop="dateCreated datePublished" datetime="2020-03-02T18:29:49+08:00">2020-03-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-26 08:10:12" itemprop="dateModified" datetime="2020-04-26T08:10:12+08:00">2020-04-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在一般的我们平常使用的计算机, 数据存储方式都是小端, 但是C语言编译器都会经过处理, 所以总是按一个类型, 倒序显示. </p>
-<p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200426080918889.png" alt="image-20200426080918889"></p>
-<p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200426080956374.png" alt="image-20200426080956374"></p>
-<p>从以上两个图片可以看出, 当结构体中位域定义时. 是从左往右一个字节一个字节进行定义, 但是在一个字节中是从</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">低位bit0 开始算起的(注意不是从高位开始对应)</span><br></pre></td></tr></table></figure>
-
-<p>如上图中 test.year = 0x655, year有12位. 但是在多出的4位中, 06在该字节的低位, test.month = 0x4在该字节的高位.</p>
-<p> 当相邻成员的类型相同时，如果它们的位宽之和小于类型的 sizeof 大小，那么后面的成员紧邻前一个成员存储，直到不能容纳为止；如果它们的位宽之和大于类型的 sizeof 大小，那么后面的成员将从新的存储单元开始，其偏移量为类型大小的整数倍。 若不是同类型, 则不会, 注意(int 与 short int)也是不同类型.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1468,7 +1571,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
