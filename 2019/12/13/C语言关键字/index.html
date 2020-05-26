@@ -1,4 +1,243 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 4.0.0"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png"><link rel="mask-icon" href="/images/logo.svg" color="#222"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"yoursite.com",root:"/",scheme:"Gemini",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!1,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!1},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!1,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!1,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}}}</script><meta name="description" content="C语言中的关键字auto ：声明自动变量 一般不使用double ：声明双精度变量或函数int： 声明整型变量或函数struct：声明结构体变量或函数break：跳出当前循环else ：条件语句否定分支（与 if 连用）long ：声明长整型变量或函数switch :用于开关语句case：开关语句分支enum ：声明枚举类型register：声明积存器变量typedef：用以给数据类型取别名（当"><meta property="og:type" content="article"><meta property="og:title" content="C语言关键字"><meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;13&#x2F;C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97&#x2F;index.html"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="C语言中的关键字auto ：声明自动变量 一般不使用double ：声明双精度变量或函数int： 声明整型变量或函数struct：声明结构体变量或函数break：跳出当前循环else ：条件语句否定分支（与 if 连用）long ：声明长整型变量或函数switch :用于开关语句case：开关语句分支enum ：声明枚举类型register：声明积存器变量typedef：用以给数据类型取别名（当"><meta property="og:locale" content="en"><meta property="og:updated_time" content="2019-12-13T05:21:00.155Z"><meta name="twitter:card" content="summary"><link rel="canonical" href="http://yoursite.com/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"en"}</script><title>C语言关键字 | Hexo</title><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml"></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="Toggle navigation bar"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Hexo</h1><span class="logo-line-after"><i></i></span></a></div><div class="site-nav-right"><div class="toggle popup-trigger"></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i> Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i> Archives</a></li></ul></nav></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en"><link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.gif"><meta itemprop="name" content="BIX"><meta itemprop="description" content=""></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Hexo"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"> C语言关键字</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i></span> <span class="post-meta-item-text">Posted on</span> <time title="Created: 2019-12-13 13:20:12 / Modified: 13:21:00" itemprop="dateCreated datePublished" datetime="2019-12-13T13:20:12+08:00">2019-12-13</time></span><br><span class="post-meta-item" title="Symbols count in article"><span class="post-meta-item-icon"><i class="far fa-file-word"></i></span> <span class="post-meta-item-text">Symbols count in article:</span> <span>567</span></span><span class="post-meta-item" title="Reading time"><span class="post-meta-item-icon"><i class="far fa-clock"></i></span> <span class="post-meta-item-text">Reading time &asymp;</span> <span>1 mins.</span></span></div></header><div class="post-body" itemprop="articleBody"><p> C语言中的关键字<br>auto ：声明自动变量 一般不使用<br>double ：声明双精度变量或函数<br>int： 声明整型变量或函数<br>struct：声明结构体变量或函数<br>break：跳出当前循环<br>else ：条件语句否定分支（与 if 连用）<br>long ：声明长整型变量或函数<br>switch :用于开关语句<br>case：开关语句分支<br>enum ：声明枚举类型<br>register：声明积存器变量<br>typedef：用以给数据类型取别名（当然还有其他作用）<br>char ：声明字符型变量或函数<br>extern：声明变量是在其他文件正声明（也可以看做是<a href="https://www.baidu.com/s?wd=引用变量&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">引用变量</a>）<br>return ：子程序返回语句（可以带参数，也看不带参数）<br>union：声明联合数据类型<br>const ：声明只读变量<br>float：声明浮点型变量或函数<br>short ：声明短整型变量或函数<br>unsigned：声明无符号类型变量或函数<br>continue：结束当前循环，开始下一轮循环<br>for：一种循环语句(可意会不可言传）<br>signed：生命有符号类型变量或函数<br>void ：声明函数无返回值或无参数，声明无类型指针（基本上就这三个作用）<br>default：开关语句中的“其他”分支<br>goto：无条件跳转语句<br>sizeof：计算数据类型长度<br>volatile：说明变量在程序执行中可被隐含地改变<br>do ：循环语句的循环体<br>while ：循环语句的循环条件<br>static ：声明静态变量<br>if:条件语句</p></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/2019/11/17/PTA/" rel="prev" title="PTA"><i class="fa fa-chevron-left"></i> PTA</a></div><div class="post-nav-item"> <a href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/" rel="next" title="形参数组">形参数组<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="C语言中的关键字auto ：声明自动变量 一般不使用double ：声明双精度变量或函数int： 声明整型变量或函数struct：声明结构体变量或函数break：跳出当前循环else ：条件语句否定分支（与 if 连用）long ：声明长整型变量或函数switch :用于开关语句case：开关语句分支enum ：声明枚举类型register：声明积存器变量typedef：用以给数据类型取别名（当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言关键字">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;13&#x2F;C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97&#x2F;index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="C语言中的关键字auto ：声明自动变量 一般不使用double ：声明双精度变量或函数int： 声明整型变量或函数struct：声明结构体变量或函数break：跳出当前循环else ：条件语句否定分支（与 if 连用）long ：声明长整型变量或函数switch :用于开关语句case：开关语句分支enum ：声明枚举类型register：声明积存器变量typedef：用以给数据类型取别名（当">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-13T05:21:00.155Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C语言关键字 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/C%E8%AF%AD%E8%A8%80%E5%85%B3%E9%94%AE%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="BIX">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言关键字
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-13 13:20:12 / Modified: 13:21:00" itemprop="dateCreated datePublished" datetime="2019-12-13T13:20:12+08:00">2019-12-13</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>567</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> C语言中的关键字<br>auto ：声明自动变量 一般不使用<br>double ：声明双精度变量或函数<br>int： 声明整型变量或函数<br>struct：声明结构体变量或函数<br>break：跳出当前循环<br>else ：条件语句否定分支（与 if 连用）<br>long ：声明长整型变量或函数<br>switch :用于开关语句<br>case：开关语句分支<br>enum ：声明枚举类型<br>register：声明积存器变量<br>typedef：用以给数据类型取别名（当然还有其他作用）<br>char ：声明字符型变量或函数<br>extern：声明变量是在其他文件正声明（也可以看做是<a href="https://www.baidu.com/s?wd=引用变量&tn=SE_PcZhidaonwhc_ngpagmjz&rsv_dl=gh_pc_zhidao" target="_blank" rel="noopener">引用变量</a>）<br>return ：子程序返回语句（可以带参数，也看不带参数）<br>union：声明联合数据类型<br>const ：声明只读变量<br>float：声明浮点型变量或函数<br>short ：声明短整型变量或函数<br>unsigned：声明无符号类型变量或函数<br>continue：结束当前循环，开始下一轮循环<br>for：一种循环语句(可意会不可言传）<br>signed：生命有符号类型变量或函数<br>void ：声明函数无返回值或无参数，声明无类型指针（基本上就这三个作用）<br>default：开关语句中的“其他”分支<br>goto：无条件跳转语句<br>sizeof：计算数据类型长度<br>volatile：说明变量在程序执行中可被隐含地改变<br>do ：循环语句的循环体<br>while ：循环语句的循环条件<br>static ：声明静态变量<br>if:条件语句 </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/17/PTA/" rel="prev" title="PTA">
+      <i class="fa fa-chevron-left"></i> PTA
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/" rel="next" title="形参数组">
+      形参数组 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
   window.addEventListener('tabs:register', () => {
     let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
@@ -18,4 +257,133 @@
       localStorage.setItem('comments_active', commentClass);
     });
   }
-</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc"> Table of Contents</li><li class="sidebar-nav-overview"> Overview</li></ul><div class="post-toc-wrap sidebar-panel"></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">BIX</p><div class="site-description" itemprop="description"></div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">posts</span></a></div></nav></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span><span class="with-love"><i class="fa fa-heart"></i></span> <span class="author" itemprop="copyrightHolder">BIX</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-chart-area"></i></span> <span title="Symbols count total">54k</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-coffee"></i></span> <span title="Reading time total">49 mins.</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer></div><script src="/lib/anime.min.js"></script><script src="/lib/velocity/velocity.min.js"></script><script src="/lib/velocity/velocity.ui.min.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/pisces.js"></script><script src="/js/next-boot.js"></script></body></html>
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">BIX</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BIX</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">54k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">49 mins.</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
