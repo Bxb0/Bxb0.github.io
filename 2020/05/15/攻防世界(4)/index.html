@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="asong  算是小白第一次接触逆向真正算法的题吧. 吃了算法的亏, 逆向这个算法想了半天🤣  0x1分析 下载下来三个文件, 但这不是我以前遇到的那种同一个题给不同的版本.  依次看了下, 一个64位elf文件无壳, 2个文本文件.  打开文本文件后,没有头绪.  将elf文件载入ida.  整个流程开始看不清楚做什么, 多看几次明白了. 先输入字符串, 打开一个that_girl文件读信息">
+<meta property="og:type" content="article">
+<meta property="og:title" content="攻防世界(4)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="asong  算是小白第一次接触逆向真正算法的题吧. 吃了算法的亏, 逆向这个算法想了半天🤣  0x1分析 下载下来三个文件, 但这不是我以前遇到的那种同一个题给不同的版本.  依次看了下, 一个64位elf文件无壳, 2个文本文件.  打开文本文件后,没有头绪.  将elf文件载入ida.  整个流程开始看不清楚做什么, 多看几次明白了. 先输入字符串, 打开一个that_girl文件读信息">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515112040201.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515112333168.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515113837252.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515170301682.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515114501031.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515114755333.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515115440782.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515120938171.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515125253662.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515134001272.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515135919513.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515184107394.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515185409497.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515193103677.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200521123259003.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200521123808376.png">
+<meta property="og:updated_time" content="2020-05-21T04:40:10.457Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;15&#x2F;%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)&#x2F;image-20200515112040201.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>攻防世界(4) | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="BIX">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          攻防世界(4)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-15 10:27:16" itemprop="dateCreated datePublished" datetime="2020-05-15T10:27:16+08:00">2020-05-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-21 12:40:10" itemprop="dateModified" datetime="2020-05-21T12:40:10+08:00">2020-05-21</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>4 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<h3 id="asong"><a href="#asong" class="headerlink" title="asong"></a>asong</h3></blockquote>
+<blockquote>
+<p>算是小白第一次接触逆向真正算法的题吧. 吃了算法的亏, 逆向这个算法想了半天🤣</p>
+</blockquote>
+<h4 id="0x1分析"><a href="#0x1分析" class="headerlink" title="0x1分析"></a>0x1分析</h4><ul>
+<li><p>下载下来三个文件, 但这不是我以前遇到的那种同一个题给不同的版本.</p>
+</li>
+<li><p>依次看了下, 一个64位elf文件无壳, 2个文本文件.  打开文本文件后,没有头绪.  将elf文件载入ida.</p>
+</li>
+<li><p>整个流程开始看不清楚做什么, 多看几次明白了. 先输入字符串, 打开一个that_girl文件读信息, 最后向out文件写信息. 但这怎么和flag联系起来呢.  其实那个out文件里的就是密文, 我们找到逆向算法, 通过密文求出明文(即我们的输入, 也是flag)</p>
+</li>
+<li><p>下面具体分析每个函数. 第一函数: <strong>sub_400B4C</strong> 由于很简单, 直接给出函数功能.</p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515112040201.png" alt="image-20200515112040201"></p>
+</li>
+<li><p><strong>sub_400B4C</strong>: 先判断, 再取 { } 之间的内容.</p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515112333168.png" alt="image-20200515112333168"></p>
+</li>
+<li><p>下面下一个函数, 也是我遇到的难点开始:  <strong>v4哪里来的及 ++*(_DWORD *)(4LL * v2 + v4);语句的作用</strong></p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515113837252.png" alt="image-20200515113837252"></p>
+<p><strong>sub_400936(&amp;buf)</strong>:</p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515170301682.png" alt="image-20200515170301682"></p>
+</li>
+<li><p>第一次遇到, 没有经验, 后来才想到通过汇编的查看, v4即是我们传了参数 a2(也就是主函数的v3), 这是通过寄存器传递. 64位与32位程序的区别吧. 但该语句功能还不是很清楚.<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515114501031.png" alt="image-20200515114501031"></p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515114755333.png" alt="image-20200515114755333"></p>
+</li>
+<li><p>继续看下一个函数<strong>sub_400E54</strong>:  看到这里, 就很清晰了,  就是先通过统计<strong>that_girl</strong>文件中每个字符出现的次数, 然后按照一定的顺序输入字符, 把每个字符出现的次数按一定顺序给下面的 v5 数组赋值.<strong>那所以sub_400936转换字符函数我们是不用管的.</strong></p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515115440782.png" alt="image-20200515115440782"></p>
+</li>
+<li><p>下面是2个加密函数,  我算法太菜, 逆算法想半天😅, 首先<strong>sub_400D33((unsigned __int8 *)v5);</strong></p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515120938171.png" alt="image-20200515120938171"></p>
+</li>
+<li><p>然后 <strong>sub_400DB4(v5, v4);</strong> 解释起来有点抽象……注意是一个字节, 所以多出的位要舍弃<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515125253662.png" alt="image-20200515125253662"></p>
+</li>
+<li><p>举个例子:<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515134001272.png" alt="image-20200515134001272"></p>
+</li>
+<li><p>最后一个函数: <strong>sub_400CC0((__int64)v5, “out”, v4);</strong>将加密后的值写入 out文件. </p>
+</li>
+</ul>
+<h4 id="0x2逆向解密"><a href="#0x2逆向解密" class="headerlink" title="0x2逆向解密"></a>0x2逆向解密</h4><ul>
+<li><p>直接exp:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">union</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">char</span> ida[<span class="number">152</span>];</span><br><span class="line">		<span class="keyword">int</span> change[<span class="number">38</span>];</span><br><span class="line">	&#125;A = &#123;</span><br><span class="line">   			<span class="number">22</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">6</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">2</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">30</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">24</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">9</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">1</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">21</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">7</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">18</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">10</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">8</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">12</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">17</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">23</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">13</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">4</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,   <span class="number">3</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">14</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">  			<span class="number">19</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">11</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">20</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">16</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">15</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">5</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">25</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">36</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">27</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">28</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">29</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">37</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">31</span>,   <span class="number">0</span>, </span><br><span class="line">    		<span class="number">0</span>,   <span class="number">0</span>,  <span class="number">32</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">33</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>, </span><br><span class="line">  			<span class="number">26</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">34</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">35</span>,   <span class="number">0</span>, </span><br><span class="line">   			<span class="number">0</span>,   <span class="number">0</span></span><br><span class="line">				&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, a[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;, temp = <span class="number">0</span>, lenth = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> b[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;, c[<span class="number">2000</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> count[<span class="number">127</span>] = &#123;<span class="number">0</span>&#125;, change_[<span class="number">38</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	</span><br><span class="line">	FILE *fp = <span class="literal">NULL</span>;</span><br><span class="line">	</span><br><span class="line">	fp = fopen(<span class="string">"out"</span>, <span class="string">"rb"</span>);			<span class="comment">//先从文件读取密文</span></span><br><span class="line">	lenth = fread(b, <span class="number">1</span>, <span class="number">100</span>, fp);		<span class="comment">//返回读取成功个数, 确定字符个数</span></span><br><span class="line">	fclose(fp);</span><br><span class="line">		</span><br><span class="line">    </span><br><span class="line">    									<span class="comment">//第一层解密</span></span><br><span class="line">	temp = b[lenth<span class="number">-1</span>]&amp;<span class="number">7</span>;			    <span class="comment">//&amp;7  取后三位数据.</span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; lenth; i++)						</span><br><span class="line">	&#123;									<span class="comment">//从整体来看就是将整个数据右移动3位</span></span><br><span class="line">		a[i] = (b[i] &gt;&gt; <span class="number">3</span>) | (temp &lt;&lt; <span class="number">5</span>);</span><br><span class="line">		temp = b[i]&amp;<span class="number">7</span>;</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	fp = fopen(<span class="string">"that_girl"</span>, <span class="string">"rb"</span>); <span class="comment">//打开that_girl, 统计字符数.</span></span><br><span class="line">	fread(c, <span class="number">1</span>, <span class="number">1742</span>, fp);</span><br><span class="line">	fclose(fp); </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="keyword">sizeof</span>(c); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(c[i] &gt;= <span class="number">65</span> &amp;&amp; c[i] &lt;= <span class="number">90</span>)  </span><br><span class="line">			c[i] += <span class="number">32</span>;					<span class="comment">//因为不区分大小写, 都转换为小写</span></span><br><span class="line">			</span><br><span class="line">		count[c[i]]++; </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(A.change[i]) </span><br><span class="line">	&#123;</span><br><span class="line">		change_[j++] = A.change[i];  <span class="comment">//统计每个字符出现次数</span></span><br><span class="line">		i = A.change[i];  </span><br><span class="line">	&#125;</span><br><span class="line">	j -= <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	temp = a[<span class="number">0</span>], a[<span class="number">0</span>] = a[change_[j]];   <span class="comment">//第二层解密</span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; lenth<span class="number">-2</span>; i++)		 <span class="comment">//按照给定赋值找到一个未变的值, 倒序赋值回去即可</span></span><br><span class="line">	&#123;</span><br><span class="line">		a[change_[j]] = a[change_[--j]];</span><br><span class="line">	&#125;</span><br><span class="line">	a[change_[j]] = temp; </span><br><span class="line">	</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; lenth; i++) <span class="comment">//第三层解密, 比对每个字符出现的次数的顺序,进而确定输入顺序</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">127</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i] == count[j])</span><br><span class="line">			&#123;</span><br><span class="line">				flag[i] = j; </span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"QCTF&#123;%s&#125;"</span>, flag);   <span class="comment">//得到flag.</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515135919513.png" alt="image-20200515135919513"></p>
+</li>
+<li><p><strong>总结: (1)算法还是太重要. 算法稍微好点的话, 这道题就轻松很多.  (2)注意64位程序的传递参数的方式</strong></p>
+<p>​          <strong>(3)要习惯看汇编代码</strong></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<h3 id="easyre-153"><a href="#easyre-153" class="headerlink" title="easyre-153"></a>easyre-153</h3></blockquote>
+<blockquote>
+<p>题其实很简单,  但差点做到自闭… 其实能猜到flag怎么算出来, 但对程序的执行想不明白.</p>
+</blockquote>
+<ul>
+<li><p>32位elf文件加了upx壳, 没有修改过的, 直接upx -d脱壳成功.<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515184107394.png" alt="image-20200515184107394"></p>
+</li>
+<li><p>ida打开, 找到主函数. 一开始就认为直接动跳控制函数的走向, 到最后一个 <strong>lol</strong> 函数得到flag. 但是动态总是在read函数卡住, 走不了, 但这里我们并不能直接跳,因为这个函数是向<strong>buf</strong>写内容, 我们最后的flag是要使用buf的内容. 然后又转 GDB 调试, 同然的结果.    纳闷这题了, 它到底是要做什么. 其实猜也是把上面 write的那部分数据作为 buf 的内容, 然后在lol函数得到 flag.  但问题是 程序到底在搞什么…..</p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515185409497.png" alt="image-20200515185409497"></p>
+</li>
+<li><p>真的做到自闭, 后来才发现我忽略上面的 pipe()函数与fork()函数. 第一次见到, 百度了下, 明白了…….</p>
+<blockquote>
+<p>首先是管道: 1.其本质是一个伪文件(实为内核缓冲区)</p>
+<p>​                     2.由两个文件描述符引用，一个表示读端，一个表示写端。</p>
+<p>​                     3.规定数据从管道的写端流入管道，从读端流出</p>
+<p>pipe()函数用于创建管道: 1.int pipe(int pipefd[2]); 成功：0；失败：-1，设置errno</p>
+<p>​                                           2.函数调用成功返回r/w两个文件描述符。无需open，但需手动close</p>
+<p>​                                           3.规定：fd[0] → r； fd[1] → w，就像0对应标准输入，1对应标准输出一样。</p>
+<p>​                                           4.向管道文件读写数据其实是在读写内核缓冲区</p>
+<p><strong>这里就是通过pipedes[1]写进内容,  从pipedes[0]写出.</strong>                    </p>
+</blockquote>
+<blockquote>
+<p>然后fork()函数. 1.fork（）函数通过系统调用创建一个与原来进程几乎完全相同的进程，</p>
+<p>​                            也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，两个进程                            也可以做不同的事</p>
+<p>​                           2.一个进程调用fork（）函数后，系统先给新的进程分配资源，例如存储数据和代码的空                           间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程值                           不同。相当于克隆了一个自己</p>
+<p>​                           3.调用fork函数一次, 返回2次值, 若返回0则是子进程, 若是一个数则是父进程的进程号.</p>
+<p><strong>所以这里就是先创建一个子进程,返回值v5 == 0, 进入子进程完成写入数据后结束进程, fork()返回新的值父进程进程号,然后执行后面的操作.</strong>        </p>
+</blockquote>
+</li>
+<li><p>这里动态调试这种创建进程的程序是不通畅的. 那就通过修改程序 EIP, 按照本来要执行的顺序执行一遍得到flag.(注意这样可能会有一个问题: 栈不平衡, 因为函数没有正常返回, 那会影响一些函数, 比如scanf()函数执行到了, 不会让我们输入, 而是直接跳过, 这就是堆栈有值它就直接读取了)</p>
+<p><img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200515193103677.png" alt="image-20200515193103677"></p>
+</li>
+<li><p><strong>总结:(1)对于盲区的知识, 搞起来还是麻烦, 积累. (2)熟悉了修改 EIP.</strong> </p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<h3 id="76号公路"><a href="#76号公路" class="headerlink" title="76号公路"></a>76号公路</h3></blockquote>
+<ul>
+<li><p>题目看似很难的样子, 但自己确实被题目的信息误导了.</p>
+</li>
+<li><p>下载后, 2个文本一个32位无壳elf文件, 并且题目信息就给了 <strong>我们认为有份确切的文档记录了每个区域的功能，请协助找出</strong> 这个提示, 所以自己做题时始终想到怎么和文本联系起来, 找线索. 但其实不然</p>
+</li>
+<li><p>载入ida后, 搜索了下字符串, 找到了主函数, 但是不能转化为伪代码,  因为之前了解过点花指令,其中  <strong>E0</strong> 总是干扰代码的. 改为 <strong>90</strong> nop掉就可以了. </p>
+</li>
+<li><p>这里同样. 改完后, 开始读汇编代码, 逻辑很简单, 就是提示, 让我们输入字符, 进去一个函数判断.<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200521123259003.png" alt="image-20200521123259003"></p>
+</li>
+<li><p>进去判断函数, 可以查看伪代码的. 分析一下就知道是跟着一条线按照顺序检索我们输入的字符串. 但是怎么找顺序呢, 因为文本文件还没用, 我就始终认为在文本文件找, 找了半天…….无果</p>
+</li>
+<li><p>最后回到程序发现, 可以找到入口点, 顺藤摸瓜的就可以找到了啊. 可以知道从索引 <strong>v2</strong> 从0开始, 直接从这里出发就好了. 直到正确退出循环.<img src="/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/image-20200521123808376.png" alt="image-20200521123808376"></p>
+</li>
+<li><p>最后得到flag: <strong>flag{09vdf7wefijbk}</strong>.</p>
+</li>
+<li><p><strong>总结: (1)不要让题目把自己的思路带偏了, 思维要发散一些.</strong>  </p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/" rel="prev" title="论剑场">
+      <i class="fa fa-chevron-left"></i> 论剑场
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/23/2020%E5%B9%B4DASCTF%E4%BA%94%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/" rel="next" title="2020年DASCTF五月线上赛">
+      2020年DASCTF五月线上赛 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#asong"><span class="nav-number">1.</span> <span class="nav-text">asong</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1分析"><span class="nav-number">1.1.</span> <span class="nav-text">0x1分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2逆向解密"><span class="nav-number">1.2.</span> <span class="nav-text">0x2逆向解密</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#easyre-153"><span class="nav-number">2.</span> <span class="nav-text">easyre-153</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#76号公路"><span class="nav-number">3.</span> <span class="nav-text">76号公路</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">BIX</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BIX</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">54k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">49 mins.</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
