@@ -336,7 +336,7 @@
     <link href="http://yoursite.com/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/"/>
     <id>http://yoursite.com/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/</id>
     <published>2020-03-02T10:29:49.000Z</published>
-    <updated>2020-05-26T08:01:23.248Z</updated>
+    <updated>2020-05-26T08:12:56.114Z</updated>
     
     <content type="html"><![CDATA[<p>在一般的我们平常使用的计算机, 数据存储方式都是小端, 但是C语言编译器都会经过处理, 所以总是按一个类型, 倒序显示. </p><p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200426080918889.png" alt="image-20200426080918889"></p><p><img src="/2020/03/02/union%20%E4%B8%8E%20%E5%B0%8F%E7%AB%AF%20/image-20200426080956374.png" alt="image-20200426080956374"></p><p>从以上两个图片可以看出, 当结构体中位域定义时. 是从左往右一个字节一个字节进行定义, 但是在一个字节中是从</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">低位bit0 开始算起的(注意不是从高位开始对应)</span><br></pre></td></tr></table></figure><p>如上图中 test.year = 0x655, year有12位. 但是在多出的4位中, 06在该字节的低位, test.month = 0x4在该字节的高位.</p><p> 当相邻成员的类型相同时，如果它们的位宽之和小于类型的 sizeof 大小，那么后面的成员紧邻前一个成员存储，直到不能容纳为止；如果它们的位宽之和大于类型的 sizeof 大小，那么后面的成员将从新的存储单元开始，其偏移量为类型大小的整数倍。 若不是同类型, 则不会, 注意(int 与 short int)也是不同类型.</p>]]></content>
     
