@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://hus96r.coding-pages.com/"/>
+  <link href="http://yoursite.com/"/>
   <updated>2020-05-24T02:49:00.377Z</updated>
-  <id>https://hus96r.coding-pages.com/</id>
+  <id>http://yoursite.com/</id>
   
   <author>
     <name>BIX</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>2020年DASCTF五月线上赛</title>
-    <link href="https://hus96r.coding-pages.com/2020/05/23/2020%E5%B9%B4DASCTF%E4%BA%94%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/"/>
-    <id>https://hus96r.coding-pages.com/2020/05/23/2020%E5%B9%B4DASCTF%E4%BA%94%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/</id>
+    <link href="http://yoursite.com/2020/05/23/2020%E5%B9%B4DASCTF%E4%BA%94%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/"/>
+    <id>http://yoursite.com/2020/05/23/2020%E5%B9%B4DASCTF%E4%BA%94%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/</id>
     <published>2020-05-23T12:00:53.000Z</published>
     <updated>2020-05-24T02:49:00.377Z</updated>
     
@@ -44,8 +44,8 @@
   
   <entry>
     <title>攻防世界(4)</title>
-    <link href="https://hus96r.coding-pages.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/"/>
-    <id>https://hus96r.coding-pages.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/</id>
+    <link href="http://yoursite.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/"/>
+    <id>http://yoursite.com/2020/05/15/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(4)/</id>
     <published>2020-05-15T02:27:16.000Z</published>
     <updated>2020-05-21T04:40:10.457Z</updated>
     
@@ -69,8 +69,8 @@
   
   <entry>
     <title>论剑场</title>
-    <link href="https://hus96r.coding-pages.com/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/"/>
-    <id>https://hus96r.coding-pages.com/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/</id>
+    <link href="http://yoursite.com/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/"/>
+    <id>http://yoursite.com/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/</id>
     <published>2020-05-12T11:15:32.000Z</published>
     <updated>2020-05-26T09:37:14.968Z</updated>
     
@@ -95,8 +95,8 @@
   
   <entry>
     <title>ASLR</title>
-    <link href="https://hus96r.coding-pages.com/2020/05/12/ASLR/"/>
-    <id>https://hus96r.coding-pages.com/2020/05/12/ASLR/</id>
+    <link href="http://yoursite.com/2020/05/12/ASLR/"/>
+    <id>http://yoursite.com/2020/05/12/ASLR/</id>
     <published>2020-05-12T04:15:30.000Z</published>
     <updated>2020-05-12T04:17:24.325Z</updated>
     
@@ -118,8 +118,8 @@
   
   <entry>
     <title>攻防世界 (3)</title>
-    <link href="https://hus96r.coding-pages.com/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/"/>
-    <id>https://hus96r.coding-pages.com/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/</id>
+    <link href="http://yoursite.com/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/"/>
+    <id>http://yoursite.com/2020/05/03/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(3)/</id>
     <published>2020-05-03T05:49:15.000Z</published>
     <updated>2020-05-12T05:51:38.879Z</updated>
     
@@ -144,8 +144,8 @@
   
   <entry>
     <title>攻防世界 (2)</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(2)/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(2)/</id>
+    <link href="http://yoursite.com/2020/04/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(2)/"/>
+    <id>http://yoursite.com/2020/04/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(2)/</id>
     <published>2020-04-29T06:53:15.000Z</published>
     <updated>2020-05-26T11:57:17.090Z</updated>
     
@@ -167,8 +167,8 @@
   
   <entry>
     <title>.cpp 逆向</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/27/cpp-%E9%80%86%E5%90%91/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/27/cpp-%E9%80%86%E5%90%91/</id>
+    <link href="http://yoursite.com/2020/04/27/cpp-%E9%80%86%E5%90%91/"/>
+    <id>http://yoursite.com/2020/04/27/cpp-%E9%80%86%E5%90%91/</id>
     <published>2020-04-27T11:35:58.000Z</published>
     <updated>2020-05-10T10:56:19.589Z</updated>
     
@@ -191,8 +191,8 @@
   
   <entry>
     <title>CTF比赛</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/25/CTF%E6%AF%94%E8%B5%9B/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/25/CTF%E6%AF%94%E8%B5%9B/</id>
+    <link href="http://yoursite.com/2020/04/25/CTF%E6%AF%94%E8%B5%9B/"/>
+    <id>http://yoursite.com/2020/04/25/CTF%E6%AF%94%E8%B5%9B/</id>
     <published>2020-04-25T11:27:55.000Z</published>
     <updated>2020-04-28T04:52:08.613Z</updated>
     
@@ -215,8 +215,8 @@
   
   <entry>
     <title>BUUCTF</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/23/BUUCTF/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/23/BUUCTF/</id>
+    <link href="http://yoursite.com/2020/04/23/BUUCTF/"/>
+    <id>http://yoursite.com/2020/04/23/BUUCTF/</id>
     <published>2020-04-23T11:05:34.000Z</published>
     <updated>2020-04-25T11:06:30.988Z</updated>
     
@@ -238,8 +238,8 @@
   
   <entry>
     <title>PWN</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/18/pwn%E5%BF%83%E5%BE%97/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/18/pwn%E5%BF%83%E5%BE%97/</id>
+    <link href="http://yoursite.com/2020/04/18/pwn%E5%BF%83%E5%BE%97/"/>
+    <id>http://yoursite.com/2020/04/18/pwn%E5%BF%83%E5%BE%97/</id>
     <published>2020-04-18T01:57:01.000Z</published>
     <updated>2020-04-25T11:04:36.363Z</updated>
     
@@ -260,8 +260,8 @@
   
   <entry>
     <title>攻防世界 (1)</title>
-    <link href="https://hus96r.coding-pages.com/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(1)/"/>
-    <id>https://hus96r.coding-pages.com/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(1)/</id>
+    <link href="http://yoursite.com/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(1)/"/>
+    <id>http://yoursite.com/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C(1)/</id>
     <published>2020-04-09T01:53:27.000Z</published>
     <updated>2020-04-29T06:51:26.595Z</updated>
     
@@ -283,8 +283,8 @@
   
   <entry>
     <title>逆向心得.</title>
-    <link href="https://hus96r.coding-pages.com/2020/03/16/%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/"/>
-    <id>https://hus96r.coding-pages.com/2020/03/16/%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/</id>
+    <link href="http://yoursite.com/2020/03/16/%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/"/>
+    <id>http://yoursite.com/2020/03/16/%E9%80%86%E5%90%91%E5%BF%83%E5%BE%97/</id>
     <published>2020-03-16T04:20:01.000Z</published>
     <updated>2020-04-25T12:08:35.270Z</updated>
     
@@ -307,8 +307,8 @@
   
   <entry>
     <title>算法</title>
-    <link href="https://hus96r.coding-pages.com/2020/03/14/%E7%AE%97%E6%B3%95-leetcode/"/>
-    <id>https://hus96r.coding-pages.com/2020/03/14/%E7%AE%97%E6%B3%95-leetcode/</id>
+    <link href="http://yoursite.com/2020/03/14/%E7%AE%97%E6%B3%95-leetcode/"/>
+    <id>http://yoursite.com/2020/03/14/%E7%AE%97%E6%B3%95-leetcode/</id>
     <published>2020-03-14T05:58:53.000Z</published>
     <updated>2020-04-28T04:49:05.534Z</updated>
     
@@ -333,8 +333,8 @@
   
   <entry>
     <title>学习汇编在下载dosbox和masm遇到的问题</title>
-    <link href="https://hus96r.coding-pages.com/2020/02/19/%E5%AD%A6%E4%B9%A0%E6%B1%87%E7%BC%96%E5%9C%A8%E4%B8%8B%E8%BD%BDdosbox%E5%92%8Cmasm%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>https://hus96r.coding-pages.com/2020/02/19/%E5%AD%A6%E4%B9%A0%E6%B1%87%E7%BC%96%E5%9C%A8%E4%B8%8B%E8%BD%BDdosbox%E5%92%8Cmasm%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <link href="http://yoursite.com/2020/02/19/%E5%AD%A6%E4%B9%A0%E6%B1%87%E7%BC%96%E5%9C%A8%E4%B8%8B%E8%BD%BDdosbox%E5%92%8Cmasm%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2020/02/19/%E5%AD%A6%E4%B9%A0%E6%B1%87%E7%BC%96%E5%9C%A8%E4%B8%8B%E8%BD%BDdosbox%E5%92%8Cmasm%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
     <published>2020-02-19T11:00:33.000Z</published>
     <updated>2020-04-25T11:00:56.500Z</updated>
     
@@ -355,8 +355,8 @@
   
   <entry>
     <title>关于memset只能给实数数组初始化值为0的原因</title>
-    <link href="https://hus96r.coding-pages.com/2020/02/15/%E5%85%B3%E4%BA%8Ememset%E5%8F%AA%E8%83%BD%E7%BB%99%E5%AE%9E%E6%95%B0%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
-    <id>https://hus96r.coding-pages.com/2020/02/15/%E5%85%B3%E4%BA%8Ememset%E5%8F%AA%E8%83%BD%E7%BB%99%E5%AE%9E%E6%95%B0%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E5%8E%9F%E5%9B%A0/</id>
+    <link href="http://yoursite.com/2020/02/15/%E5%85%B3%E4%BA%8Ememset%E5%8F%AA%E8%83%BD%E7%BB%99%E5%AE%9E%E6%95%B0%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
+    <id>http://yoursite.com/2020/02/15/%E5%85%B3%E4%BA%8Ememset%E5%8F%AA%E8%83%BD%E7%BB%99%E5%AE%9E%E6%95%B0%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%80%BC%E4%B8%BA0%E7%9A%84%E5%8E%9F%E5%9B%A0/</id>
     <published>2020-02-15T09:46:22.000Z</published>
     <updated>2020-02-15T09:47:34.310Z</updated>
     
@@ -379,8 +379,8 @@
   
   <entry>
     <title>缓冲区</title>
-    <link href="https://hus96r.coding-pages.com/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/"/>
-    <id>https://hus96r.coding-pages.com/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/</id>
+    <link href="http://yoursite.com/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/"/>
+    <id>http://yoursite.com/2020/02/05/%E7%BC%93%E5%86%B2%E5%8C%BA/</id>
     <published>2020-02-05T03:28:03.000Z</published>
     <updated>2020-02-05T03:28:26.309Z</updated>
     
@@ -402,8 +402,8 @@
   
   <entry>
     <title>需要用getchar()吃掉回车的情况</title>
-    <link href="https://hus96r.coding-pages.com/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/"/>
-    <id>https://hus96r.coding-pages.com/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/</id>
+    <link href="http://yoursite.com/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/"/>
+    <id>http://yoursite.com/2020/01/26/%E9%9C%80%E8%A6%81%E7%94%A8getchar-%E5%90%83%E6%8E%89%E5%9B%9E%E8%BD%A6%E7%9A%84%E6%83%85%E5%86%B5/</id>
     <published>2020-01-26T10:12:45.000Z</published>
     <updated>2020-01-26T10:16:42.272Z</updated>
     
@@ -425,8 +425,8 @@
   
   <entry>
     <title>小甲鱼指针作业心得</title>
-    <link href="https://hus96r.coding-pages.com/2020/01/10/%E5%B0%8F%E7%94%B2%E9%B1%BC%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%BE%97/"/>
-    <id>https://hus96r.coding-pages.com/2020/01/10/%E5%B0%8F%E7%94%B2%E9%B1%BC%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%BE%97/</id>
+    <link href="http://yoursite.com/2020/01/10/%E5%B0%8F%E7%94%B2%E9%B1%BC%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%BE%97/"/>
+    <id>http://yoursite.com/2020/01/10/%E5%B0%8F%E7%94%B2%E9%B1%BC%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%BE%97/</id>
     <published>2020-01-10T08:57:15.000Z</published>
     <updated>2020-01-10T09:04:14.926Z</updated>
     
@@ -450,8 +450,8 @@
   
   <entry>
     <title>形参数组</title>
-    <link href="https://hus96r.coding-pages.com/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/"/>
-    <id>https://hus96r.coding-pages.com/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/</id>
+    <link href="http://yoursite.com/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/"/>
+    <id>http://yoursite.com/2019/12/20/%E5%BD%A2%E5%8F%82%E6%95%B0%E7%BB%84/</id>
     <published>2019-12-20T07:59:03.000Z</published>
     <updated>2020-04-25T11:01:32.696Z</updated>
     
@@ -472,8 +472,8 @@
   
   <entry>
     <title>PTA</title>
-    <link href="https://hus96r.coding-pages.com/2019/11/17/PTA/"/>
-    <id>https://hus96r.coding-pages.com/2019/11/17/PTA/</id>
+    <link href="http://yoursite.com/2019/11/17/PTA/"/>
+    <id>http://yoursite.com/2019/11/17/PTA/</id>
     <published>2019-11-17T12:28:06.000Z</published>
     <updated>2020-05-26T01:33:47.806Z</updated>
     
