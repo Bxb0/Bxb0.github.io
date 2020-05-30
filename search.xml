@@ -57,16 +57,10 @@
       
       <categories>
           
-          <category> DASCTF线上 </category>
+          <category> CTF线上 </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -82,16 +76,10 @@
       
       <categories>
           
-          <category> 攻防世界 </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -107,16 +95,10 @@
       
       <categories>
           
-          <category> 论剑场 </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -157,16 +139,10 @@
       
       <categories>
           
-          <category> 攻防世界 </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -182,16 +158,10 @@
       
       <categories>
           
-          <category> 攻防世界 </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -205,12 +175,12 @@
         <content type="html"><![CDATA[<h2 id="百越杯2018-crazy"><a href="#百越杯2018-crazy" class="headerlink" title="百越杯2018: crazy"></a>百越杯2018: crazy</h2><ul><li><p>首先, 这道题的算法很简单, 就是考引用C++的字符串类的函数. 但是自己也挖掘了一些感觉有用的东西, 主要是通过这道题总结 c++字符串类.</p></li><li><p>拖入ExeinfoPe, 题目是64为elf文件, 用64为ida打开.</p></li><li><p>找到主函数,  查看伪代码, 发现很冗长, 但大多数都是那些字符串类函数和无用的信息. 我们可以先通过点击最后比较要用到的字符串的名称, 这时会把所有相同名称都高亮显示出来, 就可以通过逻辑判断出那些是关键函数和变量.<a id="more"></a></p></li><li><p>第一个关键函数  <strong>HighTemplar::HighTemplar((DarkTemplar *)&amp;v23, (__int64)&amp;input);</strong> </p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427213407581.png" alt="image-20200427213407581"></p></li><li><p>第二个关键函数 <strong>HighTemplar::calculate((HighTemplar *)&amp;v23);</strong></p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427213610870.png" alt="image-20200427213610870"></p></li><li><p>第三个关键函数 <strong>HighTemplar::getSerial((HighTemplar *)&amp;v23)</strong></p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427213959893.png" alt="image-20200427213959893"></p></li><li><p>最后wp: 但是要引起注意的是这个flag真的奇怪, 开始以为算错了,检查几遍, 最后就是这个 <strong>tMx<del>qdstOs</del>crvtwb~aOba}qddtbrtcd</strong>  再加上flag{}.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> a[] = <span class="string">"327a6c4304ad5938eaf0efb6cc3e53dc"</span>;</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">char</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(a); i++)</span><br><span class="line">&#123;</span><br><span class="line">a[i] = (a[i] - <span class="number">11</span>) ^ <span class="number">0x13</span>;</span><br><span class="line">a[i] = (a[i] - <span class="number">23</span>) ^ <span class="number">0x50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">puts</span>(a);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p><strong>总结:</strong></p></li><li><p>先说一下做这个题想过的一个问题.  我们知道 <strong>rodata</strong> 段是只读的, 存放常量等, 但是这里却有字符串地址的赋值, 他把 <strong>0x401EA0</strong> 地址的值改变了, 但为什么可以这样呢, 查了资料, 也想了很久, 最后认为应该是存放的指针,而且我们可以看到这一段都是8字节的增加, 都是一个指针 8字节的大小.</p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427215217839.png" alt="image-20200427215217839"></p><p>这里也通过查资料, 知道了以前学习指针的疑问.</p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200427215908475.png" alt="image-20200427215908475"></p><p><strong>因为我们初始化一个数组时,数组的初始值放在rodata段里面.数组对应开辟的空间上的数值存放在栈上,编译器会去访问rodata段上的初始值然后取来初始化局部变量，因此数组的值才能修改. 而指针指向的是rodata段，是不能被修改的</strong>.</p></li><li><p>第二个就是通过c++官方手册的查询对各种c++引用的各种字符串的总结. 下面的 a b 为字符数组.</p><table><thead><tr><th align="left">std::__cxx11::basic_string&lt;char,std::char_traits<char>,std::allocator<char>&gt;::operator[](a, i)</char></char></th></tr></thead><tbody><tr><td align="left">即 <strong>a[i]</strong> 的意思, 如果operator后面没有 <strong>[]</strong>, 那就是  <strong>a+i</strong></td></tr><tr><td align="left">std::__cxx11::basic_string&lt;char,std::char_traits<char>,std::allocator<char>&gt;::basic_string(a, b, lenth)</char></char></td></tr><tr><td align="left">即  <strong>strncpy(a, b, lenth)</strong>  第三个参数可选</td></tr><tr><td align="left">std::allocator<char>::~allocator(a)  <strong>发现只要前面有个 ~ 的都是释放</strong>.</char></td></tr><tr><td align="left">即 <strong>free(a)</strong></td></tr><tr><td align="left">std::__cxx11::basic_string&lt;char,std::char_traits<char>,std::allocator<char>&gt;::length(a)</char></char></td></tr><tr><td align="left">即 <strong>strlen(a)</strong></td></tr><tr><td align="left">std::operator&lt;&lt;&lt;std::char_traits<char>&gt;(&amp;std::cout, “hello”) 后面总跟着下面一句. <strong>关键是count</strong></char></td></tr><tr><td align="left">std::ostream::operator&lt;&lt;(v1, (__int64)&amp;std::endl&lt;char,std::char_traits<char>&gt;)                                                                     即  <strong>printf(“hello”)</strong></char></td></tr><tr><td align="left">std::operator&gt;&gt;&lt;char,std::char_traits<char>,std::allocator<char>&gt;(&amp;std::cin, &amp;a) <strong>关键是in</strong></char></char></td></tr><tr><td align="left">即 <strong>gets(a)</strong></td></tr></tbody></table><hr></li></ul><h2 id="easyCpp"><a href="#easyCpp" class="headerlink" title="easyCpp"></a>easyCpp</h2><blockquote><p>C++逆向的题, 刚开始接触很多代码看不懂,感觉可读性低.  但是看多了, 还是会好很多. 是一个慢慢熟悉stl的过程吧.</p></blockquote><ul><li><p>经过了一些CPP逆向题的折磨, 这个题大多数函数连懵带猜的看起来还好, 但是遇到了一个不仔细的错误, 想了很久…..</p></li><li><p>64位elf文件, 载入ida, 函数的大部分还是看懂了. 2个关键函数.  <strong>transform  accumulate</strong></p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510182506239.png" alt="image-20200510182506239"></p></li><li><p>先进入 transform. 算法也是很简单, 就是函数读起来更麻烦.</p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510182650313.png" alt="image-20200510182650313"></p></li><li><p>下面 accumulate. 这个看起来就不是那么容易了, 有很多地址传过来传过去就很混淆. 那就ida动态调试看看这个函数是做什么.(也是这里自己想了很久的错误, 虽然很简单的, 可能是stl把自己搞昏了吧).</p><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510183307210.png" alt="image-20200510183307210"></p></li><li><p>发现错误, 重新调试后得到经过 accumulate 函数后的结果. 把结果都记录下来后. 发现只是把 transform函数后的结果进行了逆序.<img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510183543551.png" alt="image-20200510183543551"></p></li><li><p>开始写 exp:  得到 <strong>987 -377 -610 -754 -843 -898 -932 -953 -966 -974 -979 -982 -984 -985 -986 -986</strong>. 最后在linux下运行程序输入.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span>(!a || a == <span class="number">1</span>)</span><br><span class="line"><span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> fib(a<span class="number">-1</span>) + fib(a<span class="number">-2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> flag[<span class="number">100</span>] = &#123;<span class="number">0</span>&#125;, i = <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= <span class="number">15</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">flag[i] = fib(i); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">15</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d "</span>, flag[i] = (i &lt; <span class="number">15</span> ? flag[i] - flag[<span class="number">15</span>]:flag[i]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><img src="/2020/04/27/cpp-%E9%80%86%E5%90%91/image-20200510184751024.png" alt="image-20200510184751024"></p></li><li><p><strong>总结: (1)注意传递的参数是指针还是值. (2)cpp逆向太多数都有一个模板一样, 动态调试注意地址的寻找.</strong></p></li></ul>]]></content>
       
       
+      <categories>
+          
+          <category> Reverse </category>
+          
+      </categories>
       
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -226,16 +196,10 @@
       
       <categories>
           
-          <category> DASCTF线上 </category>
+          <category> CTF线上 </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -251,16 +215,10 @@
       
       <categories>
           
-          <category> BUUCTF </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
@@ -276,16 +234,10 @@
       
       <categories>
           
-          <category> 攻防世界 </category>
+          <category> Reverse </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-        </tags>
       
     </entry>
     
