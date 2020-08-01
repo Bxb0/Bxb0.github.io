@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.bxnop.cn/"/>
-  <updated>2020-07-30T09:26:12.699Z</updated>
+  <updated>2020-08-01T05:27:09.201Z</updated>
   <id>https://www.bxnop.cn/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CrackMe</title>
+    <link href="https://www.bxnop.cn/2020/07/31/CrackMe/"/>
+    <id>https://www.bxnop.cn/2020/07/31/CrackMe/</id>
+    <published>2020-07-31T06:53:57.000Z</published>
+    <updated>2020-08-01T05:27:09.201Z</updated>
+    
+    <content type="html"><![CDATA[<p>本帖主要对练习Crackme的知识点与突破点进行记录。<a id="more"></a></p><h2 id="乘风破浪"><a href="#乘风破浪" class="headerlink" title="乘风破浪"></a>乘风破浪</h2><p>——题目来自看雪题库</p><p>题目难点：题目开始启动双线程，线程之间以事件通讯。对于不清楚双线程，自然会有很多疑问，跟踪程序起来也会困难一些。</p><p>首先以不知道双线程的角度来跟踪程序：</p><p>查看程序中的获取控件文本内容的API，搜索发现没有GetDlgItemText，但是有GetWindowTextLenthW与GetWindowTextW。双击进入。<img src="/2020/07/31/CrackMe/image-20200731174647264.png" alt="image-20200731174647264"></p><p>由于后面肯定会对输入数据进行验证处理，所以在数据窗口对该地址下硬件访问断点, F9运行断下后：<img src="/2020/07/31/CrackMe/image-20200731175348583.png" alt="image-20200731175348583"></p><p>上面汇编代码很简单，就是比较输入的name与key是否相等且最后以这个来确定返回值，尝试打开程序看验证一下，不对的。继续跟着程序返回：既然上一个验证函数是错误的，下面这个箭头所指跳转就不能实现才正确。<img src="/2020/07/31/CrackMe/image-20200731175649160.png" alt="image-20200731175649160"></p><p>修改标志寄存器后，单步分析401299以下的代码，很多无用的跳转，还是简单，一个验证：name与key的逆序是否相等且长度要不小于8。再次打开程序验证一下，正确。所以程序的key只要是name的逆序就正确。</p><p>当然我对程序还是有很多疑问，从出题人的帖子看到说是双线程。</p><p>开始去学习多线程的知识，觉得讲的很清楚的一个帖子：<a href="https://blog.csdn.net/LL596214569/article/details/89163734" target="_blank" rel="noopener">https://blog.csdn.net/LL596214569/article/details/89163734</a></p><p>了解多线程后，理解这个程序就很好了，首先是看是否有创建事件，查找API：CreatEvent。在创建线程API：CreatThread下断点，从CreatThread找到线程函数的地址。接着就是下图中的函数：<img src="/2020/07/31/CrackMe/image-20200731182155636.png" alt="image-20200731182155636"></p><p><strong>最后</strong>，所以程序的整体逻辑就是首先创建2个事件，再创建2个线程，2个线程函数都有WaitForSingleObject函数一直等待事件的信号后再向下继续执行。而我们输入name与key后点击Ok就会发生按钮事件，触发OS向程序发现消息，然后执行SetEvent函数将指定线程的WaitForSingleObject函数等待的指定事件设置为有信号状态。<img src="/2020/07/31/CrackMe/image-20200731183904491.png" alt="image-20200731183904491"></p><p>接下来在该线程进行验证name与key，如果验证通过的话设置另外一个线程等待的指定的事件设置为有信号状态，另一个线程开始执行显示提示正确的对话框的代码。<strong>简而言之：一个线程负责验证，一个线程负责显示。</strong></p><h2 id="渐入佳境"><a href="#渐入佳境" class="headerlink" title="渐入佳境"></a>渐入佳境</h2><p>——题目来自看雪题库</p><p>运行一下程序，有错误输入提示框。</p><p>上手直接找MessageBox，到达代码处向上分析：所以我们要向上回溯找到对ebp+c赋值处。<img src="/2020/07/31/CrackMe/image-20200801132230026.png" alt="image-20200801132230026"></p><p>继续向上回溯可以看到：<img src="/2020/07/31/CrackMe/image-20200801132543497.png" alt="image-20200801132543497"></p><p>所以下面跳转的地方就是验证过程：算法很简单。<img src="/2020/07/31/CrackMe/image-20200801132628646.png" alt="image-20200801132628646"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本帖主要对练习Crackme的知识点与突破点进行记录。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="CrackMe" scheme="https://www.Bxnop.cn/categories/CrackMe/"/>
+    
+    
+      <category term="破解" scheme="https://www.Bxnop.cn/tags/%E7%A0%B4%E8%A7%A3/"/>
+    
+  </entry>
   
   <entry>
     <title>2020年DASCTF七月线上赛</title>
@@ -504,28 +527,6 @@
     
     
       <category term="CTF线上" scheme="https://www.Bxnop.cn/categories/CTF%E7%BA%BF%E4%B8%8A/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>BUUCTF</title>
-    <link href="https://www.bxnop.cn/2020/04/23/BUUCTF/"/>
-    <id>https://www.bxnop.cn/2020/04/23/BUUCTF/</id>
-    <published>2020-04-23T11:05:34.000Z</published>
-    <updated>2020-05-30T09:24:55.572Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="CrackRTF1"><a href="#CrackRTF1" class="headerlink" title="CrackRTF1"></a>CrackRTF1</h2><p>从刚开始接触 BUUCTF , 做到逆向的这道题, 看了writeup 也觉得难, 就停滞了一段时间. 到论剑场和攻防世界做了20多天(期间也开始了pwn), 今天突然想到这道题(一直放在桌面顶部).</p><p>开始打开ida分析时, 发现逻辑是多么的清晰, 但是当进入第一个关键函数时, 想起了上次的难点. (1)对hash很陌生, 不知道为什么hash不可逆, 必须要爆破. (2)当时一点python都没接触过, 对于要写python脚本爆破, 就觉得很烦(当然经过不断的学习, 这20多天, 接触并开始学习些python). (3)这里第二次输入, 因为没有限制条件, 还不能爆破, 后面又是一些从没听说过的操作.(但其实这次再来看, 其实就是要用<strong>Resource Hacker</strong>这个工具查看.exe文件里的资源文件, 经过一些逻辑上的操作)<a id="more"></a></p><p>首先, 知道是系统调用的函数, 当时就每个都百度了下, 也是很麻烦的(但是逆向的路就是这样, 要知道的很多很多, 只有自己慢慢的积累).记得整个函数作用就是 调用一个hash加密函数. 具体是那个hash, 可以查看官方的介绍, 从这里的编号 : <strong>0x8004</strong> 去找对应的加密, 经过查询是 sha1.</p><p><img src="/2020/04/23/BUUCTF/image-20200423194434469.png" alt="image-20200423194434469"></p><p>因为hash不可逆, 但是这里有字符串长度是 6 位, 且转化为整数后 &gt;= 100000, 那么范围就确定了: 100000 - 999999, 下面爆破脚本: 得到 <strong>123321@DBApp</strong>, 那么我们输入就是 ; <strong>123321</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">flag = <span class="string">"@DBApp"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100000</span>, <span class="number">999999</span>):</span><br><span class="line">    s = str(i) + flag</span><br><span class="line">    x = hashlib.sha1(s.encode())</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"6E32D0943418C2C33385BC35A1470250DD8923A9"</span>.lower() == x.hexdigest():</span><br><span class="line">        <span class="keyword">print</span> (str(i) + flag)</span><br></pre></td></tr></table></figure><p> 接下来, 输入第二个字符串, 但是要加上上面的<strong>123321@DBApp</strong> 然后hash加密操作.但是这次的编号改变了 <strong>0x8003 : mad5</strong>, 这次没有限制条件, 爆破不行了.</p><p>经过看大神们的操作, 知道了可以通过下面一个函数.这个函数和我们的fopen那些文件操作不同. </p><p>这个 FindResourceA是打开这个.exe文件中资源文件的文件.(这点第一次知道, 还有这种操作!!!, 经过百度, 发现可以将自己的资源文件加入.exe文件中), 打开AAA后, 将里面的内容与我们输入的字符进行异或操作, 最后将内容写入新创建一个 dbapp.rtf 文件. 这里大神的说法都是, 因为是写进.rtf 文件那么开始写入的必然是文件头, 我们就可以随便创建一个.rtf文件, 查看文件头内容. 可以看到是 <strong>{\rtf1</strong>, 正好是6位,我们最后输入的也是6位, 那么把他和AAA文件中的前6位异或一下, 就得到我们输入的了. </p><h3 id><a href="#" class="headerlink" title></a><img src="/2020/04/23/BUUCTF/image-20200423200957999.png" alt="image-20200423200957999"></h3><p><img src="/2020/04/23/BUUCTF/image-20200423202735198.png" alt="image-20200423202735198"></p><p><img src="/2020/04/23/BUUCTF/image-20200423202025893.png" alt="image-20200423202025893"></p><p>下面脚本: 最后得到 <strong>~!3a@0</strong>, 输入程序后, 会创建一个 dbapp.rtf 文件, 打开即是flag.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">0x05</span>, <span class="number">0x7D</span>, <span class="number">0x41</span>, <span class="number">0x15</span>, <span class="number">0x26</span>, <span class="number">0x01</span>]</span><br><span class="line"></span><br><span class="line">flag = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">rtf = <span class="string">"&#123;\\rtf1"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(rtf)):</span><br><span class="line">    x = ord(rtf[i]) ^ a[i]</span><br><span class="line">    flag += chr(x)</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure><p>但对于最后的 <strong>因为是写进.rtf 文件那么开始写入的必然是文件头</strong> 我是感觉奇怪的, 他创建了一个dbapp.rtf 文件, 写入的不就是文件的内容吗, 为什么文件头都要我们来写入. 噢, 因为以前学习文件操作的时候都是往.txt文件里写内容, 那个没有文件头这一说, 所以可以一开始写进内容. 写入的实质还是填充二进制的01. 所以这里我们要先写 .rtf文件头. </p><p><img src="/2020/04/23/BUUCTF/image-20200423204326824.png" alt="image-20200423204326824"></p><p>最后, .rtf文件与 docx dox 类似, <strong><em>\</em>富文本格式\</strong>（*<em>Rich Text Format*</em>）即*<em>RTF格式*</em>，又称*<em>多文本格式*</em>，是由<a href="https://baike.baidu.com/item/微软" target="_blank" rel="noopener">微软</a>公司开发的跨平台<a href="https://baike.baidu.com/item/文档" target="_blank" rel="noopener">文档</a>格式。大多数的<a href="https://baike.baidu.com/item/文字处理" target="_blank" rel="noopener">文字处理</a>软件都能读取和保存RTF文档。**</p><p>mac先创建的文本文件, 默认都是 .rtf.</p><p>心得: 如果做到感觉很吃力的题可以先放一放, 等学习一段时间, 知识积累的更多了再来看, 不要死磕!</p><p>当一条路不同时, 注意其他函数的功能, 想它的存在为什么. </p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;CrackRTF1&quot;&gt;&lt;a href=&quot;#CrackRTF1&quot; class=&quot;headerlink&quot; title=&quot;CrackRTF1&quot;&gt;&lt;/a&gt;CrackRTF1&lt;/h2&gt;&lt;p&gt;从刚开始接触 BUUCTF , 做到逆向的这道题, 看了writeup 也觉得难, 就停滞了一段时间. 到论剑场和攻防世界做了20多天(期间也开始了pwn), 今天突然想到这道题(一直放在桌面顶部).&lt;/p&gt;
-&lt;p&gt;开始打开ida分析时, 发现逻辑是多么的清晰, 但是当进入第一个关键函数时, 想起了上次的难点. (1)对hash很陌生, 不知道为什么hash不可逆, 必须要爆破. (2)当时一点python都没接触过, 对于要写python脚本爆破, 就觉得很烦(当然经过不断的学习, 这20多天, 接触并开始学习些python). (3)这里第二次输入, 因为没有限制条件, 还不能爆破, 后面又是一些从没听说过的操作.(但其实这次再来看, 其实就是要用&lt;strong&gt;Resource Hacker&lt;/strong&gt;这个工具查看.exe文件里的资源文件, 经过一些逻辑上的操作)&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Reverse" scheme="https://www.Bxnop.cn/categories/Reverse/"/>
     
     
   </entry>
