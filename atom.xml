@@ -429,18 +429,13 @@
     <link href="https://www.bxnop.cn/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/"/>
     <id>https://www.bxnop.cn/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/</id>
     <published>2020-05-12T11:15:32.000Z</published>
-    <updated>2020-05-30T09:26:04.216Z</updated>
+    <updated>2020-09-17T14:41:53.506Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Refresh-it"><a href="#Refresh-it" class="headerlink" title="Refresh it"></a>Refresh it</h2><ul><li><p>题目下载下来是一个.pcapng文件. 先用010editor看了看会不会只是简单的将文件格式改了, 因为是reverse题, 看了一圈, 的却是流量包.</p></li><li><p>在wireshark中尝试搜索了题目关键字refresh, 没有得到有用信息. 又接着尝试了搜索了很多, 都无果. </p></li><li><p>转到foremost和binwalk看看没有什么隐藏文件.  确实看到了2张图片, 提取出来但打不开, 考虑exe文件隐藏在图片文件中, 查看了图片文件信息, PE文件的影子都没有🤣.  没办法了, 题目先放一段时间. <a id="more"></a></p></li><li><p>这又是过了几天来看这个题目, 感觉自己找不到目标, 在盲目的找…很多办法都试了下. 唯一得到的就是图片.</p></li><li><p>看了看图片信息, 发现F5 refrehsh. 又从题目的信息, 你看到刷新按钮了嘛. 突然想到之前做过一个杂项题是F5-steganography隐写. 后面那个的refresh猜测是密码. 连忙去试了下, 错误…. 但是这个确实很像是考隐写.<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512194627578.png" alt="image-20200512194627578"></p></li><li><p>考虑是binwalk提取图片有损坏或者不全的原因, 因为图片是打不开的.  又跑去wireshark. 因为这次明确是找图片, 直接搜索了 jpg, 果然出现了个图片<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200418460.png" alt="image-20200512200418460"></p></li><li><p>追踪tcp流把图片的二进制代码复制下来, winhex重建一个文件粘贴保存.注意文件头FF D8 文件尾 FF D9<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200649037.png" alt="image-20200512200649037"></p></li><li><p>这次图片可以打开了, 是个刷新按钮, 再次去用F5隐写来解密. 终于成功了….</p><p><img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200849581.png" alt="image-20200512200849581"></p></li><li><p><strong>总结: 感觉花了很多时间, 简直就是杂项题啊. 另外题的提示信息太少. 熟悉了一些工具的使用吧</strong></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<p>论剑场刷题记录。<a id="more"></a></p><h2 id="Refresh-it"><a href="#Refresh-it" class="headerlink" title="Refresh it"></a>Refresh it</h2><ul><li><p>题目下载下来是一个.pcapng文件. 先用010editor看了看会不会只是简单的将文件格式改了, 因为是reverse题, 看了一圈, 的却是流量包.</p></li><li><p>在wireshark中尝试搜索了题目关键字refresh, 没有得到有用信息. 又接着尝试了搜索了很多, 都无果. </p></li><li><p>转到foremost和binwalk看看没有什么隐藏文件.  确实看到了2张图片, 提取出来但打不开, 考虑exe文件隐藏在图片文件中, 查看了图片文件信息, PE文件的影子都没有🤣.  没办法了, 题目先放一段时间. </p></li><li><p>这又是过了几天来看这个题目, 感觉自己找不到目标, 在盲目的找…很多办法都试了下. 唯一得到的就是图片.</p></li><li><p>看了看图片信息, 发现F5 refrehsh. 又从题目的信息, 你看到刷新按钮了嘛. 突然想到之前做过一个杂项题是F5-steganography隐写. 后面那个的refresh猜测是密码. 连忙去试了下, 错误…. 但是这个确实很像是考隐写.<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512194627578.png" alt="image-20200512194627578"></p></li><li><p>考虑是binwalk提取图片有损坏或者不全的原因, 因为图片是打不开的.  又跑去wireshark. 因为这次明确是找图片, 直接搜索了 jpg, 果然出现了个图片<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200418460.png" alt="image-20200512200418460"></p></li><li><p>追踪tcp流把图片的二进制代码复制下来, winhex重建一个文件粘贴保存.注意文件头FF D8 文件尾 FF D9<img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200649037.png" alt="image-20200512200649037"></p></li><li><p>这次图片可以打开了, 是个刷新按钮, 再次去用F5隐写来解密. 终于成功了….</p><p><img src="/2020/05/12/%E8%AE%BA%E5%89%91%E5%9C%BA/image-20200512200849581.png" alt="image-20200512200849581"></p></li><li><p><strong>总结: 感觉花了很多时间, 简直就是杂项题啊. 另外题的提示信息太少. 熟悉了一些工具的使用吧</strong></p></li></ul>]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;Refresh-it&quot;&gt;&lt;a href=&quot;#Refresh-it&quot; class=&quot;headerlink&quot; title=&quot;Refresh it&quot;&gt;&lt;/a&gt;Refresh it&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;题目下载下来是一个.pcapng文件. 先用010editor看了看会不会只是简单的将文件格式改了, 因为是reverse题, 看了一圈, 的却是流量包.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;在wireshark中尝试搜索了题目关键字refresh, 没有得到有用信息. 又接着尝试了搜索了很多, 都无果. &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;转到foremost和binwalk看看没有什么隐藏文件.  确实看到了2张图片, 提取出来但打不开, 考虑exe文件隐藏在图片文件中, 查看了图片文件信息, PE文件的影子都没有🤣.  没办法了, 题目先放一段时间.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+      &lt;p&gt;论剑场刷题记录。&lt;/p&gt;
     
     </summary>
     
