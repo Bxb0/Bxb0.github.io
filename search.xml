@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>反调试记录</title>
+      <link href="/2020/11/05/%E5%8F%8D%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/"/>
+      <url>/2020/11/05/%E5%8F%8D%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<p>今后遇到的反调试都记录在此，有些具体内部原理后面再来补。<a id="more"></a></p><p>1.NtQueryInformationProcess函数</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">NTSTATUS</span> <span class="params">(WINAPI *NtQueryInformationProcessPtr)</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">       HANDLE processHandle,<span class="comment">//进程句柄</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">       PROCESSINFOCLASS processInformationClass,<span class="comment">//信息类型</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">       PVOID processInformation,<span class="comment">//缓冲区，函数返回值存入的地址空间。</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">       ULONG processInformationLength,<span class="comment">//缓冲区的大小</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">       PULONG returnLength)</span></span>;</span><br><span class="line"><span class="comment">//当第二个参数为7时可以用来查看进程的调试端口。当进程被调试时返回-1，否则返回其它值。</span></span><br></pre></td></tr></table></figure><p>另外由于这是一个未公开的API，所以我们需要使用LoadLibrary和GetProceAddress的方法获取调用地址。这里贴上遇到的程序中使用这个函数来检测调试的实例：</p><p><img src="/2020/11/05/%E5%8F%8D%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/image-20201105170711386.png" alt="image-20201105170711386"></p><p>所以执行完这个函数，可以根据dword_404468的值判断进程是否处于调试。</p><p>2.NtSetInformationThread函数</p><p>与上面一个函数类似的用法，也需要使用LoadLibrary和GetProceAddress的方法获取调用地址。</p><p><img src="/2020/11/05/%E5%8F%8D%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/image-20201105171431630.png" alt="image-20201105171431630"></p><p>调用这个函数时，如果在第二个参数里指定0x11这个值（意思是ThreadHideFromDebugger），等于告诉操作系统，将所有附加的调试器统统取消掉，即退出调试状态。</p><p>3.IsProcessorFeaturePresent函数。</p><p><img src="/2020/11/05/%E5%8F%8D%E8%B0%83%E8%AF%95%E8%AE%B0%E5%BD%95/image-20201105172140986.png" alt="image-20201105172140986"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Reverse </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2020湖湘杯</title>
       <link href="/2020/11/02/2020%E6%B9%96%E6%B9%98%E6%9D%AF/"/>
       <url>/2020/11/02/2020%E6%B9%96%E6%B9%98%E6%9D%AF/</url>
