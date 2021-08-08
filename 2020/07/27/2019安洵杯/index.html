@@ -1,4 +1,382 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 4.2.1"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/2.ico"><link rel="icon" type="image/png" sizes="16x16" href="/images/2.ico"><link rel="mask-icon" href="/images/logo.svg" color="#222"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"www.bxnop.cn",root:"/",scheme:"Gemini",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!0,style:null},back2top:{enable:!0,sidebar:!0,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!1,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。"><meta property="og:type" content="article"><meta property="og:title" content="2019安洵杯"><meta property="og:url" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/index.html"><meta property="og:site_name" content="Bxb0&#39;s blog"><meta property="og:description" content="举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162346063.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815165930112.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170400494.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170436332.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173123252.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173417257.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815175235431.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181032181.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181639575.png"><meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181823633.png"><meta property="article:published_time" content="2020-07-27T07:55:30.000Z"><meta property="article:modified_time" content="2020-09-16T09:34:21.436Z"><meta property="article:author" content="ooo"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png"><link rel="canonical" href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"en"}</script><title>2019安洵杯 | Bxb0's blog</title><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript><link rel="alternate" href="/atom.xml" title="Bxb0's blog" type="application/atom+xml"></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="Toggle navigation bar"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Bxb0's blog</h1><span class="logo-line-after"><i></i></span></a></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i> Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i> Categories<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i> Archives<span class="badge">45</span></a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i> Search</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"> <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en"><link itemprop="mainEntityOfPage" href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.gif"><meta itemprop="name" content="ooo"><meta itemprop="description" content="0x446e37fb"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Bxb0's blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"> 2019安洵杯</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i></span> <span class="post-meta-item-text">Posted on</span> <time title="Created: 2020-07-27 15:55:30" itemprop="dateCreated datePublished" datetime="2020-07-27T15:55:30+08:00">2020-07-27</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i></span> <span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a></span></span><br><span class="post-meta-item" title="Symbols count in article"><span class="post-meta-item-icon"><i class="far fa-file-word"></i></span> <span class="post-meta-item-text">Symbols count in article:</span> <span>4.5k</span></span><span class="post-meta-item" title="Reading time"><span class="post-meta-item-icon"><i class="far fa-clock"></i></span> <span class="post-meta-item-text">Reading time &asymp;</span> <span>4 mins.</span></span></div></header><div class="post-body" itemprop="articleBody"><blockquote><p><strong>举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。</strong></p></blockquote><a id="more"></a><h2 id="Easy-Encryption"><a href="#Easy-Encryption" class="headerlink" title="Easy_Encryption"></a>Easy_Encryption</h2><p>提示很多，直接找到main函数，简单分析一下，对输入flag进行2个加密函数后，最后与一个已知密文比较。其中第二个明显的base64加密。</p><p>来到一个加密函数，由于ida栈顶分析失败导致，直接alt+k修改一下就可以了。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png" alt="image-20200815162136204"></p><p>愉快的看伪代码，一个注意的地方：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162346063.png" alt="image-20200815162346063"></p><p>直接简单的爆破。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"artqkoehqpkbihv"</span>, i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> base[] = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; base[i]; i++)</span><br><span class="line">		base[i] = <span class="built_in">abs</span>(base[i]<span class="number">-97</span>);</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= s[i]; i++)	</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">97</span>; j &lt;= <span class="number">122</span>; j++)</span><br><span class="line">			<span class="keyword">if</span>((j+base[i]<span class="number">-97</span>)%<span class="number">26</span>+<span class="number">97</span> == s[i])</span><br><span class="line">				<span class="built_in">putchar</span>(j);</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//flag: umpnineissogood</span></span><br></pre></td></tr></table></figure><h2 id="game"><a href="#game" class="headerlink" title="game"></a>game</h2><p>ida载入后，发现伪代码十分难看。。。看了一会儿，实在不想分析了，所有函数都是一种形式，感觉是什么混淆代码的技术。</p><p>百度后，发现是ollvm，控制流平坦化技术。</p><blockquote><p>控制流平坦化(control flow flattening)的基本思想主要是通过一个主分发器来控制程序基本块的执行流程，这个主分发器就是函数中的switch语句。</p></blockquote><p>且目前可以利用符号执行来去除控制流平坦化。<a href="https://security.tencent.com/index.php/blog/msg/112" target="_blank" rel="noopener">利用符号执行去除控制流平坦化</a></p><p>而这也需要angr，网上说的都是建议安装在python虚拟环境中。</p><p>跟着教程安装完虚拟环境并创建后，但angr又安装失败。。。后面发现还可以直接用dokcer。</p><p>了解一波docker，<a href="https://www.cnblogs.com/blog-rui/p/11244023.html" target="_blank" rel="noopener">docker</a>，折腾一些时间（谷歌大法帮了大忙👍）后成功执行deflat.py脚本。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815165930112.png" alt="image-20200815165930112"></p><p>又是愉快的伪代码，简单就不分析了，使用gdb动调出2个对比的数独表，找出差异的数字，即0所在位置。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170400494.png" alt="image-20200815170400494"></p><p>然后使用notepad++找不不同：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170436332.png" alt="image-20200815170436332"></p><p>最后简单解密一下：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"4693641762894685722843556137219876255986"</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; s[i]; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">33</span>; j &lt;= <span class="number">122</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(((j&amp;<span class="number">0xf3</span> | ~j&amp;<span class="number">0xc</span>)<span class="number">-20</span>) == s[i])</span><br><span class="line">			&#123;</span><br><span class="line">				s[i] = j;</span><br><span class="line">				<span class="keyword">break</span>;			</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(s); i += <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span> temp = s[i];</span><br><span class="line">		s[i] = s[i+<span class="number">1</span>];</span><br><span class="line">		s[i+<span class="number">1</span>] = temp;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	k = <span class="built_in">strlen</span>(s)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(s)/<span class="number">2</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span> temp = s[k];</span><br><span class="line">		s[k] = s[i];</span><br><span class="line">		s[i] = temp;</span><br><span class="line">		k++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">puts</span>(s);</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//flag: KDEEIFGKIJ@AFGEJAEF@FDKADFGIJFA@FDE@JG@J</span></span><br></pre></td></tr></table></figure><h2 id="crackme"><a href="#crackme" class="headerlink" title="crackme"></a>crackme</h2><p>打开程序，出现hooked，表示已经对程序中的的函数hook成功。</p><p>而之前我也在逆向工程核心原理一书中看到过该章节的一点内容，它的介绍：</p><blockquote><p><strong>代码逆向分析中，钩取（hooking）是一种截取信息，更改程序流程，添加新功能的技术。</strong></p></blockquote><p>ida中找到main函数后，会发现很奇怪，有一个异常，且没有操作输入flag的函数，猜测是hook改变了程序的程序流程。但可以通过数据交叉引用找到关键函数。</p><p>看了一下所有与计算输入数据与比较数据相关的函数，了解大致流程后，OD进行动调看看：</p><p>其中main函数中的MessageBox函数执行后并没有正常的执行，而是跳到了一个新的函数，也是ida中分析过的过数据加密的函数。结合ida继续动调：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173123252.png" alt="image-20200815173123252"></p><p>OD中看到跳到的main函数触发异常的地方，但是程序无法处理的异常。。。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173417257.png" alt="image-20200815173417257"></p><p>那上图中的<strong>TopLevelExceptionFilter</strong>关键加密函数不执行的嘛。。使用PEtools来dump出正常执行的程序看到数据改变了的，那是执行了的。。</p><p>百度一下<strong>SetUnhandledExceptionFilter(TopLevelExceptionFilter)</strong>函数：<strong>简单来说就是设置一个发生异常处理的函数，且它会将原来默认处理异常的函数hook掉。且我们的程序要不处于调试状态才会去执行它设置的异常处理函数。<a href="https://blog.csdn.net/xiaoyafang123/article/details/52161106" target="_blank" rel="noopener">介绍</a></strong></p><p>参数：lpTopLevelExceptionFilter 函数指针。当异常发生时，且程序不处于调试模式（在vs或者别的调试器里运行）则首先调用该函数。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815175235431.png" alt="image-20200815175235431"></p><p>程序流程清楚了，开始分析算法：</p><p>第二个加密函数变种的base64，但第一个看不出什么名堂，自己逆的话感觉工程量肯定大且很大几率搞不出来。。</p><p>就想着先把变种的base64先解密，但一直解密乱码。。不能啊，自己也写了2个函数来测试，能将变种加密的base64还原为正常base64加密的，但题中的密文不行，。。</p><p>模拟本题的变种base64加密（也是从模拟发现是base64的）：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> k; <span class="comment">// [esp+E4h] [ebp-5Ch]</span></span><br><span class="line">  <span class="keyword">int</span> v3; <span class="comment">// [esp+F0h] [ebp-50h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> j; <span class="comment">// [esp+FCh] [ebp-44h]</span></span><br><span class="line">  <span class="keyword">int</span> v5; <span class="comment">// [esp+108h] [ebp-38h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> i; <span class="comment">// [esp+114h] [ebp-2Ch]</span></span><br><span class="line">  <span class="keyword">char</span> *v7; <span class="comment">// [esp+120h] [ebp-20h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> v8; <span class="comment">// [esp+12Ch] [ebp-14h]</span></span><br><span class="line">  <span class="keyword">int</span> v9; <span class="comment">// [esp+138h] [ebp-8h]</span></span><br><span class="line">  <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">char</span> str[] = <span class="string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/"</span>;</span><br><span class="line">  <span class="keyword">char</span> Str[] = <span class="string">"123456"</span>;</span><br><span class="line">  v5 = <span class="number">0</span>;</span><br><span class="line">  v8 = <span class="built_in">strlen</span>(Str);</span><br><span class="line">  <span class="keyword">if</span> ( v8 % <span class="number">3</span> )</span><br><span class="line">    v9 = <span class="number">4</span> * (v8 / <span class="number">3</span>) + <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    v9 = <span class="number">4</span> * (v8 / <span class="number">3</span>);</span><br><span class="line">  v7 = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*(v9+<span class="number">1</span>));</span><br><span class="line">  v7[v9] = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; v8; i += <span class="number">3</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v3 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">3</span>; ++j )</span><br><span class="line">      v3 |= (<span class="keyword">unsigned</span> __int8)Str[j + i] &lt;&lt; <span class="number">8</span> * (<span class="number">2</span> - j);</span><br><span class="line">    <span class="keyword">for</span> ( k = <span class="number">0</span>; k &lt; <span class="number">4</span>; ++k )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( k &gt;= <span class="number">4</span> - (i + <span class="number">3</span> - v8) &amp;&amp; i + <span class="number">3</span> &gt; v8 )</span><br><span class="line">        v7[v5] = <span class="string">'!'</span>;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        temp = (((v3 &gt;&gt; <span class="number">6</span> * (<span class="number">3</span> - k)) &amp; <span class="number">0x3F</span>)+<span class="number">24</span>)%<span class="number">64</span>, v7[v5] = str[temp], <span class="built_in">printf</span>(<span class="string">"%d "</span>, temp);;</span><br><span class="line">      ++v5;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">	<span class="built_in">puts</span>(v7); </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//加密后：KRGlLBSo</span></span><br></pre></td></tr></table></figure><p>还原成正常加密的base64密文：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[] = <span class="string">"KRGlLBSo"</span>;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>;</span><br><span class="line">	<span class="keyword">char</span> a1[] = &#123;<span class="number">20</span>, <span class="number">53</span>, <span class="number">0</span>, <span class="number">19</span>, <span class="number">8</span>, <span class="number">14</span>, <span class="number">41</span>, <span class="number">36</span>,</span><br><span class="line">				 <span class="number">14</span>, <span class="number">50</span>, <span class="number">22</span>, <span class="number">18</span>, <span class="number">47</span>, <span class="number">6</span>, <span class="number">38</span>, <span class="number">63</span>, <span class="number">24</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">5</span>, <span class="number">17</span>, <span class="number">56</span>&#125;;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; a[i]; i++)</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">64</span>; j++)</span><br><span class="line">			<span class="keyword">if</span>(a[i] == s[j])</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">int</span> t = j;</span><br><span class="line">				<span class="keyword">if</span>(t &lt;= <span class="number">25</span>)</span><br><span class="line">					t += <span class="number">26</span>;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(t &lt;= <span class="number">51</span>)</span><br><span class="line">					t -= <span class="number">26</span>;</span><br><span class="line">					</span><br><span class="line">				<span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; <span class="number">64</span>; k++)</span><br><span class="line">					<span class="keyword">if</span>((k+<span class="number">24</span>)%<span class="number">64</span> == t)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="built_in">putchar</span>(s[k]);</span><br><span class="line">						<span class="keyword">break</span>;</span><br><span class="line">					&#125;</span><br><span class="line">			&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//还原为正常base64加密密文：MTIzNDU2</span></span><br></pre></td></tr></table></figure><p>正常base64解密：可以看到，解密出明文。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181032181.png" alt="image-20200815181032181"></p><p>就这样卡住了。。。也无心看第一个加密了。</p><p>不行，去看了看writeup，原来这个解密出本来就是乱码，转化为16进制就好。。。又直接看了第一个加密是sm4。。</p><p>它在加密中其实有标志的：<strong>一是表，二是0xA3B1BAC6</strong><img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181639575.png" alt="image-20200815181639575"></p><p><img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181823633.png" alt="image-20200815181823633"></p><p>最后python安装pysm4进行解密：</p><p>首先base64解密且转化为16进制：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_to_hex</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join([hex(c).replace(<span class="string">'0x'</span>, <span class="string">''</span>) <span class="keyword">for</span> c <span class="keyword">in</span> s])</span><br><span class="line"></span><br><span class="line">s = <span class="string">"WdCVKQ3yQAYU9I0naQaHTg=="</span></span><br><span class="line">s1 = b64decode(s)</span><br><span class="line"></span><br><span class="line">ans = str_to_hex(s1)</span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure><p>sm4解密：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pysm4 <span class="keyword">import</span> encrypt, decrypt</span><br><span class="line"><span class="comment">#密钥</span></span><br><span class="line">mk = <span class="number">0x77686572655f6172655f755f6e6f773f</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#密文</span></span><br><span class="line">cipher_num = <span class="number">0x59d095290df2400614f48d276906874e</span></span><br><span class="line"></span><br><span class="line">clear_num = decrypt(cipher_num, mk)</span><br><span class="line">s = hex(clear_num)[<span class="number">2</span>:]</span><br><span class="line">print(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hex_to_str</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join([chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> [int(s[j]+s[j+<span class="number">1</span>], <span class="number">16</span>) <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(s), <span class="number">2</span>)]])</span><br><span class="line">print(hex_to_str(s))</span><br><span class="line"></span><br><span class="line"><span class="comment">#flag：SM4foRExcepioN?!</span></span><br></pre></td></tr></table></figure></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>Post author:</strong> ooo</li><li class="post-copyright-link"> <strong>Post link:</strong> <a href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/" title="2019安洵杯">https://www.bxnop.cn/2020/07/27/2019安洵杯/</a></li><li class="post-copyright-license"> <strong>Copyright Notice:</strong> All articles in this blog are licensed under<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i> BY-NC-SA</a> unless stating additionally.</li></ul></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div></div></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/2020/07/25/2020%E5%B9%B4DASCTF%E4%B8%83%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/" rel="prev" title="2020年DASCTF七月线上赛"><i class="fa fa-chevron-left"></i> 2020年DASCTF七月线上赛</a></div><div class="post-nav-item"> <a href="/2020/07/29/%E6%9D%82%E5%90%88writeup/" rel="next" title="杂合writeup">杂合writeup<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/2.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/2.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.bxnop.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019安洵杯">
+<meta property="og:url" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/index.html">
+<meta property="og:site_name" content="Bxb0&#39;s blog">
+<meta property="og:description" content="举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162346063.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815165930112.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170400494.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170436332.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173123252.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173417257.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815175235431.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181032181.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181639575.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181823633.png">
+<meta property="article:published_time" content="2020-07-27T07:55:30.000Z">
+<meta property="article:modified_time" content="2020-09-16T09:34:21.436Z">
+<meta property="article:author" content="ooo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png">
+
+<link rel="canonical" href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>2019安洵杯 | Bxb0's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Bxb0's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bxb0's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">42</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ooo">
+      <meta itemprop="description" content="0x446e37fb">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bxb0's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2019安洵杯
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-27 15:55:30" itemprop="dateCreated datePublished" datetime="2020-07-27T15:55:30+08:00">2020-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>4 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p><strong>举办这个比赛时自己还不知道什么是CTF，由于是在自己学校进行的，有点这个比赛的印象。入逆向后，最近把re做了下。</strong></p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="Easy-Encryption"><a href="#Easy-Encryption" class="headerlink" title="Easy_Encryption"></a>Easy_Encryption</h2><p>提示很多，直接找到main函数，简单分析一下，对输入flag进行2个加密函数后，最后与一个已知密文比较。其中第二个明显的base64加密。</p>
+<p>来到一个加密函数，由于ida栈顶分析失败导致，直接alt+k修改一下就可以了。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162136204.png" alt="image-20200815162136204"></p>
+<p>愉快的看伪代码，一个注意的地方：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815162346063.png" alt="image-20200815162346063"></p>
+<p>直接简单的爆破。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"artqkoehqpkbihv"</span>, i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> base[] = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; base[i]; i++)</span><br><span class="line">		base[i] = <span class="built_in">abs</span>(base[i]<span class="number">-97</span>);</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= s[i]; i++)	</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">97</span>; j &lt;= <span class="number">122</span>; j++)</span><br><span class="line">			<span class="keyword">if</span>((j+base[i]<span class="number">-97</span>)%<span class="number">26</span>+<span class="number">97</span> == s[i])</span><br><span class="line">				<span class="built_in">putchar</span>(j);</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//flag: umpnineissogood</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="game"><a href="#game" class="headerlink" title="game"></a>game</h2><p>ida载入后，发现伪代码十分难看。。。看了一会儿，实在不想分析了，所有函数都是一种形式，感觉是什么混淆代码的技术。</p>
+<p>百度后，发现是ollvm，控制流平坦化技术。</p>
+<blockquote>
+<p>控制流平坦化(control flow flattening)的基本思想主要是通过一个主分发器来控制程序基本块的执行流程，这个主分发器就是函数中的switch语句。</p>
+</blockquote>
+<p>且目前可以利用符号执行来去除控制流平坦化。<a href="https://security.tencent.com/index.php/blog/msg/112" target="_blank" rel="noopener">利用符号执行去除控制流平坦化</a></p>
+<p>而这也需要angr，网上说的都是建议安装在python虚拟环境中。</p>
+<p>跟着教程安装完虚拟环境并创建后，但angr又安装失败。。。后面发现还可以直接用dokcer。</p>
+<p>了解一波docker，<a href="https://www.cnblogs.com/blog-rui/p/11244023.html" target="_blank" rel="noopener">docker</a>，折腾一些时间（谷歌大法帮了大忙👍）后成功执行deflat.py脚本。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815165930112.png" alt="image-20200815165930112"></p>
+<p>又是愉快的伪代码，简单就不分析了，使用gdb动调出2个对比的数独表，找出差异的数字，即0所在位置。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170400494.png" alt="image-20200815170400494"></p>
+<p>然后使用notepad++找不不同：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815170436332.png" alt="image-20200815170436332"></p>
+<p>最后简单解密一下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"4693641762894685722843556137219876255986"</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; s[i]; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">33</span>; j &lt;= <span class="number">122</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(((j&amp;<span class="number">0xf3</span> | ~j&amp;<span class="number">0xc</span>)<span class="number">-20</span>) == s[i])</span><br><span class="line">			&#123;</span><br><span class="line">				s[i] = j;</span><br><span class="line">				<span class="keyword">break</span>;			</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(s); i += <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span> temp = s[i];</span><br><span class="line">		s[i] = s[i+<span class="number">1</span>];</span><br><span class="line">		s[i+<span class="number">1</span>] = temp;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	k = <span class="built_in">strlen</span>(s)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(s)/<span class="number">2</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span> temp = s[k];</span><br><span class="line">		s[k] = s[i];</span><br><span class="line">		s[i] = temp;</span><br><span class="line">		k++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">puts</span>(s);</span><br><span class="line">	 </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//flag: KDEEIFGKIJ@AFGEJAEF@FDKADFGIJFA@FDE@JG@J</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="crackme"><a href="#crackme" class="headerlink" title="crackme"></a>crackme</h2><p>打开程序，出现hooked，表示已经对程序中的的函数hook成功。</p>
+<p>而之前我也在逆向工程核心原理一书中看到过该章节的一点内容，它的介绍：</p>
+<blockquote>
+<p><strong>代码逆向分析中，钩取（hooking）是一种截取信息，更改程序流程，添加新功能的技术。</strong></p>
+</blockquote>
+<p>ida中找到main函数后，会发现很奇怪，有一个异常，且没有操作输入flag的函数，猜测是hook改变了程序的程序流程。但可以通过数据交叉引用找到关键函数。</p>
+<p>看了一下所有与计算输入数据与比较数据相关的函数，了解大致流程后，OD进行动调看看：</p>
+<p>其中main函数中的MessageBox函数执行后并没有正常的执行，而是跳到了一个新的函数，也是ida中分析过的过数据加密的函数。结合ida继续动调：<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173123252.png" alt="image-20200815173123252"></p>
+<p>OD中看到跳到的main函数触发异常的地方，但是程序无法处理的异常。。。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815173417257.png" alt="image-20200815173417257"></p>
+<p>那上图中的<strong>TopLevelExceptionFilter</strong>关键加密函数不执行的嘛。。使用PEtools来dump出正常执行的程序看到数据改变了的，那是执行了的。。</p>
+<p>百度一下<strong>SetUnhandledExceptionFilter(TopLevelExceptionFilter)</strong>函数：<strong>简单来说就是设置一个发生异常处理的函数，且它会将原来默认处理异常的函数hook掉。且我们的程序要不处于调试状态才会去执行它设置的异常处理函数。<a href="https://blog.csdn.net/xiaoyafang123/article/details/52161106" target="_blank" rel="noopener">介绍</a></strong> </p>
+<p>参数：lpTopLevelExceptionFilter 函数指针。当异常发生时，且程序不处于调试模式（在vs或者别的调试器里运行）则首先调用该函数。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815175235431.png" alt="image-20200815175235431"></p>
+<p>程序流程清楚了，开始分析算法：</p>
+<p>第二个加密函数变种的base64，但第一个看不出什么名堂，自己逆的话感觉工程量肯定大且很大几率搞不出来。。</p>
+<p>就想着先把变种的base64先解密，但一直解密乱码。。不能啊，自己也写了2个函数来测试，能将变种加密的base64还原为正常base64加密的，但题中的密文不行，。。</p>
+<p>模拟本题的变种base64加密（也是从模拟发现是base64的）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt; </span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> k; <span class="comment">// [esp+E4h] [ebp-5Ch]</span></span><br><span class="line">  <span class="keyword">int</span> v3; <span class="comment">// [esp+F0h] [ebp-50h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> j; <span class="comment">// [esp+FCh] [ebp-44h]</span></span><br><span class="line">  <span class="keyword">int</span> v5; <span class="comment">// [esp+108h] [ebp-38h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> i; <span class="comment">// [esp+114h] [ebp-2Ch]</span></span><br><span class="line">  <span class="keyword">char</span> *v7; <span class="comment">// [esp+120h] [ebp-20h]</span></span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">int</span> v8; <span class="comment">// [esp+12Ch] [ebp-14h]</span></span><br><span class="line">  <span class="keyword">int</span> v9; <span class="comment">// [esp+138h] [ebp-8h]</span></span><br><span class="line">  <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">char</span> str[] = <span class="string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/"</span>;</span><br><span class="line">  <span class="keyword">char</span> Str[] = <span class="string">"123456"</span>;</span><br><span class="line">  v5 = <span class="number">0</span>;</span><br><span class="line">  v8 = <span class="built_in">strlen</span>(Str);</span><br><span class="line">  <span class="keyword">if</span> ( v8 % <span class="number">3</span> )</span><br><span class="line">    v9 = <span class="number">4</span> * (v8 / <span class="number">3</span>) + <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    v9 = <span class="number">4</span> * (v8 / <span class="number">3</span>);</span><br><span class="line">  v7 = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*(v9+<span class="number">1</span>));</span><br><span class="line">  v7[v9] = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; v8; i += <span class="number">3</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v3 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">3</span>; ++j )</span><br><span class="line">      v3 |= (<span class="keyword">unsigned</span> __int8)Str[j + i] &lt;&lt; <span class="number">8</span> * (<span class="number">2</span> - j);</span><br><span class="line">    <span class="keyword">for</span> ( k = <span class="number">0</span>; k &lt; <span class="number">4</span>; ++k )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( k &gt;= <span class="number">4</span> - (i + <span class="number">3</span> - v8) &amp;&amp; i + <span class="number">3</span> &gt; v8 )</span><br><span class="line">        v7[v5] = <span class="string">'!'</span>;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        temp = (((v3 &gt;&gt; <span class="number">6</span> * (<span class="number">3</span> - k)) &amp; <span class="number">0x3F</span>)+<span class="number">24</span>)%<span class="number">64</span>, v7[v5] = str[temp], <span class="built_in">printf</span>(<span class="string">"%d "</span>, temp);;</span><br><span class="line">      ++v5;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">	<span class="built_in">puts</span>(v7); </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//加密后：KRGlLBSo</span></span><br></pre></td></tr></table></figure>
+
+<p>还原成正常加密的base64密文：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[] = <span class="string">"KRGlLBSo"</span>;</span><br><span class="line">	<span class="keyword">char</span> s[] = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>;</span><br><span class="line">	<span class="keyword">char</span> a1[] = &#123;<span class="number">20</span>, <span class="number">53</span>, <span class="number">0</span>, <span class="number">19</span>, <span class="number">8</span>, <span class="number">14</span>, <span class="number">41</span>, <span class="number">36</span>,</span><br><span class="line">				 <span class="number">14</span>, <span class="number">50</span>, <span class="number">22</span>, <span class="number">18</span>, <span class="number">47</span>, <span class="number">6</span>, <span class="number">38</span>, <span class="number">63</span>, <span class="number">24</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">5</span>, <span class="number">17</span>, <span class="number">56</span>&#125;;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; a[i]; i++)</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">64</span>; j++)</span><br><span class="line">			<span class="keyword">if</span>(a[i] == s[j])</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">int</span> t = j;</span><br><span class="line">				<span class="keyword">if</span>(t &lt;= <span class="number">25</span>)</span><br><span class="line">					t += <span class="number">26</span>;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(t &lt;= <span class="number">51</span>)</span><br><span class="line">					t -= <span class="number">26</span>;</span><br><span class="line">					</span><br><span class="line">				<span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; <span class="number">64</span>; k++)</span><br><span class="line">					<span class="keyword">if</span>((k+<span class="number">24</span>)%<span class="number">64</span> == t)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="built_in">putchar</span>(s[k]);</span><br><span class="line">						<span class="keyword">break</span>;</span><br><span class="line">					&#125;</span><br><span class="line">			&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//还原为正常base64加密密文：MTIzNDU2</span></span><br></pre></td></tr></table></figure>
+
+<p>正常base64解密：可以看到，解密出明文。<img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181032181.png" alt="image-20200815181032181"></p>
+<p>就这样卡住了。。。也无心看第一个加密了。</p>
+<p>不行，去看了看writeup，原来这个解密出本来就是乱码，转化为16进制就好。。。又直接看了第一个加密是sm4。。</p>
+<p>它在加密中其实有标志的：<strong>一是表，二是0xA3B1BAC6</strong><img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181639575.png" alt="image-20200815181639575"></p>
+<p><img src="/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/image-20200815181823633.png" alt="image-20200815181823633"></p>
+<p>最后python安装pysm4进行解密：</p>
+<p>首先base64解密且转化为16进制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_to_hex</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join([hex(c).replace(<span class="string">'0x'</span>, <span class="string">''</span>) <span class="keyword">for</span> c <span class="keyword">in</span> s])</span><br><span class="line"></span><br><span class="line">s = <span class="string">"WdCVKQ3yQAYU9I0naQaHTg=="</span></span><br><span class="line">s1 = b64decode(s)</span><br><span class="line"></span><br><span class="line">ans = str_to_hex(s1)</span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure>
+
+<p>sm4解密：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pysm4 <span class="keyword">import</span> encrypt, decrypt</span><br><span class="line"><span class="comment">#密钥</span></span><br><span class="line">mk = <span class="number">0x77686572655f6172655f755f6e6f773f</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#密文</span></span><br><span class="line">cipher_num = <span class="number">0x59d095290df2400614f48d276906874e</span></span><br><span class="line"></span><br><span class="line">clear_num = decrypt(cipher_num, mk)</span><br><span class="line">s = hex(clear_num)[<span class="number">2</span>:]</span><br><span class="line">print(s)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hex_to_str</span><span class="params">(s)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join([chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> [int(s[j]+s[j+<span class="number">1</span>], <span class="number">16</span>) <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>, len(s), <span class="number">2</span>)]])</span><br><span class="line">print(hex_to_str(s))</span><br><span class="line"></span><br><span class="line"><span class="comment">#flag：SM4foRExcepioN?!</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>ooo
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://www.bxnop.cn/2020/07/27/2019%E5%AE%89%E6%B4%B5%E6%9D%AF/" title="2019安洵杯">https://www.bxnop.cn/2020/07/27/2019安洵杯/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+	  <div>
+	  
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+		
+	</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/25/2020%E5%B9%B4DASCTF%E4%B8%83%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/" rel="prev" title="2020年DASCTF七月线上赛">
+      <i class="fa fa-chevron-left"></i> 2020年DASCTF七月线上赛
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/29/%E6%9D%82%E5%90%88writeup/" rel="next" title="杂合writeup">
+      杂合writeup <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
   window.addEventListener('tabs:register', () => {
     let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
@@ -18,4 +396,194 @@
       localStorage.setItem('comments_active', commentClass);
     });
   }
-</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc"> Table of Contents</li><li class="sidebar-nav-overview"> Overview</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Easy-Encryption"><span class="nav-number">1.</span> <span class="nav-text">Easy_Encryption</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#game"><span class="nav-number">2.</span> <span class="nav-text">game</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crackme"><span class="nav-number">3.</span> <span class="nav-text">crackme</span></a></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">ooo</p><div class="site-description" itemprop="description">0x446e37fb</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">45</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/"><span class="site-state-item-count">14</span> <span class="site-state-item-name">categories</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/"><span class="site-state-item-count">3</span> <span class="site-state-item-name">tags</span></a></div></nav></div><div class="cc-license motion-element" itemprop="license"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a></div><div class="links-of-blogroll motion-element"><div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i> Links</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="https://hack-for.fun/" title="https:&#x2F;&#x2F;hack-for.fun&#x2F;" rel="noopener" target="_blank">M0nk3y</a></li><li class="links-of-blogroll-item"> <a href="http://i0gan.cn:81/" title="http:&#x2F;&#x2F;i0gan.cn:81&#x2F;" rel="noopener" target="_blank">i0gan</a></li><li class="links-of-blogroll-item"> <a href="http://happi0.gitee.io/" title="http:&#x2F;&#x2F;happi0.gitee.io&#x2F;" rel="noopener" target="_blank">happi0</a></li><li class="links-of-blogroll-item"> <a href="https://vino0o0o.github.io/" title="https:&#x2F;&#x2F;vino0o0o.github.io&#x2F;" rel="noopener" target="_blank">Vino0o0o</a></li></ul></div></div><div class="back-to-top motion-element"><i class="fa fa-arrow-up"></i> <span>0%</span></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright"> &copy; <span itemprop="copyrightYear">2021</span><span class="with-love"><i class="fa fa-heart"></i></span> <span class="author" itemprop="copyrightHolder">ooo</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-chart-area"></i></span> <span class="post-meta-item-text">Symbols count total:</span> <span title="Symbols count total">289k</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-coffee"></i></span> <span class="post-meta-item-text">Reading time total &asymp;</span> <span title="Reading time total">4:23</span></div></div></footer></div><script src="/lib/anime.min.js"></script><script src="/lib/velocity/velocity.min.js"></script><script src="/lib/velocity/velocity.ui.min.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/pisces.js"></script><script src="/js/next-boot.js"></script><script src="/js/local-search.js"></script><script type="text/javascript" src="/js/src/clicklove.js"></script><script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({pluginRootPath:"live2dw/",pluginJsPath:"lib/",pluginModelPath:"assets/",tagMode:!1,model:{jsonPath:"/live2dw/assets/wanko.model.json"},display:{position:"left",width:150,height:300},mobile:{show:!0},log:!1})</script></body></html>
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Easy-Encryption"><span class="nav-number">1.</span> <span class="nav-text">Easy_Encryption</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#game"><span class="nav-number">2.</span> <span class="nav-text">game</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crackme"><span class="nav-number">3.</span> <span class="nav-text">crackme</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ooo</p>
+  <div class="site-description" itemprop="description">0x446e37fb</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://hack-for.fun/" title="https:&#x2F;&#x2F;hack-for.fun&#x2F;" rel="noopener" target="_blank">M0nk3y</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://i0gan.cn:81/" title="http:&#x2F;&#x2F;i0gan.cn:81&#x2F;" rel="noopener" target="_blank">i0gan</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://happi0.gitee.io/" title="http:&#x2F;&#x2F;happi0.gitee.io&#x2F;" rel="noopener" target="_blank">happi0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vino0o0o.github.io/" title="https:&#x2F;&#x2F;vino0o0o.github.io&#x2F;" rel="noopener" target="_blank">Vino0o0o</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ooo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">325k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">4:56</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <!-- ҳ����С���� -->
+   <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
